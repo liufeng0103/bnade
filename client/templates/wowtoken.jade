@@ -1,0 +1,20 @@
+extends layout
+block title
+	title 魔兽世界时光徽章实时价格查询 时光徽章历史价格 时光徽章价格波动
+block content
+	div.container-fluid
+		div.container
+			p#msg
+			div#wowtokenBuyContainer
+			div#wowTokenContainer
+			p 说明:
+			ul
+				li 数据来源
+					a(href="https://wowtoken.info") https://wowtoken.info
+				li 有任何问题请在NGA帖子下留言:
+					a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
+block pagescript
+	script(src="http://cdn.bootcss.com/highstock/4.2.3/highstock.js")
+	script(src="http://cdn.bootcss.com/highcharts/4.2.3/highcharts-more.js")
+	script(src="http://cdn.bootcss.com/highcharts/4.2.3/modules/solid-gauge.js")
+	script(src="js/wowtoken.js")

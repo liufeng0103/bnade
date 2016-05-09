@@ -1,0 +1,31 @@
+extends layout
+block title
+	title 魔兽世界时光徽章实时价格查询 时光徽章历史价格 时光徽章价格波动
+block content
+	div.container-fluid
+		div.container
+			h2.sub-header 下载
+			h3 魔兽世界插件
+			p 通过物品在所有服务器的价格计算的参考价格，玩家可以通过插件在游戏的提示框中查看到参考价格
+			p 插件的一些说明：
+			ul
+				li 游戏加载后会在聊天框打印数据更新时间(通常在第一行需要往上翻阅可以看到)
+				li 提示框中显示物品的参考价格
+				li 由于把1万多件物品的数据都放到了插件中，插件运行会占用900K左右的内存
+				li 目前不支持宠物价格和各阶制造业装备价格的查询，如果能看到也是不准确的价格参考(以后会去掉或更新这一部分)
+				li 有些物品比较冷门，拍卖的服务器少参考价格没有价值(以后会添加参考的数量来帮助玩家辨别这种数据)
+				li 由于价格文件是固定在插件中的，所以时间越久参考价值越低， 我会定期更新数据发布最新的插件到这个页面
+				li 参考价格算法(跟网站所有服务器平均价格一样):
+					ol
+						li 获取物品在所有服务器的价格，并从低到高排序
+						li 计算前80%的价格的平均值作为参考价格
+						li 如果平均价格的3倍小于80%的最高价格，则继续取80%数据的80%按第2步骤计算，直到获取到参考价格
+			p 安装说明：
+			ol
+				li 下载地址<a href="https://github.com/liufeng0103/bnade-wow-addon/archive/v1.1.0.zip">bnade-wow-addon-1.1.0.zip</a>
+				li 解压bnade-wow-addon-x.x.x.zip文件，打开文件夹bnade-wow-addon-x.x.x
+				li 复制Bnade文件夹到魔兽世界安装目录的\Interface\AddOns中
+				li 启动游戏，在聊天框看到打印的数据更新时间或鼠标移动到可拍卖物品的参考价格(如下图)，则表示安装成功
+				li 
+					img.img-rounded(src="images/bnade-addon.png" alt="插件效果")
+block pagescript

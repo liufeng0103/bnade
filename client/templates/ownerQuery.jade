@@ -1,0 +1,31 @@
+extends layout
+block title
+	title 魔兽世界玩家拍卖物品查询
+block content
+	div.container-fluid
+		div.row
+			div.col-sm-3.col-md-2.sidebar
+				ul#realmQueryList.nav.nav-sidebar
+			div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+				div.col-md-10
+					form.navbar-form(onsubmit="return false;")
+						div.form-inline
+							div.form-group
+								div.input-group
+									input#realm.form-control(type="text",placeholder="服务器(选填)")
+									div.input-group-btn
+										button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
+										ul#realmSelectList.dropdown-menu.dropdown-menu-right
+							div.form-group
+								input#owner.form-control(type="text",placeholder="玩家名")
+							input#queryBtn.btn.btn-success(type="button",value="查询")
+							input.btn.btn-success(type="reset",value="重置")
+					div#ownerItemsContainer
+					p 说明:
+					ul
+						li 晴日峰和丽丽服务器请用后面的名字作为服务器:晴日峰-江苏 丽丽-四川
+						li 有任何问题请在NGA帖子下留言:
+							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
+				div.col-md-2
+block pagescript
+	script(src="js/ownerQuery.js")

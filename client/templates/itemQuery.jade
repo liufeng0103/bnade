@@ -1,0 +1,121 @@
+extends layout
+block title
+	title 魔兽世界物价查询 24小时内价格波动 历史价格 全服务器价格查询比较
+block content
+	div.container-fluid
+		div.row
+			div.col-sm-3.col-md-2.sidebar
+				ul#realmQueryList.nav.nav-sidebar
+				ul#itemQueryList.nav.nav-sidebar
+			div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+				div.col-md-10
+					form.navbar-form(onsubmit="return false;")
+						div.form-inline
+							div.form-group
+								div.input-group
+									input#realm.form-control(type="text",placeholder="服务器(选填)")
+									div.input-group-btn
+										button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
+										ul#realmSelectList.dropdown-menu.dropdown-menu-right
+							div.form-group
+								div.input-group
+									input#itemName.form-control(type="text",placeholder="物品名或ID")
+									div.input-group-btn
+										button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
+										ul#itemSelectList.dropdown-menu.dropdown-menu-right
+							input#queryBtn.btn.btn-success(type="button",value="查询") 
+							input#itemFuzzyQueryBtn.btn.btn-success(type="button",value="模糊查询") 
+							input.btn.btn-success(type="reset",value="重置")
+					p#msg
+					div#itemListByName
+					div#itemDetail
+					p#queryByUrl
+					p#past24Msg
+					div#past24CtlDiv
+						h2.sub-header 总结
+						table.table.table-striped
+							thead
+								tr
+									th 说明
+									th 最低价格
+									th 最高价格
+									th 平均价格
+									th 平均数量
+									th 最近一次价格
+							tbody
+								tr
+									td 24小时内
+									td#past24MinBuyout
+									td#past24MaxBuyout
+									td#past24AvgBuyout
+									td#past24AvgQuantity
+									td#past24LatestBuyout
+								tr
+									td 一周内
+									td#pastWeekMinBuyout
+									td#pastWeekMaxBuyout
+									td#pastWeekAvgBuyout
+									td#pastWeekAvgQuantity
+									td
+								tr
+									td 历史信息
+									td#historyMin
+									td#historyMax
+									td#historyAvg
+									td#historyAvgQuantity
+									td
+								tr
+									td 所有服务器
+									td#allMinBuyout
+									td#allMaxBuyout
+									td#allAvgBuyout
+									td#allAvgQuantity
+									td
+						div#past24Container
+					p#pastWeekMsg
+					div#pastWeekCtlDiv
+						div#pastWeekContainer(style="min-width: 310px; height: 400px; margin: 0 auto")
+						div#pastWeekBuyoutHeatMapContainer(style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto")
+						div#pastWeekQuantityHeatMapContainer(style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto")
+					p#allRealmMsg
+					div#allRealmCtlDiv
+						div#allRealmContainer(style="min-width: 310px; height: 400px; margin: 0 auto")
+						div
+							a#showAllA.btn.btn-primary(href='javascript:void(0)') 显示全部+
+							table#showAllTbl.table.table-striped
+								thead
+									tr
+										th #
+										th 服务器
+										th 最低一口价
+										th 卖家
+										th 剩余时间
+										th 总数量
+										th 更新时间
+								tbody#showAllBody
+					p 说明:
+					ul
+						li 宠物价格查询请点击<a href="petQuery.html">宠物价格</a>页面
+						li 晴日峰和丽丽服务器请用后面的名字作为服务器:晴日峰-江苏 丽丽-四川
+						li 最高和平均价格取得是前80%数据计算
+						li 网页会保存你最近搜索的记录，默认是保存5个服务器，15个物品名，如果想要修改这些值，比如服务器个数，请在服务器搜索框输入realmCount在物品名框里输入你想要保存的个数然后按回车或点击查询，成功设置会有信息弹出，修改物品类似，服务器搜索框输入itemCount，如果不需要保存某种数据，请设置他们的值为0
+						li 有任何问题请在NGA帖子下留言:
+							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
+				div.col-md-2
+					ul#fuzzyItemsList.nav.nav-sidebar
+					h4 搜索排行榜
+					ul.nav.nav-tabs(role="tablist")
+						li.active(role="presentation")
+							a(href="#dailyHot",aria-controls="dailyHot",role="tab",data-toggle="tab") 每日
+						li(role="presentation")
+							a(href="#weeklyHot",aria-controls="weeklyHot",role="tab",data-toggle="tab") 每周
+						li(role="presentation")
+							a(href="#monthlyHot",aria-controls="monthlyHot",role="tab",data-toggle="tab") 每月
+					div.tab-content
+						div#dailyHot.tab-pane.active
+						div#weeklyHot.tab-pane
+						div#monthlyHot.tab-pane
+block pagescript
+	script(src="http://cdn.bootcss.com/highstock/4.2.3/highstock.js")
+	script(src="http://cdn.hcharts.cn/highcharts/modules/heatmap.js")
+	script(src="js/itemQuery.js")

@@ -1,0 +1,29 @@
+nav.navbar.navbar-inverse.navbar-fixed-top
+	div.container-fluid
+		div.navbar-header
+			button.navbar-toggle.collapsed(type="button",data-toggle="collapse",data-target="#navbar",aria-expanded="false",aria-controls="navbar")
+				span.sr-only Toggle navigation
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			a.navbar-brand(href="index.html") BNADE藏宝海湾
+		div#navbar.navbar-collapse.collapse
+			ul.nav.navbar-nav.navbar-right
+				li.dropdown
+					a.dropdown-toggle(href="#",data-toggle="dropdown",role="button",aria-haspopup="true",aria-expanded="false") 物品价格<span class="caret"></span>
+					ul.dropdown-menu
+						li
+							a(href="itemQuery.html") 普通物品
+						li
+							a(href="petQuery.html") 宠物价格
+						li
+							a(href="wowtoken.html") 时光徽章
+						li
+							a(href="ownerQuery.html") 玩家物品
+				li
+					a(href="auctionQuantity.html") 拍卖数量排行
+				li
+					a(href="download.html") 下载
+				li.dropdown
+					a.dropdown-toggle(href="#",data-toggle="dropdown",role="button",aria-haspopup="true",aria-expanded="false") 试验<span class="caret"></span>
+					ul.dropdown-menu

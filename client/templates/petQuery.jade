@@ -1,0 +1,49 @@
+extends layout
+block title
+	title 魔兽世界宠物价格查询 宠物全服务器价格比较查询 宠物成长类型分类查询
+block content
+	div.container-fluid
+		div.row
+			div.col-sm-3.col-md-2.sidebar
+				ul#petQueryList.nav.nav-sidebar
+			div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+				div.col-md-10
+					form.navbar-form(onsubmit="return false;")
+						div.form-inline
+							div.form-group
+								div.input-group
+									input#petName.form-control(type="text",placeholder="宠物名")
+									div.input-group-btn
+										button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
+										ul#petSelectList.dropdown-menu.dropdown-menu-right
+							input#queryBtn.btn.btn-success(type="button",value="查询")
+							input#fuzzyQueryBtn.btn.btn-success(type="button",value="模糊查询")
+							input.btn.btn-success(type="reset",value="重置")
+					p#msg
+					div#petResult
+					p#queryByUrl
+					p#allRealmMsg
+					div#allRealmCtlDiv
+						a#showAllA.btn.btn-primary(href='javascript:void(0)') 所有服务器+
+						table#showAllTbl.table.table-striped
+							thead
+								tr
+									th #
+									th 服务器
+									th 一口价
+									th 卖家
+									th 剩余时间
+									th 宠物等级
+									th 总数量
+									th 更新时间
+							tbody#showAllBody
+					p 说明:
+					ul
+						li 所有宠物不区分等级和品质，默认25级蓝色品质
+						li 晴日峰和丽丽服务器请用后面的名字作为服务器:晴日峰-江苏 丽丽-四川
+						li 有任何问题请在NGA帖子下留言:
+							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
+				div.col-md-2
+					ul#fuzzyItemsList.nav.nav-sidebar
+block pagescript
+	script(src="js/petQuery.js")

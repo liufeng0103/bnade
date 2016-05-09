@@ -1,0 +1,14 @@
+.DS_Store
+.project
+.metadata
+.checkstyle
+*.bak
+.settings/
+.classpath
+target
+test-output
+*.orig
+log/
+node_modules
+dist
+sh

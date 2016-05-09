@@ -1,0 +1,33 @@
+{
+  "name": "bnade",
+  "version": "1.0.0",
+  "description": "魔兽世界拍卖行分析",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.oschina.net/liufeng0103/BNADE_WEB"
+  },
+  "keywords": [
+    "魔兽世界",
+    "拍卖行",
+    "分析"
+  ],
+  "author": "luis",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-minify": "0.0.5",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.9.1"
+  }
+}
