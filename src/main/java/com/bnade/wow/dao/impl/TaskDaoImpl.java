@@ -33,13 +33,13 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
-	public void updateLastUpdatedForHotItemTask(long lastUpdated) throws SQLException {
-		run.update("update t_task set lastUpdated=? where type=?",  lastUpdated, Task.HOTITEM_TASK);		
+	public void updateHotItemTask(Task task) throws SQLException {
+		run.update("update t_task set lastUpdated=? where type=?", task.getLastUpdated(), task.getType());		
 	}
 
 	@Override
 	public void saveHotItemTask(Task task) throws SQLException {
-		run.update("insert into t_task (type,realmId,date,lastUpdated) values(?,?,?,?)", Task.HOTITEM_TASK, task.getRealmId(), "", task.getLastUpdated());		
+		run.update("insert into t_task (type,realmId,date,lastUpdated) values(?,?,?,?)", Task.HOTITEM_TASK, 0, "", task.getLastUpdated());		
 	}	
 	
 }

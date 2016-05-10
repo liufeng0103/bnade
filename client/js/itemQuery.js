@@ -578,33 +578,52 @@ function checkCommand(){
 function loadTopItems(){
 	$.get('wow/item/hot', function(data) {
 		if (data.length != 0){
+			var dailyI = 1;
 			var weeklyI = 1;
 			var monthlyI = 1;
 			$("#dailyHot").html("<div id='dailyHotList' class='list-group'></div>");
 			$("#weeklyHot").html("<div id='weeklyHotList' class='list-group'></div>");			
 			$("#monthlyHot").html("<div id='monthlyHotList' class='list-group'></div>");
 			for(var i in data){
-				if (data[i].type === 1) {
-					$("#dailyHotList").append("<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(parseInt(i)+1)+" "+data[i].name+" <span class='badge'>"+data[i].queried+"</span></a>");
+				if (data[i].type === 3) {
+					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(monthlyI++)+" "+data[i].name;
+					if (monthlyI <= 4) {
+						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
+					} else {
+						listItem +="</a>";
+					}					
+					$("#monthlyHotList").append(listItem);
 					$("#topItem"+i).click(function(){
 						$("#itemName").val($(this).attr('itemName'));							
 						$("#queryBtn").click();							
 					});
 				}
-//				if (data[i].type === 2) {
-//					$("#weeklyHotList").append("<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(weeklyI++)+" "+data[i].name+" <span class='badge'>"+data[i].queried+"</span></a>");
-//					$("#topItem"+i).click(function(){
-//						$("#itemName").val($(this).attr('itemName'));							
-//						$("#queryBtn").click();							
-//					});
-//				}
-//				if (data[i].type === 3) {
-//					$("#monthlyHotList").append("<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(monthlyI++)+" "+data[i].name+" <span class='badge'>"+data[i].queried+"</span></a>");
-//					$("#topItem"+i).click(function(){
-//						$("#itemName").val($(this).attr('itemName'));							
-//						$("#queryBtn").click();							
-//					});
-//				}	
+				if (data[i].type === 2) {
+					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(weeklyI++)+" "+data[i].name;
+					if (weeklyI <= 4) {
+						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
+					} else {
+						listItem +="</a>";
+					}
+					$("#weeklyHotList").append(listItem);
+					$("#topItem"+i).click(function(){
+						$("#itemName").val($(this).attr('itemName'));							
+						$("#queryBtn").click();							
+					});
+				}
+				if (data[i].type === 1) {
+					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(dailyI++)+" "+data[i].name;
+					if (dailyI <= 4) {
+						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
+					} else {
+						listItem +="</a>";
+					}
+					$("#dailyHotList").append(listItem);
+					$("#topItem"+i).click(function(){
+						$("#itemName").val($(this).attr('itemName'));							
+						$("#queryBtn").click();							
+					});
+				}	
 			}
 		}
 	});

@@ -28,8 +28,8 @@ public class HotItemServiceImpl implements HotItemService {
 	}
 
 	@Override
-	public List<HotItem> getHotItemsByPeriodSortByQueried(int period, int limit) throws SQLException {		
-		return hotItemDao.getHotItemsByPeriodSortByQueried(period, limit);
+	public List<HotItem> getGroupItemIdAfterDatetime(long datetime, int limit) throws SQLException {
+		return hotItemDao.getGroupItemIdAfterDatetime(datetime, limit);
 	}
 
 }

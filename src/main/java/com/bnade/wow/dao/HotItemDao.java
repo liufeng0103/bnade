@@ -20,18 +20,11 @@ public interface HotItemDao {
 	
 	List<HotItem> getItemQuiredCountAfterCreatedAt(long createdAt) throws SQLException;
 	
-	void add(List<HotItem> items) throws SQLException;
-	
 	void saveHotItem(HotItem item) throws SQLException;
 	
 	void updateHotItem(HotItem item) throws SQLException;
 	
-	void deleteAllHotItemByPeriod(int period) throws SQLException;
+	HotItem getByDatetimeAndItemId(long datetime, int itemId) throws SQLException;
 	
-	List<HotItem> getHotItemsByPeriod(int period) throws SQLException;
-	
-	HotItem getHotByItemIdAndPeriod(int itemId, int period) throws SQLException;
-	
-	List<HotItem> getHotItemsByPeriodSortByQueried(int period, int limit) throws SQLException;
-	
+	List<HotItem> getGroupItemIdAfterDatetime(long datetime, int limit) throws SQLException;
 }
