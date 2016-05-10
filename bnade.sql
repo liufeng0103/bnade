@@ -166,12 +166,17 @@ CREATE TABLE IF NOT EXISTS t_wowtoken (
 
 -- task控制表
 CREATE TABLE IF NOT EXISTS t_task (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	type INT UNSIGNED NOT NULL,				-- task类型
 	realmId INT UNSIGNED NOT NULL,			-- 服务器ID
 	date VARCHAR(10) NOT NULL,				-- 处理日期
 	lastUpdated BIGINT UNSIGNED NOT NULL, 	-- 上次运行时间
-	PRIMARY KEY(realmId,date)
+	PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 归档程序用于查看服务器是否处理过某个日期
+ALTER TABLE t_task ADD INDEX(realmId,date);
+-- 热门物品task更新处理时间
+ALTER TABLE t_task ADD INDEX(type);
 
 -- 用户查询的物品
 CREATE TABLE IF NOT EXISTS t_query_item (
@@ -183,8 +188,8 @@ CREATE TABLE IF NOT EXISTS t_query_item (
 
 -- 用户查询的物品
 CREATE TABLE IF NOT EXISTS t_hot_item (
-	itemId INT UNSIGNED NOT NULL,	-- 物品ID
-	queried	INT UNSIGNED NOT NULL,  -- 查询次数
-	period INT UNSIGNED NOT NULL,	-- 查询时期，每天，每周，每月等
-	PRIMARY KEY(period,itemId)
+	itemId INT UNSIGNED NOT NULL,		-- 物品ID
+	queried	INT UNSIGNED NOT NULL,  	-- 查询次数
+	dateTime BIGINT UNSIGNED NOT NULL,  -- 查询的日期时间
+	PRIMARY KEY(dateTime,itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
