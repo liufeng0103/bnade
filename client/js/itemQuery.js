@@ -448,29 +448,28 @@ function getPastWeek(realmId, realm, itemId, itemName){
 					if (week === 0) week = 7;
 					if ("00:00" === tmpTime) {						
 						heatMapBuyoutData[heatI] = [3,week-1,buyoutGold];
-						heatMapQuantityData[heatI++] = [3,week-1,quantity];
+						heatMapQuantityData[heatI++] = [3, week-1, quantity];
 					}						
 					if ("06:00" === tmpTime) {
 						heatMapBuyoutData[heatI] = [0,week-1,buyoutGold];
-						heatMapQuantityData[heatI++] = [0,week-1,quantity];
+						heatMapQuantityData[heatI++] = [0, week-1, quantity];
 					}						
 					if ("12:00" === tmpTime) {
 						heatMapBuyoutData[heatI] = [1,week-1,buyoutGold];
-						heatMapQuantityData[heatI++] = [1,week-1,quantity];
+						heatMapQuantityData[heatI++] = [1, week-1, quantity];
 					}						
 					if ("18:00" === tmpTime) {
 						heatMapBuyoutData[heatI] = [2,week-1,buyoutGold];
-						heatMapQuantityData[heatI++] = [2,week-1,quantity];
-						heatMapLabels[week-1] = '星期' + weekFormat(week);
-					}		
+						heatMapQuantityData[heatI++] = [2, week-1, quantity];						
+					}	
+					heatMapLabels[week-1] = '星期' + weekFormat(week);
 				}
 			}
 			var weekResult = Bnade.getResult(weekCalData);			
 			$('#pastWeekMinBuyout').html(Bnade.getGold(weekResult.min));
 			$('#pastWeekMaxBuyout').html(Bnade.getGold(weekResult.max));
 			$('#pastWeekAvgBuyout').html(Bnade.getGold(weekResult.max));
-			$('#pastWeekAvgQuantity').html(parseInt(weekQuantity/weekCount));	
-			
+			$('#pastWeekAvgQuantity').html(parseInt(weekQuantity/weekCount));
 			loadHeatMapChart('pastWeekBuyoutHeatMapContainer','一周内'+itemName+'价格热力图',heatMapLabels,heatMapBuyoutData,Bnade.getGold(weekResult.min),'一口价',0);
 			loadHeatMapChart('pastWeekQuantityHeatMapContainer','一周内'+itemName+'数量热力图',heatMapLabels,heatMapQuantityData,weekMinQuantity,'数量',8);
 			$('#pastWeekMsg').html("");
