@@ -1,12 +1,14 @@
 package com.bnade.wow.catcher;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.HotItemDao;
 import com.bnade.wow.dao.TaskDao;
 import com.bnade.wow.dao.impl.HotItemDaoImpl;
@@ -26,34 +28,36 @@ public class HotItemTask {
 		hotItemDao = new HotItemDaoImpl();
 	}
 	
-	public void clearDailyHotItem() throws SQLException {
-		hotItemDao.deleteAllQuiredItem();
-		hotItemDao.deleteAllHotItemByPeriod(HotItem.PERIOD_DAY);
-		logger.info("删除全天查询的所有item数据");
+	public void clearQueriedItem() throws SQLException {
+		hotItemDao.deleteAllQuiredItem();		
+		logger.info("删除查询的所有item数据");
 	}
 	
-	public void updateDailyHotItem() throws SQLException {
+	public void updateHotItemCount() throws SQLException, ParseException {
 		logger.info("开始更新每天搜索的物品");
 		Task task = taskDao.getByType(Task.HOTITEM_TASK);
 		long lastUpdated = 0;
+		long current = System.currentTimeMillis();
 		if (task != null) {
 			lastUpdated = task.getLastUpdated();
 		}
-		long current = System.currentTimeMillis();
 		List<HotItem> hotItems = hotItemDao.getItemQuiredCountAfterCreatedAt(lastUpdated);
 		logger.info("上次更新时间{}之后有新数据{}条", new Date(lastUpdated), hotItems.size());
+		// 当天0点的时间，long表示
+		long todayTime = TimeUtil.parse(TimeUtil.getDate()).getTime();
 		for (HotItem hotItem : hotItems) {
-			HotItem dbHot = hotItemDao.getHotByItemIdAndPeriod(hotItem.getItemId(), HotItem.PERIOD_DAY);
-			hotItem.setPeriod(HotItem.PERIOD_DAY);
+			HotItem dbHot = hotItemDao.getByDatetimeAndItemId(todayTime, hotItem.getItemId());
 			if (dbHot != null) {
-				hotItem.setQueried(dbHot.getQueried() + hotItem.getQueried());
-				hotItemDao.updateHotItem(hotItem);
+				dbHot.setQueried(dbHot.getQueried() + hotItem.getQueried());
+				hotItemDao.updateHotItem(dbHot);
 			} else {
+				hotItem.setDateTime(todayTime);
 				hotItemDao.saveHotItem(hotItem);
 			}						
 		}
 		if (task != null) {
-			taskDao.updateLastUpdatedForHotItemTask(current);
+			task.setLastUpdated(current);
+			taskDao.updateHotItemTask(task);
 		} else {
 			Task tmpTask = new Task();
 			tmpTask.setLastUpdated(current);
@@ -64,83 +68,22 @@ public class HotItemTask {
 		logger.info("更新每天搜索的物品完毕");
 	}
 	
-	public void updateWeeklyHotItem() throws SQLException {
-		logger.info("开始更新每周搜索的物品");
-		List<HotItem> hotItems = hotItemDao.getHotItemsByPeriod(HotItem.PERIOD_DAY);
-		logger.info("更新新数据{}条", hotItems.size());
-		for (HotItem hotItem : hotItems) {
-			HotItem weekHotItem = hotItemDao.getHotByItemIdAndPeriod(hotItem.getItemId(), HotItem.PERIOD_WEEK);
-			hotItem.setPeriod(HotItem.PERIOD_WEEK);
-			if (weekHotItem != null) {
-				hotItem.setQueried(weekHotItem.getQueried() + hotItem.getQueried());
-				hotItemDao.updateHotItem(hotItem);
-			} else {
-				hotItemDao.saveHotItem(hotItem);
-			}	
-		}
-		logger.info("更新每周搜索的物品完毕");
-	}
-	
-	public void clearWeeklyHotItem() throws SQLException {
-		hotItemDao.deleteAllHotItemByPeriod(HotItem.PERIOD_WEEK);
-		logger.info("删除全周查询的所有item数据");
-	}
-	
-	
-	public void updateMonthlyHotItem() throws SQLException {
-		logger.info("开始更新每月搜索的物品");
-		List<HotItem> hotItems = hotItemDao.getHotItemsByPeriod(HotItem.PERIOD_WEEK);
-		logger.info("更新新数据{}条", hotItems.size());
-		for (HotItem hotItem : hotItems) {
-			HotItem monthHotItem = hotItemDao.getHotByItemIdAndPeriod(hotItem.getItemId(), HotItem.PERIOD_MONTH);
-			hotItem.setPeriod(HotItem.PERIOD_MONTH);
-			if (monthHotItem != null) {
-				hotItem.setQueried(monthHotItem.getQueried() + hotItem.getQueried());
-				hotItemDao.updateHotItem(hotItem);
-			} else {
-				hotItemDao.saveHotItem(hotItem);
-			}	
-		}
-		logger.info("更新每月搜索的物品完毕");
-	}
-	
-	public void clearMonthlyHotItem() throws SQLException {
-		hotItemDao.deleteAllHotItemByPeriod(HotItem.PERIOD_MONTH);
-		logger.info("删除全周月询的所有item数据");
-	}
-	
-	public static void main(String[] args) throws SQLException {
-//		args = new String[1];		
-//		args[0] = "updateDaily";
-//		args[0] = "clearDaily";
-//		args[0] = "updateWeek";
-//		args[0] = "clearWeek";
-//		args[0] = "updateMonth";
-//		args[0] = "clearMonth";
+	public static void main(String[] args) throws SQLException, ParseException {
+		args = new String[1];		
+//		args[0] = "update";
+		args[0] = "clear";
 		if (args.length > 0) {
 			String parm = args[0];
 			switch(parm) {
-				case "updateDaily":
-					new HotItemTask().updateDailyHotItem();
+				case "update":
+					new HotItemTask().updateHotItemCount();
 					break;
-				case "clearDaily":
-					new HotItemTask().clearDailyHotItem();
-					break;
-				case "updateWeek":
-					new HotItemTask().updateWeeklyHotItem();
-					break;
-				case "clearWeek":
-					new HotItemTask().clearWeeklyHotItem();
-					break;
-				case "updateMonth":
-					new HotItemTask().updateMonthlyHotItem();
-					break;
-				case "clearMonth":
-					new HotItemTask().clearMonthlyHotItem();
+				case "clear":
+					new HotItemTask().clearQueriedItem();
 					break;
 			}
 		} else {
-			new HotItemTask().updateDailyHotItem();
+			new HotItemTask().updateHotItemCount();
 		}		
 	}
 }

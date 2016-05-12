@@ -35,41 +35,23 @@ public class HotItemDaoImpl implements HotItemDao {
 	}
 
 	@Override
-	public void add(List<HotItem> items) throws SQLException {
-		
-		
-	}
-
-	@Override
-	public HotItem getHotByItemIdAndPeriod(int itemId, int period)
-			throws SQLException {		
-		return run.query("select itemId,queried,period from t_hot_item where period>=? and itemId=?", new BeanHandler<HotItem>(HotItem.class), period, itemId);
-	}
-
-	@Override
 	public void saveHotItem(HotItem item) throws SQLException {
-		run.update("insert into t_hot_item (itemId,queried,period) values (?,?,?)", item.getItemId(), item.getQueried(), item.getPeriod());		
+		run.update("insert into t_hot_item (itemId,queried,dateTime) values (?,?,?)", item.getItemId(), item.getQueried(), item.getDateTime());		
 	}
 
 	@Override
 	public void updateHotItem(HotItem item) throws SQLException {
-		run.update("update t_hot_item set queried=? where period=? and itemId=?", item.getQueried(), item.getPeriod(), item.getItemId());
+		run.update("update t_hot_item set queried=? where dateTime=? and itemId=?", item.getQueried(), item.getDateTime(), item.getItemId());
 	}
 
 	@Override
-	public List<HotItem> getHotItemsByPeriod(int period) throws SQLException {
-		return run.query("select itemId,queried,period from t_hot_item where period=?", new BeanListHandler<HotItem>(HotItem.class), period);
+	public HotItem getByDatetimeAndItemId(long datetime, int itemId) throws SQLException {
+		return run.query("select itemId,queried,datetime from t_hot_item where datetime=? and itemId=?", new BeanHandler<HotItem>(HotItem.class), datetime, itemId);
 	}
 
 	@Override
-	public void deleteAllHotItemByPeriod(int period) throws SQLException {
-		run.update("delete from t_hot_item where period=?", period);		
-	}
-
-	@Override
-	public List<HotItem> getHotItemsByPeriodSortByQueried(int period, int limit)
-			throws SQLException {
-		return run.query("select itemId,queried,period from t_hot_item where period=? order by queried desc limit ?", new BeanListHandler<HotItem>(HotItem.class), period, limit);
+	public List<HotItem> getGroupItemIdAfterDatetime(long datetime, int limit) throws SQLException {
+		return run.query("select itemId,sum(queried) as queried from t_hot_item where datetime>=? group by itemId order by sum(queried) desc limit ?", new BeanListHandler<HotItem>(HotItem.class), datetime, limit);
 	}
 	
 }

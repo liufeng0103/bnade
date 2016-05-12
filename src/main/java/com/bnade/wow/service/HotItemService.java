@@ -12,6 +12,6 @@ public interface HotItemService {
 	
 	List<HotItem> getItemQuiredCountAfterLastUpdated(long lastUpdated) throws SQLException;
 	
-	List<HotItem> getHotItemsByPeriodSortByQueried(int period, int limit) throws SQLException;
+	public List<HotItem> getGroupItemIdAfterDatetime(long datetime, int limit) throws SQLException;
 	
 }

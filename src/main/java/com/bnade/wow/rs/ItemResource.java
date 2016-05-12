@@ -1,6 +1,7 @@
 package com.bnade.wow.rs;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bnade.util.HttpClient;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.po.HotItem;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.po.QueryItem;
@@ -120,26 +122,37 @@ public class ItemResource {
 	@Path("/hot")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getHotDailyItems() {
+		int hotCount = 10;
 		try {
-			List<HotItem> hotItems = hotItemService.getHotItemsByPeriodSortByQueried(HotItem.PERIOD_DAY, 10);
-			hotItems.addAll(hotItemService.getHotItemsByPeriodSortByQueried(HotItem.PERIOD_WEEK, 10));
-			hotItems.addAll(hotItemService.getHotItemsByPeriodSortByQueried(HotItem.PERIOD_MONTH, 10));
 			List<HotItemVo> items = new ArrayList<>();
-			for (HotItem hotItem : hotItems) {
-				HotItemVo item = new HotItemVo();
-				item.setId(hotItem.getItemId());
-				Item dbItem = itemService.getItemById(hotItem.getItemId());
-				if (dbItem != null) {
-					item.setName(dbItem.getName());	
-				}
-				item.setQueried(hotItem.getQueried());
-				item.setType(hotItem.getPeriod());
-				items.add(item);
-			}
+			long monthStart = TimeUtil.parse(TimeUtil.getDate(-30)).getTime();
+			List<HotItem> hotItems = hotItemService.getGroupItemIdAfterDatetime(monthStart, hotCount);
+			copy(hotItems, items, HotItem.HOT_MONTH);
+			long weekStart = TimeUtil.parse(TimeUtil.getDate(-7)).getTime();
+			hotItems = hotItemService.getGroupItemIdAfterDatetime(weekStart, hotCount);
+			copy(hotItems, items, HotItem.HOT_WEEK);
+			long dayStart = TimeUtil.parse(TimeUtil.getDate(0)).getTime();
+			hotItems = hotItemService.getGroupItemIdAfterDatetime(dayStart, hotCount);
+			copy(hotItems, items, HotItem.HOT_DAY);			
 			return items;
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
 		}
 	}
+	
+	private void copy(List<HotItem> hotItems, List<HotItemVo> items, int type) throws SQLException {
+		for (HotItem hotItem : hotItems) {
+			HotItemVo item = new HotItemVo();
+			item.setId(hotItem.getItemId());
+			Item dbItem = itemService.getItemById(hotItem.getItemId());
+			if (dbItem != null) {
+				item.setName(dbItem.getName());	
+			}
+			item.setQueried(hotItem.getQueried());
+			item.setType(type);
+			items.add(item);
+		}
+	}
+	
 }

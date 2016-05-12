@@ -44,11 +44,11 @@ public class AuctionDataArchivingProcessor {
 				if (i == 1) {
 					aucPeriod = tmpTime;
 				} else if (i == PERIOD) {	
-					if (lastModified >= tmpTime) {
+					if (lastModified >= (tmpTime - period)) {
 						aucPeriod = startTime + TimeUtil.DAY;
 					}					
 				} else {
-					if (lastModified >= tmpTime) {
+					if (lastModified >= (tmpTime - period)) {
 						aucPeriod = tmpTime;
 					}
 				}				

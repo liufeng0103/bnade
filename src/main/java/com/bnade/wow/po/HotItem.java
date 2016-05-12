@@ -2,14 +2,13 @@ package com.bnade.wow.po;
 
 public class HotItem {
 	
-	public static final int PERIOD_DAY = 1;
-	public static final int PERIOD_WEEK = 2;
-	public static final int PERIOD_MONTH = 3;
-	public static final int PERIOD_YEAR = 3;
-
+	public static final int HOT_DAY = 1;
+	public static final int HOT_WEEK = 2;
+	public static final int HOT_MONTH = 3;
+	
 	private int itemId;
 	private int queried;
-	private int period;
+	private long dateTime;
 
 	public int getItemId() {
 		return itemId;
@@ -27,11 +26,12 @@ public class HotItem {
 		this.queried = queried;
 	}
 
-	public int getPeriod() {
-		return period;
+	public long getDateTime() {
+		return dateTime;
 	}
 
-	public void setPeriod(int period) {
-		this.period = period;
+	public void setDateTime(long dateTime) {
+		this.dateTime = dateTime;
 	}
+
 }

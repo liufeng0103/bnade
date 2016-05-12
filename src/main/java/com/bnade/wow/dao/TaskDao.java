@@ -17,7 +17,7 @@ public interface TaskDao {
 	
 	Task getByType(int type) throws SQLException;
 	
-	void updateLastUpdatedForHotItemTask(long lastUpdated) throws SQLException;
+	void updateHotItemTask(Task task) throws SQLException;
 	
 	void saveHotItemTask(Task task) throws SQLException;
 	
