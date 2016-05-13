@@ -10,6 +10,9 @@ body {
   padding-top: 50px;
 }
 
+input {
+	margin-left: 1px;
+}
 
 /*
  * Global add-ons
