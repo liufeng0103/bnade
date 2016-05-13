@@ -62,6 +62,24 @@ CREATE TABLE IF NOT EXISTS t_item_market (
 	PRIMARY KEY(itemId,petSpeciesId,petBreedId,bonusLists)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 超值的物品
+CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
+	realmId INT UNSIGNED NOT NULL,			-- 服务器ID	
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	buy BIGINT UNSIGNED NOT NULL,			-- 价格
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 物品价格规则，满足条件的将被保存
+CREATE TABLE IF NOT EXISTS t_item_rule (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	ltBuy BIGINT UNSIGNED NOT NULL,			-- 小于某个价
+	gtBuy BIGINT UNSIGNED NOT NULL,			-- 大于某个价
+	PRIMARY KEY(id)	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 宠物信息表
 CREATE TABLE IF NOT EXISTS t_pet (	
 	id INT UNSIGNED NOT NULL,		-- 宠物id				
