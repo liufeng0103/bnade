@@ -16,12 +16,15 @@ import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.model.AuctionDataFile;
 import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.po.Auction;
+import com.bnade.wow.po.OwnerItem;
 import com.bnade.wow.po.Realm;
 import com.bnade.wow.service.AuctionHouseDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDailyDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDataService;
+import com.bnade.wow.service.AuctionHouseOwnerItemService;
 import com.bnade.wow.service.RealmService;
 import com.bnade.wow.service.impl.AuctionHouseDataServiceImpl;
+import com.bnade.wow.service.impl.AuctionHouseOwnerItemServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutDailyDataServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutDataServiceImpl;
 import com.bnade.wow.service.impl.RealmServiceImpl;
@@ -59,6 +62,7 @@ public class AuctionDataExtractingTask implements Runnable {
 	private WowClient wowClient;	
 	private RealmService realmService;
 	private AuctionHouseDataService auctionDataService;
+	private AuctionHouseOwnerItemService auctionHouseOwnerItemService;
 	private AuctionHouseMinBuyoutDataService auctionMinBuyoutDataService;
 	private AuctionHouseMinBuyoutDailyDataService auctionMinBuyoutDailyDataService;
 	private AuctionDataProcessor auctionDataProcessor;
@@ -75,6 +79,7 @@ public class AuctionDataExtractingTask implements Runnable {
 		wowClient = new WowClient();
 		realmService = new RealmServiceImpl();		
 		auctionDataService = new AuctionHouseDataServiceImpl();
+		auctionHouseOwnerItemService = new AuctionHouseOwnerItemServiceImpl();
 		auctionMinBuyoutDataService = new AuctionMinBuyoutDataServiceImpl();
 		auctionMinBuyoutDailyDataService = new AuctionMinBuyoutDailyDataServiceImpl();
 		auctionDataProcessor = new AuctionDataProcessor();
@@ -134,12 +139,18 @@ public class AuctionDataExtractingTask implements Runnable {
 				auctionDataProcessor.process(auctions);
 				if (auctionDataProcessor.getMaxAucId() != realm.getMaxAucId()) {	
 					// 1. 保存所有数据
-					addInfo("删除上一次拍卖行数据", tmpAucs.size());
+					addInfo("删除上一次拍卖行数据");
 					auctionDataService.deleteAll(realm.getId());
 					addInfo("开始保存{}条拍卖行数据", tmpAucs.size());
 					long start = System.currentTimeMillis();
 					auctionDataService.save(tmpAucs, realm.getId());
 					addInfo("保存{}条拍卖行数据完毕, 用时{}", auctions.size(), TimeUtil.format(System.currentTimeMillis() - start));
+					addInfo("删除上一次玩家物品数数据");
+					auctionHouseOwnerItemService.deleteAll(realm.getId());
+					List<OwnerItem> ownerItems = auctionDataProcessor.getOwnerItems();
+					addInfo("开始保存{}条玩家拍卖物品数", ownerItems.size());
+					auctionHouseOwnerItemService.save(ownerItems, realm.getId());
+					addInfo("保存{}条玩家拍卖物品数完毕", ownerItems.size());					
 					// 2. 保存所有最低一口价数据
 					List<JAuction> minBuyoutAuctions = auctionDataProcessor.getMinBuyoutAuctions();
 					// 更新服务器拍卖状态信息到t_realm
@@ -232,6 +243,6 @@ public class AuctionDataExtractingTask implements Runnable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new AuctionDataExtractingTask("亚雷戈斯").process();
+		new AuctionDataExtractingTask("古尔丹").process();
 	}
 }

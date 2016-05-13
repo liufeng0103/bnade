@@ -78,4 +78,8 @@ public class HistoryAuction {
 		this.count = count;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("Auc[item=%d,buyout=%d,bonusLists=%s,lastModifed=%d]", item, buyout, bonusLists, lastModifed);
+	}
 }
