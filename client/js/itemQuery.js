@@ -117,6 +117,10 @@ function getPast24(realmId, realm, itemId, itemName) {
 			$('#past24CtlDiv').hide();
 		} else {				
 			$('#past24CtlDiv').show();
+			// 按更新时间排序
+			data.sort(function(a, b){
+				return a[2] - b[2];
+			});
 			var chartLabels=[];
 			var chartMinBuyout=[];
 			var chartQuantity=[];
@@ -436,8 +440,8 @@ function getPastWeek(realmId, realm, itemId, itemName){
 				var buyoutGold = Bnade.getGold(buyout);
 				var quantity = data[i][1];
 				var updated = data[i][2];
-				if (updated >= startTime) {
-					weekCalData[i] =  buyout;
+				if (updated > startTime) {
+					weekCalData[heatI] =  buyout;
 					weekQuantity += quantity;
 					weekCount++;
 					if (weekMinQuantity === 0 || weekMinQuantity > quantity) {
@@ -468,7 +472,7 @@ function getPastWeek(realmId, realm, itemId, itemName){
 			var weekResult = Bnade.getResult(weekCalData);			
 			$('#pastWeekMinBuyout').html(Bnade.getGold(weekResult.min));
 			$('#pastWeekMaxBuyout').html(Bnade.getGold(weekResult.max));
-			$('#pastWeekAvgBuyout').html(Bnade.getGold(weekResult.max));
+			$('#pastWeekAvgBuyout').html(Bnade.getGold(weekResult.avg));
 			$('#pastWeekAvgQuantity').html(parseInt(weekQuantity/weekCount));
 			loadHeatMapChart('pastWeekBuyoutHeatMapContainer','一周内'+itemName+'价格热力图',heatMapLabels,heatMapBuyoutData,Bnade.getGold(weekResult.min),'一口价',0);
 			loadHeatMapChart('pastWeekQuantityHeatMapContainer','一周内'+itemName+'数量热力图',heatMapLabels,heatMapQuantityData,weekMinQuantity,'数量',8);
