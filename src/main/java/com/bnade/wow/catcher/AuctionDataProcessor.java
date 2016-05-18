@@ -23,7 +23,7 @@ public class AuctionDataProcessor {
 	private Map<String, JAuction> minByoutAuctions;
 	private Map<String, Map<Integer, Integer>> owners = new HashMap<>();
 	private List<OwnerItem> items = new ArrayList<>();
-	
+
 	public AuctionDataProcessor() {
 		minByoutAuctions = new HashMap<>();
 	}
@@ -52,7 +52,7 @@ public class AuctionDataProcessor {
 					minBuyoutAuction.setQuantity(auction.getQuantity() + minBuyoutAuction.getQuantity());				
 				} 
 			}			
-		}
+		}		
 	}
 	
 	private void addOwnerItem(JAuction auc) {		
@@ -102,4 +102,7 @@ public class AuctionDataProcessor {
 		return new ArrayList<>(minByoutAuctions.values());
 	}
 	
+	public  Map<String, JAuction> getMinBuyoutAuctionMap() {
+		return minByoutAuctions;
+	}
 }

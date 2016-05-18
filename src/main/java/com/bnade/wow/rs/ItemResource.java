@@ -24,8 +24,10 @@ import com.bnade.wow.po.HotItem;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.po.QueryItem;
 import com.bnade.wow.service.HotItemService;
+import com.bnade.wow.service.ItemRuleService;
 import com.bnade.wow.service.ItemService;
 import com.bnade.wow.service.impl.HotItemServiceImpl;
+import com.bnade.wow.service.impl.ItemRuleServiceImpl;
 import com.bnade.wow.service.impl.ItemServiceImpl;
 import com.bnade.wow.vo.HotItemVo;
 import com.bnade.wow.vo.ItemVo;
@@ -37,10 +39,12 @@ public class ItemResource {
 	
 	private ItemService itemService;
 	private HotItemService hotItemService;
+	private ItemRuleService itemRuleService;
 	
 	public ItemResource() {
 		itemService = new ItemServiceImpl();
 		hotItemService = new HotItemServiceImpl();
+		itemRuleService = new ItemRuleServiceImpl();
 	}
 
 	/*
@@ -136,6 +140,36 @@ public class ItemResource {
 			copy(hotItems, items, HotItem.HOT_DAY);			
 			return items;
 		} catch (SQLException | ParseException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}
+	}
+	
+	/*
+	 * 物品规则
+	 */
+	@GET
+	@Path("/rules")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getItemRules() {		
+		try {
+			return itemRuleService.getAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}
+	}
+	
+	/*
+	 * 物品规则
+	 */
+	@GET
+	@Path("/rule/matchs")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getItemRuleMatchs() {		
+		try {
+			return itemRuleService.getAllMatched();
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
 		}

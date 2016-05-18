@@ -51,17 +51,6 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 	PRIMARY KEY(itemId, bonusList)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 物品的参考价格
-CREATE TABLE IF NOT EXISTS t_item_market (
-	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
-	petSpeciesId INT UNSIGNED NOT NULL,		-- 宠物ID
-	petBreedId INT UNSIGNED NOT NULL,		-- 宠物类型
-	bonusLists VARCHAR(20) NOT NULL,		-- 奖励
-	buy BIGINT UNSIGNED NOT NULL,			-- 市场价
-	realmQuantity INT UNSIGNED NOT NULL,	-- 参考服务器数
-	PRIMARY KEY(itemId,petSpeciesId,petBreedId,bonusLists)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- 超值的物品
 CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
@@ -216,6 +205,7 @@ ALTER TABLE t_task ADD INDEX(realmId,date);
 -- 热门物品task更新处理时间
 ALTER TABLE t_task ADD INDEX(type);
 
+------------------- 搜索排行榜功能相关表 -------------------
 -- 用户查询的物品
 CREATE TABLE IF NOT EXISTS t_query_item (
 	itemId INT UNSIGNED NOT NULL,		-- 物品ID
@@ -224,10 +214,46 @@ CREATE TABLE IF NOT EXISTS t_query_item (
 	PRIMARY KEY(itemId,ip)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 用户查询的物品
+-- 每天物品查询的次数
 CREATE TABLE IF NOT EXISTS t_hot_item (
 	itemId INT UNSIGNED NOT NULL,		-- 物品ID
 	queried	INT UNSIGNED NOT NULL,  	-- 查询次数
 	dateTime BIGINT UNSIGNED NOT NULL,  -- 查询的日期时间
 	PRIMARY KEY(dateTime,itemId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+------------------- 参考价格功能相关表 -------------------
+-- 记录处理过的item id
+CREATE TABLE IF NOT EXISTS t_item_analysis (
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	PRIMARY KEY(itemId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 物品的参考价格
+CREATE TABLE IF NOT EXISTS t_item_market (
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	petSpeciesId INT UNSIGNED NOT NULL,		-- 宠物ID
+	petBreedId INT UNSIGNED NOT NULL,		-- 宠物类型
+	bonusLists VARCHAR(20) NOT NULL,		-- 奖励
+	buy BIGINT UNSIGNED NOT NULL,			-- 市场价
+	realmQuantity INT UNSIGNED NOT NULL,	-- 参考服务器数
+	PRIMARY KEY(itemId,petSpeciesId,petBreedId,bonusLists)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+------------------- 淘宝功能相关表 -------------------
+-- 物品价格配置
+CREATE TABLE IF NOT EXISTS t_item_rule (
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	ltBuy BIGINT UNSIGNED NOT NULL,		-- 低于
+	gtBuy BIGINT UNSIGNED NOT NULL,		-- 高于
+	PRIMARY KEY(itemId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 满足规则的物品
+CREATE TABLE IF NOT EXISTS t_item_rule_match (
+	realmId INT UNSIGNED NOT NULL,			-- 服务器ID
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	buyout BIGINT UNSIGNED NOT NULL,		-- 一口价
+	lastModified BIGINT UNSIGNED NOT NULL,	-- 数据更新时间
+	PRIMARY KEY(realmId,itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
