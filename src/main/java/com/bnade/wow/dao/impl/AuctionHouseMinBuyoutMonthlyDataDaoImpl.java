@@ -87,8 +87,10 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 					+ " where item=?";
 			if (bounsList != null) {
 				url += " and bonusLists=?";
+				logger.debug(url);
 				return run.query(url, new BeanListHandler<HistoryAuction>(HistoryAuction.class), itemId, bounsList);
 			} else {
+				logger.debug(url);
 				return run.query(url, new BeanListHandler<HistoryAuction>(HistoryAuction.class), itemId);
 			}			
 		} else {

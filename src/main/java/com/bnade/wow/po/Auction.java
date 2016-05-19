@@ -157,7 +157,6 @@ public class Auction {
 
 	@Override
 	public String toString() {
-		return String.format("%d %d context:%d bonusLists:%s", auc, item,
-				context, getBonusLists());
+		return String.format("item=%d, buyout=%d", item, buyout);
 	}
 }

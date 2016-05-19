@@ -78,10 +78,9 @@ public class AuctionDataArchivingTask {
 				addInfo("获取数据完毕, 共{}条", aucs.size());
 				try {
 					List<HistoryAuction> result = auctionDataArchivingProcessor.process(aucs, handleDate);
-					addInfo("数据分析完毕共{}条", result.size());	
-					int year = TimeUtil.getYear(TimeUtil.parse(handleDate));
+					addInfo("数据分析完毕共{}条", result.size());					
 					String month = TimeUtil.getYearMonth(TimeUtil.parse(handleDate).getTime());
-					addInfo("把数据归档到{}年的集合", year);	
+					addInfo("把数据归档到{}年的集合", month);	
 					auctionMinBuyoutHistoryDataService.save(result, month, realm.getId());
 					taskStatusDao.addArchivedTask(taskStatus);
 					addInfo("数据添加为已归档", handleDate);

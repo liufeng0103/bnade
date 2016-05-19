@@ -51,6 +51,35 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 	PRIMARY KEY(itemId, bonusList)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 物品的参考价格
+CREATE TABLE IF NOT EXISTS t_item_market (
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	petSpeciesId INT UNSIGNED NOT NULL,		-- 宠物ID
+	petBreedId INT UNSIGNED NOT NULL,		-- 宠物类型
+	bonusLists VARCHAR(20) NOT NULL,		-- 奖励
+	buy BIGINT UNSIGNED NOT NULL,			-- 市场价
+	realmQuantity INT UNSIGNED NOT NULL,	-- 参考服务器数
+	PRIMARY KEY(itemId,petSpeciesId,petBreedId,bonusLists)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 超值的物品
+CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
+	realmId INT UNSIGNED NOT NULL,			-- 服务器ID	
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	buy BIGINT UNSIGNED NOT NULL,			-- 价格
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 物品价格规则，满足条件的将被保存
+CREATE TABLE IF NOT EXISTS t_item_rule (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	ltBuy BIGINT UNSIGNED NOT NULL,			-- 小于某个价
+	gtBuy BIGINT UNSIGNED NOT NULL,			-- 大于某个价
+	PRIMARY KEY(id)	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 宠物信息表
 CREATE TABLE IF NOT EXISTS t_pet (	
 	id INT UNSIGNED NOT NULL,		-- 宠物id				
@@ -156,6 +185,15 @@ CREATE TABLE IF NOT EXISTS t_ah_min_buyout_data_yyyyMM_x (
 -- 查询物品或宠物在所有服务器yyyyMM月的最低一口价  
 ALTER TABLE t_ah_min_buyout_data_yyyyMM_x ADD INDEX(item);
 ALTER TABLE t_ah_min_buyout_data_yyyyMM_x ADD INDEX(petSpeciesId);
+
+-- 玩家拍卖的物品数据
+CREATE TABLE IF NOT EXISTS t_ah_owner_item_x (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,	-- 自增ID，便于插入数据
+	item INT UNSIGNED NOT NULL,					-- 物品ID
+	owner VARCHAR(12) NOT NULL,					-- 玩家	
+	quantity INT UNSIGNED NOT NULL,				-- 数量	
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 时光徽章
 CREATE TABLE IF NOT EXISTS t_wowtoken (	

@@ -69,9 +69,9 @@ public class HotItemTask {
 	}
 	
 	public static void main(String[] args) throws SQLException, ParseException {
-		args = new String[1];		
+//		args = new String[1];		
 //		args[0] = "update";
-		args[0] = "clear";
+//		args[0] = "clear";
 		if (args.length > 0) {
 			String parm = args[0];
 			switch(parm) {

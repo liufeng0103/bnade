@@ -2,6 +2,8 @@ package com.bnade.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,5 +30,19 @@ public class FileUtil {
 			e.printStackTrace();
 		}		
 		return list;
-	} 
+	}
+	
+	public static void stringToFile(String text, String filePath) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new FileOutputStream(filePath, true));
+			out.println(text);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				out.close();	
+			}			
+		}		
+	}
 }

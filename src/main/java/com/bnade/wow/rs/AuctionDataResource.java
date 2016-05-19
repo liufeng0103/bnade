@@ -16,16 +16,19 @@ import com.bnade.util.TimeUtil;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.HistoryAuction;
 import com.bnade.wow.po.Item;
+import com.bnade.wow.po.OwnerItemStatistics;
 import com.bnade.wow.po.Pet;
 import com.bnade.wow.po.Realm;
 import com.bnade.wow.service.AuctionHouseDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDailyDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutHistoryDataService;
+import com.bnade.wow.service.AuctionHouseOwnerItemService;
 import com.bnade.wow.service.ItemService;
 import com.bnade.wow.service.PetService;
 import com.bnade.wow.service.RealmService;
 import com.bnade.wow.service.impl.AuctionHouseDataServiceImpl;
+import com.bnade.wow.service.impl.AuctionHouseOwnerItemServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutDailyDataServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutDataServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutHistoryDataServiceImpl;
@@ -46,6 +49,7 @@ public class AuctionDataResource {
 	private ItemService itemService;
 	private RealmService realmService;
 	private AuctionHouseDataService auctionDataService;
+	private AuctionHouseOwnerItemService auctionHouseOwnerItemService;
 	private AuctionHouseMinBuyoutDataService auctionMinBuyoutDataService;
 	private AuctionHouseMinBuyoutDailyDataService auctionMinBuyoutDailyDataService;
 	private AuctionHouseMinBuyoutHistoryDataService auctionMinBuyoutHistoryDataService;
@@ -55,6 +59,7 @@ public class AuctionDataResource {
 		itemService = new ItemServiceImpl();
 		realmService = new RealmServiceImpl();
 		auctionDataService = new AuctionHouseDataServiceImpl();
+		auctionHouseOwnerItemService = new AuctionHouseOwnerItemServiceImpl();
 		auctionMinBuyoutDataService = new AuctionMinBuyoutDataServiceImpl();
 		auctionMinBuyoutDailyDataService = new AuctionMinBuyoutDailyDataServiceImpl();
 		auctionMinBuyoutHistoryDataService = new AuctionMinBuyoutHistoryDataServiceImpl();
@@ -266,6 +271,60 @@ public class AuctionDataResource {
 				result.add(realmVo);
 			}	
 			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}		
+	}
+	
+	/**
+	 * 获取玩家拍卖物品种类最多的排行
+	 * @param itemId
+	 * @param bl
+	 * @return
+	 */
+	@GET
+	@Path("/realm/{realmId}/owner/item/category/top")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getOwnerItemTopCount(@PathParam("realmId") int realmId) {
+		try {
+			return auctionHouseOwnerItemService.getOwnerItemStatisticsByRealmId(realmId, OwnerItemStatistics.CATEGERY_COUNT, 50);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}		
+	}
+	
+	/**
+	 * 获取玩家拍卖物品总价值最多的排行
+	 * @param itemId
+	 * @param bl
+	 * @return
+	 */
+	@GET
+	@Path("/realm/{realmId}/owner/item/worth/top")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getOwnerItemTopWorth(@PathParam("realmId") int realmId) {
+		try {
+			return auctionHouseOwnerItemService.getOwnerItemStatisticsByRealmId(realmId, OwnerItemStatistics.WORTH, 50);			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}		
+	}
+	
+	/**
+	 * 获取玩家拍卖物品总数量最多的排行
+	 * @param itemId
+	 * @param bl
+	 * @return
+	 */
+	@GET
+	@Path("/realm/{realmId}/owner/item/quantity/top")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getOwnerItemTopQuantity(@PathParam("realmId") int realmId) {
+		try {
+			return auctionHouseOwnerItemService.getOwnerItemStatisticsByRealmId(realmId, OwnerItemStatistics.QUANTITY, 50);			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();

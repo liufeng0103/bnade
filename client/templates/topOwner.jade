@@ -3,34 +3,32 @@ block title
 	title 魔兽世界拍卖行玩家排行
 block content
 	div.container-fluid
-		div.row
-			div.col-sm-3.col-md-2.sidebar
-				ul#realmQueryList.nav.nav-sidebar
-			div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
-				div.col-md-10
-					form.navbar-form(onsubmit="return false;")
-						div.form-inline
-							div.form-group
-								div.input-group
-									input#realm.form-control(type="text",placeholder="服务器(选填)")
-									div.input-group-btn
-										button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
-										ul#realmSelectList.dropdown-menu.dropdown-menu-right
-							input#queryBtn.btn.btn-success(type="button",value="查询")
-							input.btn.btn-success(type="reset",value="重置")
-					p#msg
-					div.row
-						div.col-md-6
-							h3 玩家物品数量排名
-							div#topAuc
-						div.col-md-6
-							h3 玩家物品总价值排名
-							div#topPrice
-					p 说明:
-					ul
-						li 晴日峰和丽丽服务器请用后面的名字作为服务器:晴日峰-江苏 丽丽-四川
-						li 有任何问题请在NGA帖子下留言:
-							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
-				div.col-md-2
+		div.container
+			div.row
+				form.navbar-form(onsubmit="return false;")
+					div.form-inline
+						div.form-group
+							div.input-group
+								input#realm.form-control(type="text",placeholder="服务器(选填)")
+								div.input-group-btn
+									button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown",aria-haspopup="true",aria-expanded="false") 选择 <span class="caret"></span>
+									ul#realmSelectList.dropdown-menu.dropdown-menu-right
+						input#queryBtn.btn.btn-success(type="button",value="查询")
+						input.btn.btn-success(type="reset",value="重置")
+				p#msg
+			div.row
+				div.col-md-4
+					h3 玩家物品总价值排行榜
+					div#topWorth
+				div.col-md-4
+					h3 玩家物品种类数排行榜
+					div#topCategory
+				div.col-md-4
+					h3 玩家物品总数量排行榜
+					div#topQuantity
+			p 说明:
+			ul
+				li 有任何问题请在NGA帖子下留言:
+					a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
 block pagescript
 	script(src="js/topOwner.js")
