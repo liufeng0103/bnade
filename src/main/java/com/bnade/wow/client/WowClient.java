@@ -46,6 +46,8 @@ public class WowClient {
 	 * @throws IOException
 	 */
 	public AuctionDataFile getAuctionDataFile(String realmName) throws WowClientException {		
+		// 晴日峰 (江苏)和丽丽需要转化空格
+		realmName = realmName.replaceAll(" ", "%20");
 		String url = HOST + AUCTION_DATA + realmName + APIKEY;
 		String json = null;
 		try {			
