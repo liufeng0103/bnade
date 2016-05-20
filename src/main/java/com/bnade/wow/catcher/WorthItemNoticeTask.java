@@ -53,9 +53,7 @@ public class WorthItemNoticeTask {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			} else {
-				logger.info("找不到物品{}" + rule.getItemId());
-			}
+			} 
 		}
 	}
 	
