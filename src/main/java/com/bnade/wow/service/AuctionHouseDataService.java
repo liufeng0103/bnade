@@ -19,4 +19,6 @@ public interface AuctionHouseDataService {
 
 	List<Auction> getByOwner(String owner, int realmId) throws SQLException;
 
+	List<Auction> getByItemId(int itemId, String bounsList, int realmId) throws SQLException;
+	
 }

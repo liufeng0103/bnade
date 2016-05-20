@@ -503,13 +503,14 @@ function getItemByAllRealms(itemId,itemName){
 					var ownerItemUrl = "";
 					for(var i in data){				
 						var itemArr=data[i];
-						var realm=Realm.getConnectedById(itemArr[0]);
+						var realmId = itemArr[0];
+						var realm=Realm.getConnectedById(realmId);
 						var realmColumnClass="";								
 						if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
 							realmColumnClass = "class='danger'";									
 						}
 						var buyout=Bnade.getGold(itemArr[1]);						
-						$("#showAllBody").append("<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(itemArr[0]))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td>"+itemArr[3]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>");
+						$("#showAllBody").append("<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>");
 					}
 				}else{
 					isShowAll=true;
@@ -699,5 +700,30 @@ $(document).ready(function() {
 		$("#fuzzyItemsList").hide();	
 		queryByUrl();
 		loadTopItems();
-	}();	
+	}();
+	$('#itemAucsModal').on('show.bs.modal', function (event) {
+		var aLink = $(event.relatedTarget);
+		var realmId = aLink.data('realmid');
+		var itemId = aLink.data('itemid');
+		var modal = $(this);
+		modal.find('.modal-body-content').text("正在查询，请稍等...");
+		$.get('wow/auction/realm/' + realmId + '/item/' + itemId, function(data) {		
+			if (data.length === 0) {
+				$('#msg').html("找不到物品:" + itemName);
+			} else {
+				data.sort(function(a,b){
+					return a[3]/a[4] - b[3]/b[4];
+				});
+				var tblHtml = "<table class='table table-striped'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th></tr></thead><tbody>";
+				for (var i in data) {
+					var item = data[i];
+					tblHtml += "<tr><td>"+(parseInt(i)+1)+"</td><td>"+item[0]+"</td><td>"+item[1]+"</td><td>"+Bnade.getGold(item[2])+"</td><td>"+Bnade.getGold(item[3])+"</td><td>"+item[4]+"</td><td>"+Bnade.getGold(item[3]/item[4])+"</td><td>"+leftTimeMap[item[5]]+"</td></tr>";
+				}
+				tblHtml += "</tbody></table>";				
+				modal.find('.modal-body-content').html(tblHtml);
+			}		
+		}).fail(function() {
+			$("#msg").html("查询物品所有拍卖出错");
+	    });			  
+	});
 });
