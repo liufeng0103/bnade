@@ -685,7 +685,12 @@ $(document).ready(function() {
 	$("#queryBtn").click(function() {
 		itemQuery();
 	});
-	$("#itemFuzzyQueryBtn").click(function(){
+    
+   $( "#itemName" ).autocomplete({
+     source: 'wow/item/names'
+   });
+	
+   $("#itemFuzzyQueryBtn").click(function(){
 		var itemName=$("#itemName").val();
 		if(itemName==""){
 			$('#msg').html("物品名不能为空");

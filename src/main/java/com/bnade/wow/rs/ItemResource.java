@@ -56,7 +56,7 @@ public class ItemResource {
 	public Object getItemsByName(@PathParam("name")String name, @QueryParam("fuzzy") boolean isFuzzy, @Context HttpServletRequest request) {
 		try {
 			if (isFuzzy) {
-				List<Item> items = itemService.getItemsByName(name, true);
+				List<Item> items = itemService.getItemsByName(name, true, 0);
 				List<String> result = new ArrayList<>();
 				for (Item item : items) {
 					result.add(item.getName());
@@ -88,6 +88,27 @@ public class ItemResource {
 				}
 				return result;	
 			}			
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}
+	}
+	
+	/*
+	 * 返回包含term的所有物品名
+	 */
+	@GET
+	@Path("/names")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getItemNamesByTerm(@QueryParam("term") String term) {
+		int max_length = 10;
+		try {			
+			List<Item> items = itemService.getItemsByName(term, true, max_length);
+			List<String> result = new ArrayList<>();
+			for (Item item : items) {
+				result.add(item.getName());
+			}
+			return result;			
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
