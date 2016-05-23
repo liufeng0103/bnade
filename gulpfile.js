@@ -38,7 +38,7 @@ gulp.task('lint', function() {
 
 // Concat & Minify JS
 gulp.task('minify', function(){
-	gulp.src(["client/js/itemsQuery.js","client/js/wowtoken.js","client/js/topOwner.js","client/js/petQuery.js","client/js/ownerQuery.js","client/js/itemQuery.js","client/js/auctionQuantity.js"])
+	gulp.src(["client/js/itemsQuery.js","client/js/itemRule.js","client/js/worthItem.js","client/js/wowtoken.js","client/js/topOwner.js","client/js/petQuery.js","client/js/ownerQuery.js","client/js/itemQuery.js","client/js/auctionQuantity.js"])
     .pipe(uglify())
     .pipe(gulp.dest(GulpConfig.jsDist));
   return gulp.src(GulpConfig.jsSrc)
@@ -51,7 +51,7 @@ gulp.task('minify', function(){
 
 //Concat & Minify JS Dev
 gulp.task('minify-dev', function(){
-	gulp.src(["client/js/itemsQuery.js","client/js/wowtoken.js","client/js/topOwner.js","client/js/petQuery.js","client/js/ownerQuery.js","client/js/itemQuery.js","client/js/auctionQuantity.js"])
+	gulp.src(["client/js/itemsQuery.js","client/js/itemRule.js","client/js/worthItem.js","client/js/wowtoken.js","client/js/topOwner.js","client/js/petQuery.js","client/js/ownerQuery.js","client/js/itemQuery.js","client/js/auctionQuantity.js"])
     .pipe(gulp.dest(GulpConfig.jsDist));
   return gulp.src(GulpConfig.jsSrc)
     .pipe(concat('main.js'))

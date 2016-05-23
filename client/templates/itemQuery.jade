@@ -2,6 +2,15 @@ extends layout
 block title
 	title 魔兽世界物价查询 24小时内价格波动 历史价格 全服务器价格查询比较
 block content
+	div#itemAucsModal.modal.fade.bs-example-modal-lg
+		div.modal-dialog.modal-lg
+			div.modal-content
+				div.modal-header
+					h4.modal-title 所有拍卖
+				div.modal-body
+					div.modal-body-content
+				div.modal-footer
+					button.btn.btn-default(type="button", data-dismiss="modal") 关闭
 	div.container-fluid
 		div.row
 			div.col-sm-3.col-md-2.sidebar

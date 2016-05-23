@@ -66,6 +66,7 @@ public class AuctionDataExtractingTask implements Runnable {
 	private AuctionHouseMinBuyoutDataService auctionMinBuyoutDataService;
 	private AuctionHouseMinBuyoutDailyDataService auctionMinBuyoutDailyDataService;
 	private AuctionDataProcessor auctionDataProcessor;
+	private WorthItemNoticeTask worthItemNoticeTask;
 	private boolean isApiAvailable = true;
 
 	public AuctionDataExtractingTask(String realmName) {
@@ -83,6 +84,7 @@ public class AuctionDataExtractingTask implements Runnable {
 		auctionMinBuyoutDataService = new AuctionMinBuyoutDataServiceImpl();
 		auctionMinBuyoutDailyDataService = new AuctionMinBuyoutDailyDataServiceImpl();
 		auctionDataProcessor = new AuctionDataProcessor();
+		worthItemNoticeTask = new WorthItemNoticeTask();
 	}
 
 	public void process() throws CatcherException, IOException, SQLException {
@@ -137,7 +139,9 @@ public class AuctionDataExtractingTask implements Runnable {
 				List<Auction> tmpAucs = new ArrayList<>();
 				copy(auctions, tmpAucs, realm.getId(), realm.getLastModified());
 				auctionDataProcessor.process(auctions);
-				if (auctionDataProcessor.getMaxAucId() != realm.getMaxAucId()) {	
+				if (auctionDataProcessor.getMaxAucId() != realm.getMaxAucId() || (isApiAvailable && useAPIGetData)) {
+					// 通知低价
+					worthItemNoticeTask.a(auctionDataProcessor.getMinBuyoutAuctionMap(), realm.getId(), realm.getLastModified());
 					// 1. 保存所有数据
 					addInfo("删除上一次拍卖行数据");
 					auctionDataService.deleteAll(realm.getId());

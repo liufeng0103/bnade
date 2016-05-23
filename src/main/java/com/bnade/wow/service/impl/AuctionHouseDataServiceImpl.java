@@ -30,5 +30,11 @@ public class AuctionHouseDataServiceImpl implements AuctionHouseDataService {
 	public List<Auction> getByOwner(String owner, int realmId) throws SQLException {
 		return auctionHouseDataDao.getByOwner(owner, realmId);
 	}
+
+	@Override
+	public List<Auction> getByItemId(int itemId, String bounsList, int realmId)
+			throws SQLException {		
+		return auctionHouseDataDao.getByItemId(itemId, bounsList, realmId);
+	}
 	
 }

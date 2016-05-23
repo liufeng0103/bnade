@@ -191,6 +191,34 @@ public class AuctionDataResource {
 	}
 	
 	/*
+	 * 获取某个服务器某个物品的所有拍卖
+	 */
+	@GET
+	@Path("/realm/{realmId}/item/{itemId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getAuctionItemsByRealmAndItem(@PathParam("realmId") int realmId, @PathParam("itemId") int itemId, @QueryParam("bl") String bl) {
+		try {
+			List<Auction> aucs = auctionDataService.getByItemId(itemId, bl, realmId);
+			Object[] result = new Object[aucs.size()];
+			for (int i = 0; i < aucs.size(); i++) {
+				Auction auc = aucs.get(i);					
+				Object[] item = new Object[6];
+				item[0] = auc.getOwner();
+				item[1] = auc.getOwnerRealm();
+				item[2] = auc.getBid();
+				item[3] = auc.getBuyout();
+				item[4] = auc.getQuantity();
+				item[5] = auc.getTimeLeft();
+				result[i] = item;			
+			}
+			return result; 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}	
+	}
+	
+	/*
 	 * 获取某个服务器玩家拍卖的所有东西
 	 */
 	@GET
