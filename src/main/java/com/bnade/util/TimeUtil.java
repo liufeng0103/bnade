@@ -105,5 +105,6 @@ public class TimeUtil {
 		System.out.println(TimeUtil.parse("20160512"));	
 		System.out.println(TimeUtil.getYear(new Date()));
 		System.out.println(TimeUtil.getYearMonth(-1));
+		System.out.println(TimeUtil.parse(TimeUtil.getDate(0)).getTime());
 	}
 }
