@@ -77,9 +77,12 @@ public class ItemMarketPriceAnalysis {
 				if (marketItem != null) {
 					if (aucs.size() < REFERENCE_AUCTION_COUNT) {
 						if (price > marketItem.getBuy() && marketItem.getBuy() != 0) {
-							logger.info("{}参考服务器数量{}少于{}，这次价格{}，历史价格{}数量{}", id, aucs.size(), REFERENCE_AUCTION_COUNT, price, marketItem.getBuy(), marketItem.getRealmQuantity());
 							price = marketItem.getBuy();
 							realmQuantity = marketItem.getRealmQuantity();							
+						} else {
+							if (price != marketItem.getBuy()) {
+								logger.info("{}参考服务器数量{}少于{}，这次价格{}，历史价格{}数量{}", id, aucs.size(), REFERENCE_AUCTION_COUNT, price, marketItem.getBuy(), marketItem.getRealmQuantity());	
+							}							
 						}						
 					}
 					run.update("update t_item_market set buy=?,realmQuantity=? where itemId=?", price, realmQuantity, id);
