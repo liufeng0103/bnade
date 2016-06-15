@@ -12,3 +12,4 @@ log/
 node_modules
 dist
 sh
+.idea/
