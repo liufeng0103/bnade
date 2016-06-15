@@ -56,7 +56,7 @@ public class ItemResource {
 	public Object getItemsByName(@PathParam("name")String name, @QueryParam("fuzzy") boolean isFuzzy, @Context HttpServletRequest request) {
 		try {
 			if (isFuzzy) {
-				List<Item> items = itemService.getItemsByName(name, true);
+				List<Item> items = itemService.getItemsByName(name, true, 0);
 				List<String> result = new ArrayList<>();
 				for (Item item : items) {
 					result.add(item.getName());
