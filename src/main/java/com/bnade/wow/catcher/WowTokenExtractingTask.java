@@ -85,7 +85,7 @@ public class WowTokenExtractingTask {
 			wowToken.setUpdated(wowToken.getUpdated() * 1000);
 			logger.info("从数据库获取更新时间{}的时光徽章", new Date(wowToken.getUpdated()));
 			WowToken dbWowToken = wowTokenService.getByUpdated(wowToken.getUpdated());
-			if (dbWowToken == null) {
+			if (dbWowToken == null && wowToken.getBuy() != 0) {
 				logger.info("时光徽章不在数据库，添加信息{}", wowToken);
 				wowTokenService.save(wowToken);
 			} else {
