@@ -66,6 +66,17 @@ public class TimeUtil {
 		return sf.format(cal.getTime());
 	}
 	
+	/**
+	 * 返回比当天差i天的日期
+	 * @return
+	 */
+	public static String getDate(Date date, int i) {		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, i);
+		return sf.format(cal.getTime());
+	}
+	
 	public static String getDate(long time) {
 		return sf.format(time);
 	}
@@ -106,5 +117,6 @@ public class TimeUtil {
 		System.out.println(TimeUtil.getYear(new Date()));
 		System.out.println(TimeUtil.getYearMonth(-1));
 		System.out.println(TimeUtil.parse(TimeUtil.getDate(0)).getTime());
+		System.out.println(TimeUtil.getDate(TimeUtil.parse("20160610"), -1));
 	}
 }

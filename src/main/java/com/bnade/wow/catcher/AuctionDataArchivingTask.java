@@ -124,13 +124,27 @@ public class AuctionDataArchivingTask {
 		logger.error(logHeader + msg, arguments);
 	}
 
-	public static void main(String[] args) throws CatcherException, SQLException {
+	public static void main(String[] args) throws CatcherException, SQLException, ParseException {
 //		args = new String[2];
 //		args[0] = "古尔丹";
 //		args[1] = "20160507";
 		logger.info("启动");
 		long start = System.currentTimeMillis();
-		if (args != null && args.length > 1) {
+		if (args != null && args.length == 1) {
+			AuctionDataArchivingTask task = new AuctionDataArchivingTask();
+			List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
+			String handleDate = args[0];
+			String cleanDate = TimeUtil.getDate(TimeUtil.parse(handleDate), -1);
+			for (String realmName : realmNames) {
+				task.process(realmName, handleDate);
+				task.clean(realmName, cleanDate);
+				if (task.isShutdown()) {
+					logger.info("准备退出，当前运行服务器[{}]", realmName);
+					break;
+				}
+			}	
+			task.finished();
+		} else if (args != null && args.length > 1) {
 			String realmName = args[0];
 			String handleDate = args[1];		
 			AuctionDataArchivingTask task = new AuctionDataArchivingTask();
