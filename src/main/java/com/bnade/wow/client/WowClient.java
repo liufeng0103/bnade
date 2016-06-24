@@ -12,6 +12,7 @@ import com.bnade.wow.client.model.AuctionDataFile;
 import com.bnade.wow.client.model.AuctionDataFiles;
 import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.JAuctions;
+import com.bnade.wow.client.model.JItem;
 import com.google.gson.Gson;
 
 /**
@@ -26,6 +27,7 @@ public class WowClient {
 		
 	private static final String HOST = "https://api.battlenet.com.cn";
 	private static final String AUCTION_DATA = "/wow/auction/data/";
+	private static final String ITEM = "/wow/item/";
 	private static final String APIKEY = "?apikey=" + BnadeProperties.getApiKey();
 	
 	private HttpClient httpClient;
@@ -52,7 +54,7 @@ public class WowClient {
 		String json = null;
 		try {			
 			httpClient.resetTryCount();
-			 json = httpClient.reliableGet(url);
+			json = httpClient.reliableGet(url);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new WowClientException();
@@ -70,5 +72,24 @@ public class WowClient {
 		httpClient.resetTryCount();
 		String json = httpClient.reliableGet(url);		
 		return gson.fromJson(json, JAuctions.class).getAuctions();
+	}
+	
+	/**
+	 * 通过物品ID获取物品的信息
+	 * @param id
+	 * @return
+	 * @throws WowClientException 
+	 */
+	public JItem getItem(int id) throws WowClientException {
+		String url = HOST + ITEM + id + APIKEY;
+		String json = null;
+		try {			
+			httpClient.resetTryCount();
+			json = httpClient.reliableGet(url);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new WowClientException();
+		}		
+		return gson.fromJson(json, JItem.class);
 	}
 }

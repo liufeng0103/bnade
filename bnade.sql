@@ -42,7 +42,8 @@ ALTER TABLE mt_item ADD INDEX(name); -- 通过物品名查询物品信息时使�
 truncate mt_item;
 -- 数据导入到内存中
 insert into mt_item (id,name,icon,itemLevel) select id,name,icon,itemLevel from t_item;
-
+-- 手动更新那些通过api找不到的物品
+insert into t_item (id,description,name,icon,itemLevel)values(732,'','成熟的秋葵','inv_misc_herb_09',10);
 -- 装备奖励表
 -- 6.0制造业和fb物品都是拥有相同的itemId但不同的等级，副属性等通过bonus来表示
 CREATE TABLE IF NOT EXISTS t_item_bonus (

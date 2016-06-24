@@ -1,8 +1,6 @@
-package com.bnade.wow.po;
+package com.bnade.wow.client.model;
 
-import java.util.List;
-
-public class Item {
+public class JItem {
 	private int id;
 	private String description;
 	private String name;
@@ -11,15 +9,6 @@ public class Item {
 	private int itemSubClass;
 	private int inventoryType;
 	private int itemLevel;
-	private List<String> bonusList;
-
-	public List<String> getBonusList() {
-		return bonusList;
-	}
-
-	public void setBonusList(List<String> bonusList) {
-		this.bonusList = bonusList;
-	}
 
 	public int getId() {
 		return id;
@@ -85,12 +74,4 @@ public class Item {
 		this.itemLevel = itemLevel;
 	}
 
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", description=" + description + ", name="
-				+ name + ", icon=" + icon + ", itemClass=" + itemClass
-				+ ", itemSubClass=" + itemSubClass + ", inventoryType="
-				+ inventoryType + ", itemLevel=" + itemLevel + ", bonusList="
-				+ bonusList + "]";
-	}
 }

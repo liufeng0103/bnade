@@ -167,6 +167,21 @@ public class ItemResource {
 	}
 	
 	/*
+	 * 用户每天搜索的排行
+	 */
+	@GET
+	@Path("/hotsearch")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getHotSearchItems(@QueryParam("offset") int offset, @QueryParam("limit") int limit) {
+		try {
+			return hotItemService.getHotSearchItems(offset, limit);
+		} catch (SQLException e) {		 
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}
+	}
+	
+	/*
 	 * 物品规则
 	 */
 	@GET
@@ -182,7 +197,7 @@ public class ItemResource {
 	}
 	
 	/*
-	 * 物品规则
+	 * 满足规则的物品
 	 */
 	@GET
 	@Path("/rule/matchs")

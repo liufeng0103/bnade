@@ -50,8 +50,8 @@ public class HotItemDaoImpl implements HotItemDao {
 	}
 
 	@Override
-	public List<HotItem> getGroupItemIdAfterDatetime(long datetime, int limit) throws SQLException {
-		return run.query("select itemId,sum(queried) as queried from t_hot_item where datetime>=? group by itemId order by sum(queried) desc limit ?", new BeanListHandler<HotItem>(HotItem.class), datetime, limit);
+	public List<HotItem> getGroupItemIdAfterDatetime(long datetime, int offset, int limit) throws SQLException {
+		return run.query("select itemId,sum(queried) as queried from t_hot_item where datetime>=? group by itemId order by sum(queried) desc limit ?,?", new BeanListHandler<HotItem>(HotItem.class), datetime, offset, limit);
 	}
 	
 }
