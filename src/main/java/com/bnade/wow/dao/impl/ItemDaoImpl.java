@@ -28,11 +28,12 @@ public class ItemDaoImpl implements ItemDao {
 	
 	@Override
 	public List<Item> getItemsByName(String name, boolean isFuzzy, int offset, int limit) throws SQLException {
-		String condition = "=?";
+		String condition = "=? ";
 		if (isFuzzy) {
 			condition = "like ?";
 			name = "%" + name + "%";
 		}
+		condition += " order by hot desc ";
 		if (limit > 0) {
 			condition += " limit ?,?";
 			return run.query("select id,name,icon,itemLevel from mt_item where name " + condition, new BeanListHandler<Item>(Item.class), name, offset, limit);
