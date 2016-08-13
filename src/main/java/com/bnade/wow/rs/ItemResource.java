@@ -56,11 +56,12 @@ public class ItemResource {
 	public Object getItemsByName(@PathParam("name")String name, @QueryParam("fuzzy") boolean isFuzzy, @Context HttpServletRequest request) {
 		try {
 			if (isFuzzy) {
-				List<Item> items = itemService.getItemsByName(name, true, 0);
+				List<Item> items = itemService.getItemsByName(name, true, 0, -1);
 				List<String> result = new ArrayList<>();
 				for (Item item : items) {
 					result.add(item.getName());
 				}
+				System.out.println(result);
 				return result;
 			} else {
 				List<ItemVo> result = new ArrayList<>();
@@ -103,7 +104,7 @@ public class ItemResource {
 	public Object getItemNamesByTerm(@QueryParam("term") String term) {
 		int max_length = 10;
 		try {			
-			List<Item> items = itemService.getItemsByName(term, true, max_length);
+			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
 			List<String> result = new ArrayList<>();
 			for (Item item : items) {
 				result.add(item.getName());
