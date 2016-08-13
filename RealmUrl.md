@@ -1,6 +1,6 @@
 # 各服务器的拍卖行数据地址
 
-国服战网api从前夕开始到现在已经关闭一段时间了，以前拍卖数据的地址还是在更新的，但不确定能用多久，大家有需要的可以参考下
+国服战网api从前夕开始到现在已经关闭一段时间了，以前拍卖数据的地址还是在更新的，但不确定能用多久，大家有需要的可以参考下，对于那些大服务器我就取了一个保存，如果大家找的服务器不再里面的话，请去http://www.bnade.com/auctionQuantity.html查找下，应该第一个就是我保存的那个服务器名
 
 万色星辰	http://auction-api-cn.worldofwarcraft.com/auction-data/330beb217242022e18398ae252e513c0/auctions.json  
 丹莫德	http://auction-api-cn.worldofwarcraft.com/auction-data/bb850f3a316028d2faeeb15b8de96ecc/auctions.json  
