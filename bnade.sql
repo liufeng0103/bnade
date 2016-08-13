@@ -51,6 +51,11 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 	bonusList VARCHAR(20) NOT NULL, 	-- 装备奖励
 	PRIMARY KEY(itemId, bonusList)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 物品和宠物信息表
+CREATE VIEW v_item as 
+select id,name,icon,itemLevel,1 as type from mt_item
+union all
+select id,name,icon,0 as itemLevel,2 as type from t_pet
 
 -- 超值的物品
 CREATE TABLE IF NOT EXISTS t_item_worthbuy (	

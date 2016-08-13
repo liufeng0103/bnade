@@ -23,8 +23,11 @@ import com.google.gson.Gson;
  */
 public class WowClient {
 	
-	private static Logger logger = LoggerFactory.getLogger(WowClient.class);
-		
+	public static final String REGION_US = "us";
+	public static final String REGION_CN = "cn";
+	public static final String REGION_TW = "tw";
+	
+	private static Logger logger = LoggerFactory.getLogger(WowClient.class);	
 	private static final String HOST = "https://api.battlenet.com.cn";
 	private static final String AUCTION_DATA = "/wow/auction/data/";
 	private static final String ITEM = "/wow/item/";
@@ -33,11 +36,17 @@ public class WowClient {
 	private HttpClient httpClient;
 	private Gson gson;
 	
-	
+	private String region = "cn";
+
 	public WowClient() {
 		httpClient = new HttpClient();
 		httpClient.setGzipSupported(true);
 		gson = new Gson();
+	}
+	
+	public WowClient(String region) {		
+		this();
+		this.region = region;
 	}
 
 	/**
@@ -50,7 +59,7 @@ public class WowClient {
 	public AuctionDataFile getAuctionDataFile(String realmName) throws WowClientException {		
 		// 晴日峰 (江苏)和丽丽需要转化空格
 		realmName = realmName.replaceAll(" ", "%20");
-		String url = HOST + AUCTION_DATA + realmName + APIKEY;
+		String url = getHost() + AUCTION_DATA + realmName + APIKEY;
 		String json = null;
 		try {			
 			httpClient.resetTryCount();
@@ -81,7 +90,7 @@ public class WowClient {
 	 * @throws WowClientException 
 	 */
 	public JItem getItem(int id) throws WowClientException {
-		String url = HOST + ITEM + id + APIKEY;
+		String url = getHost() + ITEM + id + APIKEY;
 		String json = null;
 		try {			
 			httpClient.resetTryCount();
@@ -91,5 +100,22 @@ public class WowClient {
 			throw new WowClientException();
 		}		
 		return gson.fromJson(json, JItem.class);
+	}
+	
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	private String getHost() {
+		// default
+		String host = HOST;
+		if (!REGION_CN.equals(region)) {
+			host = "https://" + region + ".api.battle.net";
+		}
+		return host;
 	}
 }

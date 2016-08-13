@@ -1,5 +1,7 @@
 package com.bnade.wow.client.model;
 
+import java.util.List;
+
 public class JItem {
 	private int id;
 	private String description;
@@ -9,6 +11,7 @@ public class JItem {
 	private int itemSubClass;
 	private int inventoryType;
 	private int itemLevel;
+	private List<ItemSpell> itemSpells;
 
 	public int getId() {
 		return id;
@@ -74,4 +77,30 @@ public class JItem {
 		this.itemLevel = itemLevel;
 	}
 
+	public List<ItemSpell> getItemSpells() {
+		return itemSpells;
+	}
+
+	public void setItemSpells(List<ItemSpell> itemSpells) {
+		this.itemSpells = itemSpells;
+	}
+
+	public int getSpellId() {
+		if (itemSpells.size() > 0) {
+			return itemSpells.get(0).getSpellId();
+		}
+		return -1;
+	}
+}
+
+class ItemSpell {
+	private int spellId;
+
+	public int getSpellId() {
+		return spellId;
+	}
+
+	public void setSpellId(int spellId) {
+		this.spellId = spellId;
+	}
 }
