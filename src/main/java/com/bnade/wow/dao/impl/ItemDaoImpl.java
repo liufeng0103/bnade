@@ -55,7 +55,7 @@ public class ItemDaoImpl implements ItemDao {
 	@Override
 	public List<ItemV> get(String name, int offset, int limit) throws SQLException {
 		name = "%" + name + "%";
-		return run.query("select id,name,icon,itemLevel,type from v_item where name like ? limit ?,?", new BeanListHandler<ItemV>(ItemV.class), name, offset, limit);
+		return run.query("select id,name,icon,itemLevel,type from v_item where name like ? order by hot desc limit ?,?", new BeanListHandler<ItemV>(ItemV.class), name, offset, limit);
 	}	
 
 }
