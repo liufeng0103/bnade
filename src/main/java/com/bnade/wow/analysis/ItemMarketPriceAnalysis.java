@@ -2,6 +2,7 @@ package com.bnade.wow.analysis;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -62,7 +63,7 @@ public class ItemMarketPriceAnalysis {
 		for (long id : ids1) {
 			int itemId = new Long(id).intValue();
 			List<Auction> aucs = auctionHouseMinBuyoutDataDao.getByItemIdAndBounsList(itemId, null);
-			if (aucs.size() > 0 && aucs.size() <= 170) {
+			if (aucs.size() > 0 && aucs.size() <= 170) { 
 				System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 				Collections.sort(aucs, new Comparator<Auction>() {
 		            public int compare(Auction auc1, Auction auc2) {
@@ -95,6 +96,7 @@ public class ItemMarketPriceAnalysis {
 			if (count % 200 == 0) {
 				logger.info("已保存{}条处理{}", count, (count * 100 / ids1.size()) + "%");
 			}
+			break; // 测试用
 		}
 	}
 	
@@ -126,12 +128,20 @@ public class ItemMarketPriceAnalysis {
 			sb.append(item.getRealmQuantity());
 			sb.append("}");
 		}
-		String text = "Bnade_data={[\"updated\"]=\""+new Date()+"\","+sb.toString()+"}";
-		String fileName = "Data.lua";
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String addonUpdateTime = sf.format(new Date());
+        String text = "Bnade_data={[\"updated\"]=\"" + addonUpdateTime + "\"," + sb.toString() + "}";
+        String fileName = "Data.lua";
 		new File(fileName).delete();
 		FileUtil.stringToFile(text, fileName);
-		logger.info("保存到文件");		
+		logger.info("保存到文件");
+        updateAddonTime(addonUpdateTime);
+        logger.info("插件时间更新");
 	}
+
+	private void updateAddonTime(String time) throws SQLException {
+        run.update("update t_addon set version=?", time);
+    }
 	
 	private long getPrice(List<Auction> aucs) {	
 		float range = 0.8f;

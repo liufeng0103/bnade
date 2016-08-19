@@ -89,7 +89,7 @@ public class ItemCatcher {
 		try {
 			run.update("truncate mt_item");
 			System.out.println("清空mt_item表");
-			run.update("insert into mt_item (id,name,icon,itemLevel) select id,name,icon,itemLevel from t_item");
+			run.update("insert into mt_item (id,name,icon,itemLevel,hot) select id,name,icon,itemLevel,hot from t_item");
 			System.out.println("导入t_item数据到mt_item");
 		} catch (SQLException e) {
 			e.printStackTrace();

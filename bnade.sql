@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 物品和宠物信息表
 CREATE VIEW v_item as 
-select id,name,icon,itemLevel,1 as type from mt_item
+select id,name,icon,itemLevel,1 as type,hot from mt_item 
 union all
-select id,name,icon,0 as itemLevel,2 as type from t_pet
+select id,name,icon,0 as itemLevel,2 as type,0 as hot from t_pet
 
 -- 超值的物品
 CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
@@ -266,3 +266,9 @@ CREATE TABLE IF NOT EXISTS t_item_rule_match (
 	lastModified BIGINT UNSIGNED NOT NULL,	-- 数据更新时间
 	PRIMARY KEY(realmId,itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 插件信息表
+CREATE TABLE IF NOT EXISTS t_addon (
+    version VARCHAR(20) NOT NULL        -- 插件版本
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into t_addon (version) values ("TBD");
