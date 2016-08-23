@@ -96,7 +96,7 @@ public class ItemMarketPriceAnalysis {
 			if (count % 200 == 0) {
 				logger.info("已保存{}条处理{}", count, (count * 100 / ids1.size()) + "%");
 			}
-			break; // 测试用
+//			break; // 测试用
 		}
 	}
 	

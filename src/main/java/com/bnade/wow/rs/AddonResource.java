@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -31,6 +32,14 @@ public class AddonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Object getVersion() throws SQLException {
         String version = run.query("select version from t_addon limit 1", new ScalarHandler<String>());
+        return "{\"version\":\"" + version + "\"}";
+    }
+    
+    @GET
+    @Path("/tsm/{realmId}/version")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getTSMRealmVersion(@PathParam("realmId")int realmId) throws SQLException {
+        String version = run.query("select version from t_tsm_realm_data_version where realmId=?", new ScalarHandler<String>(), realmId);
         return "{\"version\":\"" + version + "\"}";
     }
 

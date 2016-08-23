@@ -35,7 +35,7 @@ public class FileUtil {
 	public static void stringToFile(String text, String filePath) {
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter(new FileOutputStream(filePath, true));
+			out = new PrintWriter(new FileOutputStream(filePath, false));
 			out.println(text);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

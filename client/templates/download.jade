@@ -5,11 +5,10 @@ block content
 	div.container-fluid
 		div.container
 			h3.sub-header 魔兽世界插件(每日凌晨4点会更新)
-			a.btn.btn-primary(href="./Bnade.zip") 下载地址1
+			a.btn.btn-primary(href="./Bnade.zip") 下载地址
 			p 通过物品在所有服务器的价格计算的参考价格，玩家可以通过插件在游戏的提示框中查看到参考价格
 			p 插件的一些说明：
 			ul
-				li 游戏加载后会在聊天框打印数据更新时间(通常在第一行需要往上翻阅可以看到)
 				li 提示框中显示物品的参考价格
 				li 目前不支持宠物价格和各阶制造业装备价格的查询
 				li 由于价格文件是固定在插件中的，所以时间越久参考价值越低， 我会定期更新数据发布最新的插件到这个页面
@@ -25,10 +24,23 @@ block content
 				li 启动游戏，在聊天框看到打印的数据更新时间或鼠标移动到可拍卖物品的参考价格(如下图)，则表示安装成功
 				li 
 					img.img-rounded(src="images/bnade-addon.png" alt="插件效果")
-			h3.sub-header 插件客户端
-			a.btn.btn-primary(href="./BnadeClient.zip") 下载地址1
-			p 客户端程序使用java编写，所以需要java的运行环境，可以到<a href="http://www.java.com" target="_blank">http://www.java.com</a>下载
+			h3.sub-header 插件客户端(08-23)
+			a.btn.btn-primary(href="./BnadeClient.zip") 下载地址
+			p 插件客户端用于更新bnade插件以及tsm插件数据
+			p 客户端使用java编写，所以需要java的运行环境，可以到<a href="http://www.java.com" target="_blank">http://www.java.com</a>下载
 			p 下载后解压文件，打开bnade.bat或bnadec.bat即可运行程序
+			p tsm插件数据的说明:
+			ul
+				li 需要安装TradeSkillMaster_AppHelper插件
+				li 目前不支持宠物价格和各阶制造业装备价格的数据
+				li 每日凌晨2点更新数据
+				li 数据组成说明，如果大家对数据的取法有更好的建议可以告诉我:
+					ol
+						li itemString  - 物品ID
+						li marketValue - 市场价，这里用的更插件计算的价格一样
+						li minBuyout   - 最低一口价，使用前一天的最低一口价
+						li historical  - 历史价，使用前一天的平均价
+						li numAuctions - 拍卖数量，使用前一天的平均数量
 			h3.sub-header 微信公众号
 			p
 				p 目前主要同于通知网站的更新
