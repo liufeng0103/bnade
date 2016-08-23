@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 物品和宠物信息表
 CREATE VIEW v_item as 
-select id,name,icon,itemLevel,1 as type from mt_item
+select id,name,icon,itemLevel,1 as type,hot from mt_item 
 union all
-select id,name,icon,0 as itemLevel,2 as type from t_pet
+select id,name,icon,0 as itemLevel,2 as type,0 as hot from t_pet
 
 -- 超值的物品
 CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
@@ -265,4 +265,39 @@ CREATE TABLE IF NOT EXISTS t_item_rule_match (
 	buyout BIGINT UNSIGNED NOT NULL,		-- 一口价
 	lastModified BIGINT UNSIGNED NOT NULL,	-- 数据更新时间
 	PRIMARY KEY(realmId,itemId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+------------------- 插件相关表 -------------------
+-- 插件信息表
+CREATE TABLE IF NOT EXISTS t_addon (
+    version VARCHAR(20) NOT NULL,	-- 插件版本
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into t_addon (version) values ("TBD");
+
+-- 物价信息表，用于tsm app数据的更新
+CREATE TABLE IF NOT EXISTS t_tsm_app_data (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	realmId INT UNSIGNED NOT NULL,			-- 服务器id
+	itemId INT UNSIGNED NOT NULL,			-- 物品ID
+	minBuyout BIGINT UNSIGNED NOT NULL,		-- 最低一口价(近期)
+    historical BIGINT UNSIGNED NOT NULL,	-- 历史价格(近期)
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_tsm_app_data ADD INDEX(realmId);
+
+-- View, 包含tsm需要的所有数据
+CREATE VIEW v_tsm_app_data as 
+select a.realmId,a.itemId,buy,minBuyout,historical,quantity 
+from t_tsm_app_data a 
+join t_ah_min_buyout_data b on
+a.realmId=b.realmId and a.itemId=b.item
+join t_item_market c on 
+c.itemId=a.itemId
+
+-- 服务器数据的版本信息
+CREATE TABLE IF NOT EXISTS t_tsm_realm_data_version (	
+	realmId INT UNSIGNED NOT NULL,			-- 服务器id
+    version VARCHAR(20) NOT NULL,			-- 插件版本
+    PRIMARY KEY(realmId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

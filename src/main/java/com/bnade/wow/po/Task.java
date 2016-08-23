@@ -4,6 +4,7 @@ public class Task {
 
 	public static final int ARCHIVE_TASK = 1;
 	public static final int HOTITEM_TASK = 2;
+	public static final int TSM_APP_DATA_TASK = 3;
 
 	private int type;
 	private int realmId;
