@@ -53,7 +53,7 @@ public class TSMAppDataTask {
 				// 2. 判断服务器是否已处理过
 				Task task = run.query("select type,realmId,date,lastUpdated from t_task where type=? and realmId=? and date=?", new BeanHandler<Task>(Task.class), Task.TSM_APP_DATA_TASK, realmId, processDate);
 				if (task == null) {
-					List<TSMAppData> appDatas = run.query("select a.itemId,a.buy,b.minBuyout,b.historical,b.quantity from t_item_market a join (select item,min(buyout) as minBuyout,avg(buyout) as historical,avg(quantity) as quantity from t_ah_min_buyout_data_"+TimeUtil.getDate(-1)+"_"+realmId+" group by item ) b on a.itemId=b.item", new BeanListHandler<TSMAppData>(TSMAppData.class));
+					List<TSMAppData> appDatas = run.query("select a.itemId,a.buy,b.minBuyout,b.historical,b.quantity from t_item_market a join (select item,min(buyout) as minBuyout,sum(buyout)/count(item) as historical,avg(quantity) as quantity from t_ah_min_buyout_data_"+TimeUtil.getDate(-1)+"_"+realmId+" group by item ) b on a.itemId=b.item", new BeanListHandler<TSMAppData>(TSMAppData.class));
 					long updateTime = new Date().getTime() / 1000;
 					saveFile(realmId, updateTime, appDatas);
 					logger.info("文件已保存");
@@ -121,6 +121,8 @@ public class TSMAppDataTask {
 			sb.append(data.getBuy());
 			sb.append(",");
 			sb.append(data.getMinBuyout());
+			sb.append(",");
+			sb.append(data.getHistorical());
 			sb.append(",");
 			sb.append(data.getQuantity());
 			sb.append("}");			
