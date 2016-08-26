@@ -109,3 +109,21 @@ input {
   display: inline-block;
   border-radius: 50%;
 }
+
+.tblHeadBtn {
+	border : none;
+	text-align: left;
+	padding : 0;
+	font-weight : bold;
+	cursor: pointer;
+}
+
+.tblHeadBtn:hover{
+	background : #c0c0c0;
+}
+
+.tblHeadSelect {
+	border : none;
+	text-align: left;	
+	font-weight : bold;
+} 

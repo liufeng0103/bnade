@@ -1,3 +1,8 @@
+var sortColumn = "sort1";
+var orderByDesc = true;
+var gblData = [];
+var gblItemId = 0;
+
 function itemQueryByName(realm, itemName) {
 	$.get('wow/item/name/' + encodeURIComponent(itemName), function(data) {					
 		if (data.length === 0) {
@@ -101,6 +106,11 @@ function accurateQuery(realm, itemId, itemName) {
 			$('#msg').html("找不到服务器：" + realm);
 		}		
 	}		
+	
+	gblItemId =itemId;
+	sortColumn = "sort1";
+	orderByDesc = true;
+	
 	getItemByAllRealms(itemId, itemName);
 	var url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?itemName=" + encodeURIComponent(itemName);
 	if (realm != null && realm != '') {
@@ -482,6 +492,42 @@ function getPastWeek(realmId, realm, itemId, itemName){
 		$("#pastWeekMsg").html("历史数据查询出错");
     });
 }
+var Column = {
+	minBuyout : 1,
+	quantity : 2,
+}
+
+function sortData(column, data, orderByDesc) {
+	data.sort(function(a,b){
+		switch(column) {
+			case Column.minBuyout :
+				var result = a[1] - b[1];
+				return orderByDesc ? -result : result;
+				break;
+			case Column.quantity :			
+				var result = a[3] - b[3];
+				return orderByDesc ? -result : result;
+				break;			
+		}	
+	});	
+}
+
+function generateTableBody(itemId,data) {	
+	var tblHtml="";
+	for (var i in data) {
+		var itemArr=data[i];
+		var realmId = itemArr[0];
+		var realm=Realm.getConnectedById(realmId);
+		var realmColumnClass="";								
+		if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
+			realmColumnClass = "class='danger'";									
+		}
+		var buyout=Bnade.getGold(itemArr[1]);						
+		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+	}
+	return tblHtml;
+}
+
 function getItemByAllRealms(itemId,itemName){
 	$('#allRealmMsg').html("正在查询所有服务器数据,请稍等...");
 	$.get('wow/auction/item/'+itemId,function(data){	
@@ -489,36 +535,25 @@ function getItemByAllRealms(itemId,itemName){
 			$('#allRealmMsg').html("查询所有服务器失败:"+data.errorMessage);
 			$('#allRealmCtlDiv').hide();
 		}else{
-			$('#allRealmCtlDiv').show();					
-			data.sort(function(a,b){
-				return a[1]-b[1];
-			});
+			$('#allRealmCtlDiv').show();
+			// 重置排序数据
 			var isShowAll=true;
+			gblData = data;			
+			
 			$("#showAllA").click(function(){
 				if(isShowAll){
 					isShowAll=false;
 					$("#showAllTbl").show();
-					$("#showAllA").html("显示全部-");			
-					$("#showAllBody").empty();
-					var ownerItemUrl = "";
-					for(var i in data){				
-						var itemArr=data[i];
-						var realmId = itemArr[0];
-						var realm=Realm.getConnectedById(realmId);
-						var realmColumnClass="";								
-						if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
-							realmColumnClass = "class='danger'";									
-						}
-						var buyout=Bnade.getGold(itemArr[1]);						
-						$("#showAllBody").append("<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>");
-					}
+					$("#showAllA").html("显示全部-");
 				}else{
 					isShowAll=true;
 					$("#showAllTbl").hide();
 					$("#showAllA").html("显示全部+");
 				}		
 			});
-							
+			$('#sort'+Column.minBuyout).click();
+			$("#showAllA").click();
+			
 			var chartLabels=[];
 			var chartBuyoutData=[];
 			var chartQuantityData=[];
@@ -547,7 +582,6 @@ function getItemByAllRealms(itemId,itemName){
 			$('#allAvgQuantity').html(parseInt(quantitySum/data.length));				
 			$('#allRealmMsg').html("所有服务器平均价格:"+avgBuy);				
 			loadChart('allRealmContainer',itemName+'在各服务器的价格和数量',itemName,chartLabels,chartBuyoutData,minBuy,avgBuy * 2 < maxBuy ? avgBuy * 2 : maxBuy, false, 'spline',chartQuantityData,'column');
-			$("#showAllA").click();				
 		}
 	});
 }
@@ -731,4 +765,34 @@ $(document).ready(function() {
 			$("#msg").html("查询物品所有拍卖出错");
 	    });			  
 	});
+	
+	for (var i in Column) {
+		(function(){
+			var column = Column[i];
+			$('#sort'+column).click(function() {
+				if ($(this).attr("id") == sortColumn) {
+						orderByDesc = !orderByDesc;
+					} else {
+						orderByDesc = true;
+						sortColumn = $(this).attr("id");
+					}
+					sortData(column, gblData, orderByDesc);	       					
+					$("#showAllBody").html(generateTableBody(gblItemId,gblData));
+					// 修改排序图标
+					for (var j in Column) {
+						var col = Column[j];
+						$("#sort"+col + " span").removeClass("glyphicon-sort glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt");
+						if ("sort"+col == $(this).attr("id")) {
+							if (orderByDesc) {
+								$("#sort"+col + " span").addClass("glyphicon-sort-by-attributes-alt");
+							} else {
+								$("#sort"+col + " span").addClass("glyphicon-sort-by-attributes");
+							}	       								       							
+						} else {
+							$("#sort"+col + " span").addClass("glyphicon-sort");	       							
+						}
+					}	      
+			});
+		})();
+	}
 });
