@@ -11,7 +11,7 @@ $(document).ready(function() {
 		} else {
 			var realmId = Realm.getIdByName(realm);
 			if (realmId > 0) {
-				$.get("wow/auction/realm/" + realmId + "/owner/" + owner, function(data) {
+				$.get("wow/auction/realm/" + encodeURIComponent(realmId) + "/owner/" + encodeURIComponent(owner), function(data) {
 		       		if (data.length === 0) {
 		       			$("#ownerItemsContainer").html("找不到玩家拍卖的物品");
 		       		} else {	
