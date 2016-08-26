@@ -70,7 +70,7 @@ public class AuctionDataArchivingTask {
 		Realm realm = realmService.getByName(realmName);
 		logHeader = "服务器[" + realmName + "-" + realm.getId() + "]";
 		addInfo("开始归档{}的数据", handleDate);
-		Task taskStatus = new Task(realm.getId(), handleDate);
+		Task taskStatus = new Task(realm.getId(), handleDate, Task.ARCHIVE_TASK);
 		if(taskStatusDao.getArchivedTask(taskStatus) == null) {
 			addInfo("开始获取{}的数据", handleDate);
 			List<Auction> aucs = auctionMinBuyoutDailyDataService.get(handleDate, realm.getId());
@@ -100,7 +100,7 @@ public class AuctionDataArchivingTask {
 	public void clean(String realmName, String handleDate) throws SQLException {
 		Realm realm = realmService.getByName(realmName);	
 		logHeader = "服务器[" + realmName + "-" + realm.getId() + "]";
-		Task taskStatus = new Task(realm.getId(), handleDate);
+		Task taskStatus = new Task(realm.getId(), handleDate, Task.ARCHIVE_TASK);
 		if(taskStatusDao.getArchivedTask(taskStatus) != null) {
 			addInfo("开始删除{}的集合", handleDate);
 			auctionMinBuyoutDailyDataService.drop(handleDate, realm.getId());
