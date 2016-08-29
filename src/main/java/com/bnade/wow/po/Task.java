@@ -14,9 +14,10 @@ public class Task {
 	public Task() {
 	}
 
-	public Task(int realmId, String date) {
+	public Task(int realmId, String date, int type) {
 		this.realmId = realmId;
 		this.date = date;
+		this.type = type;
 	}
 
 	public int getType() {

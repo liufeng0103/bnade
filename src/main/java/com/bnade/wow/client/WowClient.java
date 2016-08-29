@@ -53,10 +53,10 @@ public class WowClient {
 	 * 通过服务器名获取拍卖数据文件信息
 	 * @param realmName
 	 * @return
-	 * @throws WowClientException
+	 * @throws WoWClientException
 	 * @throws IOException
 	 */
-	public AuctionDataFile getAuctionDataFile(String realmName) throws WowClientException {		
+	public AuctionDataFile getAuctionDataFile(String realmName) throws WoWClientException {		
 		// 晴日峰 (江苏)和丽丽需要转化空格
 		realmName = realmName.replaceAll(" ", "%20");
 		String url = getHost() + AUCTION_DATA + realmName + APIKEY;
@@ -66,7 +66,7 @@ public class WowClient {
 			json = httpClient.reliableGet(url);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new WowClientException();
+			throw new WoWClientException();
 		}		
 		return gson.fromJson(json, AuctionDataFiles.class).getFiles().get(0);
 	}
@@ -87,9 +87,9 @@ public class WowClient {
 	 * 通过物品ID获取物品的信息
 	 * @param id
 	 * @return
-	 * @throws WowClientException 
+	 * @throws WoWClientException 
 	 */
-	public JItem getItem(int id) throws WowClientException {
+	public JItem getItem(int id) throws WoWClientException {
 		String url = getHost() + ITEM + id + APIKEY;
 		String json = null;
 		try {			
@@ -97,7 +97,7 @@ public class WowClient {
 			json = httpClient.reliableGet(url);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new WowClientException();
+			throw new WoWClientException();
 		}		
 		return gson.fromJson(json, JItem.class);
 	}

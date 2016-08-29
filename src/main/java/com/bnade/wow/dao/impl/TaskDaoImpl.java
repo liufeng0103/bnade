@@ -24,7 +24,7 @@ public class TaskDaoImpl implements TaskDao {
 
 	@Override
 	public Task getArchivedTask(Task task) throws SQLException {
-		return run.query("select realmId,date from t_task where realmId=? and date=?", new BeanHandler<Task>(Task.class), task.getRealmId(), task.getDate());
+		return run.query("select realmId,date from t_task where realmId=? and date=? and type=?", new BeanHandler<Task>(Task.class), task.getRealmId(), task.getDate(), task.getType());
 	}
 
 	@Override
