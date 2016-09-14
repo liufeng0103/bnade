@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -101,7 +102,7 @@ public class ItemResource {
 	@GET
 	@Path("/names")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getItemNamesByTerm(@QueryParam("term") String term) {
+	public Object getItemNamesByTerm(@QueryParam("term") String term, @Context HttpServletResponse resp) {
 		int max_length = 10;
 		try {			
 			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
@@ -109,6 +110,7 @@ public class ItemResource {
 			for (Item item : items) {
 				result.add(item.getName());
 			}
+			resp.setHeader("Access-Control-Allow-Origin", "*");
 			return result;			
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -147,7 +149,7 @@ public class ItemResource {
 	@GET
 	@Path("/hot")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getHotDailyItems() {
+	public Object getHotDailyItems(@Context HttpServletResponse resp) {
 		int hotCount = 10;
 		try {
 			List<HotItemVo> items = new ArrayList<>();
@@ -159,7 +161,8 @@ public class ItemResource {
 			copy(hotItems, items, HotItem.HOT_WEEK);
 			long dayStart = TimeUtil.parse(TimeUtil.getDate(0)).getTime();
 			hotItems = hotItemService.getGroupItemIdAfterDatetime(dayStart, hotCount);
-			copy(hotItems, items, HotItem.HOT_DAY);			
+			copy(hotItems, items, HotItem.HOT_DAY);		
+			resp.setHeader("Access-Control-Allow-Origin", "*");
 			return items;
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
