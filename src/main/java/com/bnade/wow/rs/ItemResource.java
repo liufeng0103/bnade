@@ -54,7 +54,7 @@ public class ItemResource {
 	@GET
 	@Path("/name/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getItemsByName(@PathParam("name")String name, @QueryParam("fuzzy") boolean isFuzzy, @Context HttpServletRequest request) {
+	public Object getItemsByName(@PathParam("name")String name, @QueryParam("fuzzy") boolean isFuzzy, @Context HttpServletRequest request, @Context HttpServletResponse resp) {
 		try {
 			if (isFuzzy) {
 				List<Item> items = itemService.getItemsByName(name, true, 0, -1);
@@ -88,6 +88,7 @@ public class ItemResource {
 						logger.debug("插入搜索物品出错{}", e.getMessage());
 					}								
 				}
+				resp.setHeader("Access-Control-Allow-Origin", "*");
 				return result;	
 			}			
 		} catch (SQLException e) {			
