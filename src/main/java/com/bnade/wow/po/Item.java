@@ -3,6 +3,9 @@ package com.bnade.wow.po;
 import java.util.List;
 
 public class Item {
+	public static final int TYPE_ITEM = 0;
+	public static final int TYPE_PET = 1;
+	
 	private int id;
 	private String description;
 	private String name;
@@ -12,6 +15,20 @@ public class Item {
 	private int inventoryType;
 	private int itemLevel;
 	private List<String> bonusList;
+	private int type;
+
+	public Item() {}
+	
+	public Item(String name, int itemClass, int itemSubClass,
+			int inventoryType, int itemLevel, int type) {
+		super();
+		this.name = name;
+		this.itemClass = itemClass;
+		this.itemSubClass = itemSubClass;
+		this.inventoryType = inventoryType;
+		this.itemLevel = itemLevel;
+		this.type = type;
+	}
 
 	public List<String> getBonusList() {
 		return bonusList;
@@ -83,6 +100,14 @@ public class Item {
 
 	public void setItemLevel(int itemLevel) {
 		this.itemLevel = itemLevel;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	@Override

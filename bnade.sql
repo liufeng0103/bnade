@@ -33,10 +33,14 @@ CREATE TABLE IF NOT EXISTS t_item (
 ALTER TABLE t_item ADD hot INT NOT NULL; -- 20160813,列已添加到建表语句里，单独添加用
 
 -- 物品信息内存表， 由于经常使用数据保存到内存中
+SET max_heap_table_size = 1024*1024*32;
 CREATE TABLE IF NOT EXISTS mt_item (
 	id	INT UNSIGNED NOT NULL,			-- ID
 	name VARCHAR(80) NOT NULL,			-- 物品名
 	icon VARCHAR(64) NOT NULL,			-- 图标名
+	itemClass INT NOT NULL,				-- 类型
+	itemSubClass INT NOT NULL,			-- 子类型
+	inventoryType INT NOT NULL,			-- 装备位置
 	itemLevel INT NOT NULL,				-- 物品等级
 	hot INT NOT NULL,					-- 物品热度
 	PRIMARY KEY(id)
@@ -44,7 +48,7 @@ CREATE TABLE IF NOT EXISTS mt_item (
 ALTER TABLE mt_item ADD INDEX(name); -- 通过物品名查询物品信息时使用
 truncate mt_item;
 -- 数据导入到内存中
-insert into mt_item (id,name,icon,itemLevel,hot) select id,name,icon,itemLevel,hot from t_item;
+insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot) select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot from t_item;
 -- 手动更新那些通过api找不到的物品
 insert into t_item (id,description,name,icon,itemLevel)values(732,'','成熟的秋葵','inv_misc_herb_09',10);
 -- 装备奖励表

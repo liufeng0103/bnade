@@ -199,6 +199,15 @@ class Bonus implements Comparable<Bonus> {
 		bonusIds.add(565);
 		bonusIds.add(566);
 		bonusIds.add(567);
+		// 7.0 世界掉了装备
+		bonusIds.add(1477); // 815
+		bonusIds.add(1482); // 820
+		bonusIds.add(1487); // 825
+		bonusIds.add(1492); // 830
+		bonusIds.add(1497); // 835
+		bonusIds.add(1502); // 840
+		bonusIds.add(1507); // 845
+		bonusIds.add(1512); // 850
 	}
 
 	private int bonusListId;
