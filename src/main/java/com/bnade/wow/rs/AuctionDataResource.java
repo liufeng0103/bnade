@@ -4,13 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -45,7 +43,7 @@ public class AuctionDataResource {
 	// 近期记录显示几天的数据
 	private static final int PAST_DAYS = 2;
 	// 分时段的历史记录显示几个月的数据
-	private static final int PAST_MONTHS = 12;
+	private static final int PAST_MONTHS = 2;
 	
 	private PetService petService;
 	private ItemService itemService;
@@ -76,7 +74,7 @@ public class AuctionDataResource {
 	@GET
 	@Path("/item/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getAuctionsByItemId(@PathParam("id") int itemId, @QueryParam("bl") String bl, @Context HttpServletResponse resp) {		 
+	public Object getAuctionsByItemId(@PathParam("id") int itemId, @QueryParam("bl") String bl) {		 
 		try {
 			List<Auction> aucs = auctionMinBuyoutDataService.getByItemIdAndBounsList(itemId, bl);
 			Object[] result = new Object[aucs.size()];
@@ -91,7 +89,6 @@ public class AuctionDataResource {
 				item[5] = auc.getTimeLeft();
 				result[i] = item;
 			}
-			resp.setHeader("Access-Control-Allow-Origin", "*");
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -154,7 +151,7 @@ public class AuctionDataResource {
 				item[1] = auc.getQuantity();
 				item[2] = auc.getLastModifed();
 				result[i] = item;
-			}			
+			}
 			return result; 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -199,7 +196,7 @@ public class AuctionDataResource {
 	@GET
 	@Path("/realm/{realmId}/item/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getAuctionItemsByRealmAndItem(@PathParam("realmId") int realmId, @PathParam("itemId") int itemId, @QueryParam("bl") String bl, @Context HttpServletResponse resp) {
+	public Object getAuctionItemsByRealmAndItem(@PathParam("realmId") int realmId, @PathParam("itemId") int itemId, @QueryParam("bl") String bl) {
 		try {
 			List<Auction> aucs = auctionDataService.getByItemId(itemId, bl, realmId);
 			Object[] result = new Object[aucs.size()];
@@ -214,7 +211,6 @@ public class AuctionDataResource {
 				item[5] = auc.getTimeLeft();
 				result[i] = item;			
 			}
-			resp.setHeader("Access-Control-Allow-Origin", "*");
 			return result; 
 		} catch (SQLException e) {
 			e.printStackTrace();
