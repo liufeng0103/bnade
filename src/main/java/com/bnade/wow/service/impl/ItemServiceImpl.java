@@ -40,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public List<ItemV> get(String name, int offset, int limit)
 			throws SQLException {
-		return itemDao.get(name, offset, limit);
+		return null;
 	}
 
 }
