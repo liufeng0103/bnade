@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,9 @@ public class ItemCatcher {
 					e1.printStackTrace();
 				}
 //				break;
-				// 用于邮件标题
-				System.out.println("未找到:" + notFound);
+				// 用于邮件标题				
 			}
+			System.out.println("未找到:" + notFound);
 		} catch (Exception e) {
 			logger.error("添加物品出错:{}", e.getMessage());
 			// 用于邮件标题
@@ -73,11 +74,10 @@ public class ItemCatcher {
 		logger.info("物品信息更新完毕");
 	}
 	
-	public void refreshItems() {
-		
+	public void refreshItems() {		
 		try {
 			run.update("truncate mt_item");
-			run.update("insert into mt_item (id,name,icon,itemLevel,hot) select id,name,icon,itemLevel,hot from t_item");			
+			run.update("insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot) select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot from t_item");			
 		} catch (SQLException e) {
 			logger.error("刷新mt_item表出错:{}", e.getMessage());
 			// 用于邮件标题
@@ -86,11 +86,35 @@ public class ItemCatcher {
 		}	
 		logger.info("刷新mt_item表完毕");
 	}
+	
+	/*
+	 * 更新item bonus信息
+	 */
+	public void updateItemBounus() {
+		List<ItemBonus> itemBonus;
+		try {
+			itemBonus = run.query("select itemId,bonusList from t_item_bonus", new BeanListHandler<ItemBonus>(ItemBonus.class));
+			System.out.println("当前数据库Item Bonus数量" + itemBonus.size());
+			List<ItemBonus> aucIb = run.query("select item as itemId,bonusLists as bonusList from t_ah_min_buyout_data where context in (26) and bonusLists <> '' group by item,context,bonusLists", new BeanListHandler<ItemBonus>(ItemBonus.class));
+			System.out.println("当前最新排卖行数据中的Item Bonus数量" + aucIb.size());
+			aucIb.removeAll(itemBonus);
+			System.out.println("最新的Item Bonus数量" + aucIb.size());
+			for (ItemBonus ib : aucIb) {
+				run.update("insert into t_item_bonus (itemId,bonusList) values (?,?)", ib.getItemId(), ib.getBonusList());
+			}
+			System.out.println("Item Bonus信息更新完成");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
-		itemCatcher.refreshItems();
+		itemCatcher.updateItemBounus();
+//		itemCatcher.process();
+//		itemCatcher.refreshItems();
 	}	
 
 }
