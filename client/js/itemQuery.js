@@ -177,6 +177,7 @@ function getPast24(realmId, realm, itemId, itemName) {
     });
 }
 function loadChart(containerId,title,subtitle,chartLabels,chartMinBuyout,minBuyout,maxBuyout,showxAxisLabel,series1Type,chartQuantity,series2Type){
+	minBuyout = minBuyout < 100 ? 0 : minBuyout;
 	$('#'+containerId).highcharts({
         chart:{zoomType: 'xy',ignoreHiddenSeries: false},	        
         title:{text:title},
