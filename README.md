@@ -10,4 +10,6 @@ BNADE全称Battle Net Auction Data Extracting, 网站www.bnade.com用于魔兽�
 - Web容器： Tomcat7
 - 构建工具：Maven, gulp
 
-## [BNADE api文档](http://www.bnade.com/api-docs/)
+## 开发者相关
+- [BNADE api文档](http://www.bnade.com/api-docs/)
+- 欢迎加入BNADE开发者交流QQ群546818902
