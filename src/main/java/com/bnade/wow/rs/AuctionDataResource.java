@@ -140,7 +140,7 @@ public class AuctionDataResource {
 	@GET
 	@Path("/past/realm/{realmId}/item/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getPastAuctionsByRealmAndItemId(@PathParam("realmId") int realmId, @PathParam("id") int itemId, @QueryParam("bl") String bl) {
+	public Object getPastAuctionsByRealmAndItemId(@PathParam("realmId") int realmId, @PathParam("id") int itemId, @QueryParam("bl") String bl, @Context HttpServletResponse resp) {
 		try {
 			List<Auction> aucs = new ArrayList<>();
 			for (int i = 0; i < PAST_DAYS; i++) {
@@ -155,6 +155,7 @@ public class AuctionDataResource {
 				item[2] = auc.getLastModifed();
 				result[i] = item;
 			}
+			resp.setHeader("Access-Control-Allow-Origin", "*");
 			return result; 
 		} catch (SQLException e) {
 			e.printStackTrace();
