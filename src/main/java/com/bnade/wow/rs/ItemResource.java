@@ -80,7 +80,7 @@ public class ItemResource {
 					try {
 						QueryItem item = new QueryItem();
 						item.setItemId(items.get(0).getId());
-						item.setIp(request.getRemoteAddr());
+						item.setIp(request.getHeader("remote-user-ip"));
 						item.setCreatedAt(System.currentTimeMillis());
 						hotItemService.add(item);	
 					} catch (SQLException e) {
