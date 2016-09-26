@@ -199,6 +199,29 @@ class Bonus implements Comparable<Bonus> {
 		bonusIds.add(565);
 		bonusIds.add(566);
 		bonusIds.add(567);
+		// 7.0 新物品
+		bonusIds.add(1477);	//815
+		bonusIds.add(1482);	//820
+		bonusIds.add(1487);	//825
+		bonusIds.add(1492);	//830
+		bonusIds.add(1497);	//835
+		bonusIds.add(1502);	//840
+		bonusIds.add(1507);	//845
+		bonusIds.add(1512);	//850
+		bonusIds.add(1517);	//855
+		bonusIds.add(1522);	//860
+		bonusIds.add(1527);	//865
+		bonusIds.add(1532);	//870
+		bonusIds.add(1537);	//875
+		bonusIds.add(1542);	//880
+		bonusIds.add(1547);	//885
+		bonusIds.add(1552);	//890
+		bonusIds.add(1552);	//890
+		bonusIds.add(1808);	//棱彩插槽
+		bonusIds.add(40);	//躲闪
+		bonusIds.add(41);	//吸血
+		bonusIds.add(42);	//速度
+		bonusIds.add(3398);	//按等级缩放
 	}
 
 	private int bonusListId;
