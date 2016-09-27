@@ -218,9 +218,9 @@ class Bonus implements Comparable<Bonus> {
 		bonusIds.add(1552);	//890
 		bonusIds.add(1552);	//890
 		bonusIds.add(1808);	//棱彩插槽
-		bonusIds.add(40);	//躲闪
-		bonusIds.add(41);	//吸血
-		bonusIds.add(42);	//速度
+//		bonusIds.add(40);	//躲闪
+//		bonusIds.add(41);	//吸血
+//		bonusIds.add(42);	//速度
 		bonusIds.add(3398);	//按等级缩放
 	}
 
