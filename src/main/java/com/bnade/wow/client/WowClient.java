@@ -13,6 +13,7 @@ import com.bnade.wow.client.model.AuctionDataFiles;
 import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.JAuctions;
 import com.bnade.wow.client.model.JItem;
+import com.bnade.wow.client.model.PetStats;
 import com.google.gson.Gson;
 
 /**
@@ -31,6 +32,7 @@ public class WowClient {
 	private static final String HOST = "https://api.battlenet.com.cn";
 	private static final String AUCTION_DATA = "/wow/auction/data/";
 	private static final String ITEM = "/wow/item/";
+	private static final String PET_STATS = "/wow/pet/stats/";
 	private static final String APIKEY = "?apikey=" + BnadeProperties.getApiKey();
 	
 	private HttpClient httpClient;
@@ -100,6 +102,12 @@ public class WowClient {
 			throw new WoWClientException();
 		}		
 		return gson.fromJson(json, JItem.class);
+	}
+	
+	public PetStats getPetStats(int id, int breedId, int level, int qualityId) throws IOException {
+		String url = getHost() +  PET_STATS + id + APIKEY + "&level=" + level + "&qualityId="+qualityId+"&breedId="+breedId;			
+		String json = httpClient.reliableGet(url);
+		return gson.fromJson(json, PetStats.class);		
 	}
 	
 	public String getRegion() {

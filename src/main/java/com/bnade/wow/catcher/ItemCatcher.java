@@ -1,5 +1,6 @@
 package com.bnade.wow.catcher;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bnade.util.DBUtil;
+import com.bnade.util.HttpClient;
 import com.bnade.wow.client.WoWAPI;
+import com.bnade.wow.client.WowClient;
 import com.bnade.wow.client.WowHeadClient;
 import com.bnade.wow.client.model.Item;
 
@@ -106,12 +109,54 @@ public class ItemCatcher {
 			e.printStackTrace();
 		}		
 	}
+	
+	/*
+	 * 添加新的宠物, 国服api不好用 临时解决方案
+	 */
+	public void addNewPets() {
+		HttpClient client = new HttpClient();
+		client.setGzipSupported(true);
+		try {
+			List<Long> ids = run.query("select distinct petSpeciesId from t_ah_min_buyout_data where item = 82800 and petSpeciesId not in (select id from t_pet)", new ColumnListHandler<Long>());
+			for (Long tmpId : ids) {
+				int id = tmpId.intValue();
+				String petTooltip = client.get("https://www.battlenet.com.cn/wow/zh/pet/"+id+"/tooltip");
+				int index = petTooltip.indexOf("<span class=\"name\">");
+				String name = petTooltip.substring(index + "<span class=\"name\">".length(), petTooltip.indexOf("</span>", index));
+				int index2 = petTooltip.indexOf("http://content.battlenet.com.cn/wow/icons/36/");
+				String icon = petTooltip.substring(index2+"http://content.battlenet.com.cn/wow/icons/36/".length(), petTooltip.indexOf(".jpg", index2));
+				System.out.println(id + name + " " + icon);
+				run.update("insert into t_pet (id,name,icon) values (?,?,?)", id, name, icon); 
+			}
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addPetStats() {
+		try {
+			List<PetStats> pets = run.query("select distinct petSpeciesId as speciesId,petbreedId as breedId from t_ah_min_buyout_data where item = 82800", new BeanListHandler<PetStats>(PetStats.class));
+			List<PetStats> pets2 = run.query("select speciesId,breedId from t_pet_stats", new BeanListHandler<PetStats>(PetStats.class));
+			pets.removeAll(pets2);
+			WowClient client = new WowClient();
+			client.setRegion(WowClient.REGION_TW);
+			for (PetStats pet : pets) {
+				com.bnade.wow.client.model.PetStats petStats = client.getPetStats(pet.getSpeciesId(), pet.getBreedId(), 25, 3);
+				System.out.println(petStats);
+				run.update("insert into t_pet_stats (speciesId,breedId,petQualityId,level,health,power,speed) values (?,?,?,?,?,?,?)", pet.getSpeciesId(),pet.getBreedId(),3,25,petStats.getHealth(),petStats.getPower(),petStats.getSpeed());
+			}	
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}		 
+	}
 
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-//		itemCatcher.process();
-//		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
+		itemCatcher.process();
+		itemCatcher.refreshItems();
+//		itemCatcher.updateItemBounus();
+//		itemCatcher.addNewPets();
+//		itemCatcher.addPetStats();
 	}	
 
 }
