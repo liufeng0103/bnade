@@ -1,14 +1,14 @@
 package com.bnade.wow.client;
 
-public class WoWClientException extends Exception {
+public class WowClientException extends Exception {
 
 	private static final long serialVersionUID = -6279921800735861381L;
 
-	public WoWClientException() {
+	public WowClientException() {
 		super();
 	}
 	
-	public WoWClientException(Throwable e) {
+	public WowClientException(Throwable e) {
 		super(e);
 	}
 }
