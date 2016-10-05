@@ -152,9 +152,9 @@ public class ItemCatcher {
 
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
-		itemCatcher.refreshItems();
-//		itemCatcher.updateItemBounus();
+//		itemCatcher.process();
+//		itemCatcher.refreshItems();
+		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
 	}	

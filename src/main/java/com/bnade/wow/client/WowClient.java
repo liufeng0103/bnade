@@ -33,13 +33,19 @@ public class WowClient {
 	private static final String AUCTION_DATA = "/wow/auction/data/";
 	private static final String ITEM = "/wow/item/";
 	private static final String PET_STATS = "/wow/pet/stats/";
-	private static final String APIKEY = "?apikey=" + BnadeProperties.getApiKey();
+	private String apiKey = BnadeProperties.getApiKey();
 	
 	private HttpClient httpClient;
 	private Gson gson;
 	
 	private String region = "cn";
 
+	public WowClient(String region, String apiKey) {
+		this();
+		this.region = region;
+		this.apiKey = apiKey;
+	}
+	
 	public WowClient() {
 		httpClient = new HttpClient();
 		httpClient.setGzipSupported(true);
@@ -61,7 +67,7 @@ public class WowClient {
 	public AuctionDataFile getAuctionDataFile(String realmName) throws WoWClientException {		
 		// 晴日峰 (江苏)和丽丽需要转化空格
 		realmName = realmName.replaceAll(" ", "%20");
-		String url = getHost() + AUCTION_DATA + realmName + APIKEY;
+		String url = getHost() + AUCTION_DATA + realmName + "?apikey=" + apiKey;
 		String json = null;
 		try {			
 			httpClient.resetTryCount();
@@ -91,8 +97,21 @@ public class WowClient {
 	 * @return
 	 * @throws WoWClientException 
 	 */
-	public JItem getItem(int id) throws WoWClientException {
-		String url = getHost() + ITEM + id + APIKEY;
+	public JItem getItem(int id) throws WoWClientException {		
+		return getItem(id, null);
+	}
+	
+	/**
+	 * 通过物品ID获取物品的信息
+	 * @param id
+	 * @return
+	 * @throws WoWClientException 
+	 */
+	public JItem getItem(int id, String bl) throws WoWClientException {
+		String url = getHost() + ITEM + id + "?apikey=" + apiKey;
+		if (bl != null) {
+			url += "&bl=" + bl;
+		}
 		String json = null;
 		try {			
 			httpClient.resetTryCount();
@@ -105,7 +124,7 @@ public class WowClient {
 	}
 	
 	public PetStats getPetStats(int id, int breedId, int level, int qualityId) throws IOException {
-		String url = getHost() +  PET_STATS + id + APIKEY + "&level=" + level + "&qualityId="+qualityId+"&breedId="+breedId;			
+		String url = getHost() +  PET_STATS + id + "?apikey=" + apiKey + "&level=" + level + "&qualityId="+qualityId+"&breedId="+breedId;			
 		String json = httpClient.reliableGet(url);
 		return gson.fromJson(json, PetStats.class);		
 	}
@@ -125,5 +144,14 @@ public class WowClient {
 			host = "https://" + region + ".api.battle.net";
 		}
 		return host;
+	}
+	
+	public static void main(String[] args) throws WoWClientException {
+		WowClient client = new WowClient(WowClient.REGION_US, "4ba623uecansk7kucbv73fwbb5gzr676");
+		System.out.println(client.getItem(124105));
+//		for (int i = 1676; i <= 1721; i++) {
+//			JItem item = client.getItem(123915, String.valueOf(i));
+//			System.out.println(i + " " + item.getName() + item.getBonusStats());
+//		}
 	}
 }

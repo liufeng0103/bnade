@@ -12,6 +12,7 @@ public class JItem {
 	private int inventoryType;
 	private int itemLevel;
 	private List<ItemSpell> itemSpells;
+	private List<ItemBonusStat> bonusStats;
 
 	public int getId() {
 		return id;
@@ -91,6 +92,24 @@ public class JItem {
 		}
 		return -1;
 	}
+
+	public List<ItemBonusStat> getBonusStats() {
+		return bonusStats;
+	}
+
+	public void setBonusStats(List<ItemBonusStat> bonusStats) {
+		this.bonusStats = bonusStats;
+	}
+
+	@Override
+	public String toString() {
+		return "JItem [id=" + id + ", description=" + description + ", name="
+				+ name + ", icon=" + icon + ", itemClass=" + itemClass
+				+ ", itemSubClass=" + itemSubClass + ", inventoryType="
+				+ inventoryType + ", itemLevel=" + itemLevel + ", itemSpells="
+				+ itemSpells + ", bonusStats=" + bonusStats + "]";
+	}
+	
 }
 
 class ItemSpell {

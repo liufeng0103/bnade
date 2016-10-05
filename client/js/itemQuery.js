@@ -3,6 +3,207 @@ var orderByDesc = true;
 var gblData = [];
 var gblItemId = 0;
 
+var BonusGroups = [ {
+	"id" : 1,
+	"desc" : "快刀之 全能 爆击",
+	"bonusGroups" : [ {
+		"bl" : "1676",
+		"desc" : "245全能 614暴击"
+	}, {
+		"bl" : "1677",
+		"desc" : "307全能 552暴击"
+	}, {
+		"bl" : "1678",
+		"desc" : "368全能 491暴击"
+	}, {
+		"bl" : "1679",
+		"desc" : "429全能 429暴击"
+	}, {
+		"bl" : "1680",
+		"desc" : "491全能 368暴击"
+	}, {
+		"bl" : "1681",
+		"desc" : "552全能 307暴击"
+	}, {
+		"bl" : "1682",
+		"desc" : "614全能 245暴击"
+	}, ]
+}, {
+	"id" : 2,
+	"desc" : "无双之 爆击 精通",
+	"bonusGroups" : [ {
+		"bl" : "1683",
+		"desc" : "614暴击 245精通"
+	}, {
+		"bl" : "1684",
+		"desc" : "552暴击 307精通"
+	}, {
+		"bl" : "1685",
+		"desc" : "491暴击 368精通"
+	}, {
+		"bl" : "1686",
+		"desc" : "429暴击 429精通"
+	}, {
+		"bl" : "1687",
+		"desc" : "368暴击 491精通"
+	}, {
+		"bl" : "1688",
+		"desc" : "307暴击 552精通"
+	}, {
+		"bl" : "1689",
+		"desc" : "245暴击 614精通"
+	}, ]
+}, {
+	"id" : 3,
+	"desc" : "燎火之 爆击 急速",
+	"bonusGroups" : [ {
+		"bl" : "1690",
+		"desc" : "614暴击 245急速"
+	}, {
+		"bl" : "1691",
+		"desc" : "552暴击 307急速"
+	}, {
+		"bl" : "1692",
+		"desc" : "491暴击 368急速"
+	}, {
+		"bl" : "1693",
+		"desc" : "429暴击 429急速"
+	}, {
+		"bl" : "1694",
+		"desc" : "368暴击 491急速"
+	}, {
+		"bl" : "1695",
+		"desc" : "307暴击 552急速"
+	}, {
+		"bl" : "1696",
+		"desc" : "245暴击 614急速"
+	}, ]
+}, {
+	"id" : 4,
+	"desc" : "灼光之 精通 急速",
+	"bonusGroups" : [ {
+		"bl" : "1697",
+		"desc" : "245精通 614急速"
+	}, {
+		"bl" : "1698",
+		"desc" : "307精通 552急速"
+	}, {
+		"bl" : "1699",
+		"desc" : "368精通 491急速"
+	}, {
+		"bl" : "1700",
+		"desc" : "429精通 429急速"
+	}, {
+		"bl" : "1701",
+		"desc" : "491精通 368急速"
+	}, {
+		"bl" : "1702",
+		"desc" : "552精通 307急速"
+	}, {
+		"bl" : "1703",
+		"desc" : "614精通 245急速"
+	}, ]
+}, {
+	"id" : 5,
+	"desc" : "曙光之 全能 急速",
+	"bonusGroups" : [ {
+		"bl" : "1704",
+		"desc" : "245全能 614急速"
+	}, {
+		"bl" : "1705",
+		"desc" : "307全能 552急速"
+	}, {
+		"bl" : "1706",
+		"desc" : "368全能 491急速"
+	}, {
+		"bl" : "1707",
+		"desc" : "429全能 429急速"
+	}, {
+		"bl" : "1708",
+		"desc" : "491全能 368急速"
+	}, {
+		"bl" : "1709",
+		"desc" : "552全能 307急速"
+	}, {
+		"bl" : "1710",
+		"desc" : "614全能 245急速"
+	}, ]
+}, {
+	"id" : 6,
+	"desc" : "谐律之 全能 精通",
+	"bonusGroups" : [ {
+		"bl" : "1711",
+		"desc" : "245全能 614精通"
+	}, {
+		"bl" : "1712",
+		"desc" : "307全能 552精通"
+	}, {
+		"bl" : "1713",
+		"desc" : "368全能 491精通"
+	}, {
+		"bl" : "1714",
+		"desc" : "429全能 429精通"
+	}, {
+		"bl" : "1715",
+		"desc" : "491全能 368精通"
+	}, {
+		"bl" : "1716",
+		"desc" : "552全能 307精通"
+	}, {
+		"bl" : "1717",
+		"desc" : "614全能 245精通"
+	}, ]
+}, {
+	"id" : 7,
+	"desc" : "屠夫之 爆击",
+	"bonusGroups" : [ {
+		"bl" : "1718",
+		"desc" : "859爆击"
+	}, ]
+}, {
+	"id" : 8,
+	"desc" : "应变之 全能",
+	"bonusGroups" : [ {
+		"bl" : "1719",
+		"desc" : "859全能"
+	}, ]
+}, {
+	"id" : 9,
+	"desc" : "焦躁之 急速",
+	"bonusGroups" : [ {
+		"bl" : "1720",
+		"desc" : "859急速"
+	}, ]
+}, {
+	"id" : 10,
+	"desc" : "专擅之 精通",
+	"bonusGroups" : [ {
+		"bl" : "1721",
+		"desc" : "859精通"
+	}, ]
+}, ];
+
+// 获取bonus说明，仅用于7.0制造业物品
+function getItemBonusHtml() {
+	var tmpHtml = "<div class='panel-group' role='tablist' aria-multiselectable='true'>";
+	for (i in BonusGroups) {
+		var bls = BonusGroups[i];
+		tmpHtml += "<div class='panel panel-default'><div class='panel-heading' role='tab' id='heading"+bls.id+"'><h4 class='panel-title'><a class='collapsed' data-toggle='collapse' data-parent='#accordion' href='#collapse"+bls.id+"' aria-expanded='false' aria-controls='collapse"+bls.id+"'>";
+		tmpHtml += bls.desc;
+		tmpHtml += "</a></h4></div><div id='collapse"+bls.id+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading"+bls.id+"'><div class='panel-body'>";
+			// body
+		tmpHtml += "<ul class='list-group'>";
+		for (j in bls.bonusGroups) {
+			var bl = bls.bonusGroups[j];
+			tmpHtml += "<li class='list-group-item'><a class='bonus' href='javascript:void(0)' bl='"+bl.bl+"'>"+bl.desc+"</a></li>";
+		}
+		tmpHtml += "</ul>";
+		tmpHtml += "</div></div></div>";
+	}
+	tmpHtml += "</div>";
+	return tmpHtml;
+}
+
 function itemQueryByName(realm, itemName) {
 	$.get('wow/item/name/' + encodeURIComponent(itemName), function(data) {					
 		if (data.length === 0) {
@@ -13,21 +214,31 @@ function itemQueryByName(realm, itemName) {
 			if (item.bonusList.length === 0 || item.bonusList.length === 1) {							
 				accurateQuery(realm, item.id, itemName);
 			} else {
-				$('#msg').html('物品:' + itemName + ' 发现' + item.bonusList.length + '种版本,请选择下列表中的一种来查询');
-				var tableHtml = "<table class='table table-striped'><thead><tr><th>ID</th><th>物品名</th><th>物品说明</th></tr></thead><tbody>";
-				for (var i in item.bonusList) {
-					var itemBonus = item.bonusList[i];
-					tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
-				}
-				tableHtml += '</tbody></table>';
-				$('#itemListByName').html(tableHtml);	
-				for (var i in item.bonusList) {
-					var itemBonus = item.bonusList[i];
-					$("#itemBonus" + i + item.id).click(function() {
-						var regItemId = $(this).attr('itemId')+"?bl="+$(this).attr('bl');
-						var regItemName = $(this).html();
-						accurateQuery(realm, regItemId, regItemName);									
+				// 多bonus物品
+				if (item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) { // 7.0制造业物品
+					$('#msg').html('7.0制造业装备有多种副属性组合，请选择一种查询');
+					$('#itemListByName').html(getItemBonusHtml());
+					$(".bonus").click(function() {
+						var regItemId = item.id+"?bl="+$(this).attr('bl');
+						accurateQuery(realm, regItemId, itemName);									
 					});
+				} else {
+					$('#msg').html('物品:' + itemName + ' 发现' + item.bonusList.length + '种版本,请选择下列表中的一种来查询');
+					var tableHtml = "<table class='table table-striped'><thead><tr><th>ID</th><th>物品名</th><th>物品说明</th></tr></thead><tbody>";
+					for (var i in item.bonusList) {
+						var itemBonus = item.bonusList[i];
+						tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
+					}
+					tableHtml += '</tbody></table>';
+					$('#itemListByName').html(tableHtml);	
+					for (var i in item.bonusList) {
+						var itemBonus = item.bonusList[i];
+						$("#itemBonus" + i + item.id).click(function() {
+							var regItemId = $(this).attr('itemId')+"?bl="+$(this).attr('bl');
+							var regItemName = $(this).html();
+							accurateQuery(realm, regItemId, regItemName);									
+						});
+					}
 				}
 			}						
 		}else if (data.length > 1) {
