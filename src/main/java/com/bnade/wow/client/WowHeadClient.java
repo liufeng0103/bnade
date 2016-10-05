@@ -2,8 +2,11 @@ package com.bnade.wow.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,8 +20,10 @@ import org.xml.sax.SAXException;
 
 import com.bnade.util.HttpClient;
 import com.bnade.wow.client.model.Item;
+import com.bnade.wow.client.model.XItem;
+import com.bnade.wow.client.model.XWowHead;
 
-public class WowHeadClient implements WoWAPI {
+public class WowHeadClient implements WowAPI {
 	
 	private static final String HOST = "http://@region.wowhead.com";
 	
@@ -30,12 +35,12 @@ public class WowHeadClient implements WoWAPI {
 	}
 	 
 	@Override
-	public Item getItem(int id) throws WoWClientException {
+	public Item getItem(int id) throws WowClientException {
 		String url = HOST.replace("@region", region) + "/item=" + id + "&xml";
 		try {
 			return parserXml(id, url);
 		} catch (IOException | ParserConfigurationException | SAXException e) {
-			throw new WoWClientException(e);
+			throw new WowClientException(e);
 		}		
 	}
 	
@@ -77,6 +82,27 @@ public class WowHeadClient implements WoWAPI {
 		return null;
 	}	
 	
+	public XItem getItem2(int id) throws WowClientException {		
+		try {
+			String url = HOST.replace("@region", region) + "/item=" + id + "&xml";
+			String xml = httpClient.get(url).replaceAll("[\\x00-\\x08\\x0b-\\x0c\\x0e-\\x1f]", "");
+			System.out.println(xml);
+			return converyToJavaBean(xml, XWowHead.class).getItem();
+		} catch (IOException e) {
+			throw new WowClientException(e);
+		}		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T> T converyToJavaBean(String xml, Class<T> c) {
+		try {
+			return (T)JAXBContext.newInstance(c).createUnmarshaller().unmarshal(new StringReader(xml));
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	private Node getNode(String name, NodeList nodeList) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node itemAttr = nodeList.item(i);
@@ -110,10 +136,11 @@ public class WowHeadClient implements WoWAPI {
 		this.region = region;
 	}
 	
-	public static void main(String[] args) throws WoWClientException {
+	public static void main(String[] args) throws WowClientException {
 		WowHeadClient client = new WowHeadClient();
-		System.out.println(client.getItem(124106));
-		System.out.println(client.getItem(14970));
-		System.out.println(client.getItem(114821));
+		System.out.println(client.getItem2(123915));
+//		System.out.println(client.getItem(124106));
+//		System.out.println(client.getItem(14970));
+//		System.out.println(client.getItem(114821));
 	}
 }
