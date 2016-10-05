@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.bnade.util.DBUtil;
 import com.bnade.util.HttpClient;
-import com.bnade.wow.client.WoWAPI;
+import com.bnade.wow.client.WowAPI;
 import com.bnade.wow.client.WowClient;
 import com.bnade.wow.client.WowHeadClient;
 import com.bnade.wow.client.model.Item;
@@ -29,7 +29,7 @@ public class ItemCatcher {
 	private static Logger logger = LoggerFactory.getLogger(ItemCatcher.class);
 	
 	private QueryRunner run;	
-	private WoWAPI wowAPI;
+	private WowAPI wowAPI;
 	
 	public ItemCatcher() {
 		run = new QueryRunner(DBUtil.getDataSource());		

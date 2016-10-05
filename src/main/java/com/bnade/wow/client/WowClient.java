@@ -61,10 +61,10 @@ public class WowClient {
 	 * 通过服务器名获取拍卖数据文件信息
 	 * @param realmName
 	 * @return
-	 * @throws WoWClientException
+	 * @throws WowClientException
 	 * @throws IOException
 	 */
-	public AuctionDataFile getAuctionDataFile(String realmName) throws WoWClientException {		
+	public AuctionDataFile getAuctionDataFile(String realmName) throws WowClientException {		
 		// 晴日峰 (江苏)和丽丽需要转化空格
 		realmName = realmName.replaceAll(" ", "%20");
 		String url = getHost() + AUCTION_DATA + realmName + "?apikey=" + apiKey;
@@ -74,7 +74,7 @@ public class WowClient {
 			json = httpClient.reliableGet(url);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new WoWClientException();
+			throw new WowClientException();
 		}		
 		return gson.fromJson(json, AuctionDataFiles.class).getFiles().get(0);
 	}
@@ -95,9 +95,9 @@ public class WowClient {
 	 * 通过物品ID获取物品的信息
 	 * @param id
 	 * @return
-	 * @throws WoWClientException 
+	 * @throws WowClientException 
 	 */
-	public JItem getItem(int id) throws WoWClientException {		
+	public JItem getItem(int id) throws WowClientException {		
 		return getItem(id, null);
 	}
 	
@@ -105,9 +105,9 @@ public class WowClient {
 	 * 通过物品ID获取物品的信息
 	 * @param id
 	 * @return
-	 * @throws WoWClientException 
+	 * @throws WowClientException 
 	 */
-	public JItem getItem(int id, String bl) throws WoWClientException {
+	public JItem getItem(int id, String bl) throws WowClientException {
 		String url = getHost() + ITEM + id + "?apikey=" + apiKey;
 		if (bl != null) {
 			url += "&bl=" + bl;
@@ -118,7 +118,7 @@ public class WowClient {
 			json = httpClient.reliableGet(url);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new WoWClientException();
+			throw new WowClientException();
 		}		
 		return gson.fromJson(json, JItem.class);
 	}
@@ -146,7 +146,7 @@ public class WowClient {
 		return host;
 	}
 	
-	public static void main(String[] args) throws WoWClientException {
+	public static void main(String[] args) throws WowClientException {
 		WowClient client = new WowClient(WowClient.REGION_US, "4ba623uecansk7kucbv73fwbb5gzr676");
 		System.out.println(client.getItem(124105));
 //		for (int i = 1676; i <= 1721; i++) {

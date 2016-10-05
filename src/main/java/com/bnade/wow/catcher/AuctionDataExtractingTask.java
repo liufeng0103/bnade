@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.bnade.util.BnadeProperties;
 import com.bnade.util.TimeUtil;
 import com.bnade.wow.client.WowClient;
-import com.bnade.wow.client.WoWClientException;
+import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.model.AuctionDataFile;
 import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.po.Auction;
@@ -115,7 +115,7 @@ public class AuctionDataExtractingTask implements Runnable {
 							addInfo("数据更新时间{}与api获取的更新时间一样，不更新", new Date(realm.getLastModified()));
 							return;
 						}
-					} catch (WoWClientException e) {
+					} catch (WowClientException e) {
 						isApiAvailable = false;
 						addInfo("获取拍卖行数据文件信息api不好用，使用数据库中的url下载数据文件");
 						long start = System.currentTimeMillis();
