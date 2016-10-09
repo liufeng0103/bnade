@@ -3,7 +3,7 @@ var orderByDesc = true;
 var gblData = [];
 var gblItemId = 0;
 
-var BonusGroups = [ {
+var BonusGroups1 = [ {
 	"id" : 1,
 	"desc" : "快刀之 全能 爆击",
 	"bonusGroups" : [ {
@@ -183,11 +183,332 @@ var BonusGroups = [ {
 	}, ]
 }, ];
 
+var BonusGroups2 = [ {
+	"id" : 1,
+	"desc" : "快刀之 全能 爆击",
+	"bonusGroups" : [ {
+		"bl" : "1742",
+		"desc" : "460全能 1150暴击"
+	}, {
+		"bl" : "1743",
+		"desc" : "552全能 1058暴击"
+	}, {
+		"bl" : "1744",
+		"desc" : "644全能 966暴击"
+	}, {
+		"bl" : "1745",
+		"desc" : "736全能 874暴击"
+	}, {
+		"bl" : "1746",
+		"desc" : "966全能 644暴击"
+	}, {
+		"bl" : "1747",
+		"desc" : "1058全能 552暴击"
+	}, {
+		"bl" : "1748",
+		"desc" : "1150全能 460暴击"
+	}, ]
+}, {
+	"id" : 2,
+	"desc" : "无双之 爆击 精通",
+	"bonusGroups" : [ {
+		"bl" : "1749",
+		"desc" : "1150暴击 460精通"
+	}, {
+		"bl" : "1750",
+		"desc" : "1058暴击 552精通"
+	}, {
+		"bl" : "1751",
+		"desc" : "966暴击 644精通"
+	}, {
+		"bl" : "1752",
+		"desc" : "874暴击 736精通"
+	}, {
+		"bl" : "1753",
+		"desc" : "644暴击 966精通"
+	}, {
+		"bl" : "1754",
+		"desc" : "552暴击 1058精通"
+	}, {
+		"bl" : "1755",
+		"desc" : "460暴击 1150精通"
+	}, ]
+}, {
+	"id" : 3,
+	"desc" : "燎火之 爆击 急速",
+	"bonusGroups" : [ {
+		"bl" : "1756",
+		"desc" : "460暴击 1150急速"
+	}, {
+		"bl" : "1757",
+		"desc" : "598暴击 1012急速"
+	}, {
+		"bl" : "1758",
+		"desc" : "644暴击 966急速"
+	}, {
+		"bl" : "1759",
+		"desc" : "736暴击 874急速"
+	}, {
+		"bl" : "1760",
+		"desc" : "966暴击 644急速"
+	}, {
+		"bl" : "1761",
+		"desc" : "1058暴击 552急速"
+	}, {
+		"bl" : "1762",
+		"desc" : "1150暴击 460急速"
+	}, ]
+}, {
+	"id" : 4,
+	"desc" : "灼光之 精通 急速",
+	"bonusGroups" : [ {
+		"bl" : "1763",
+		"desc" : "1150精通 460急速"
+	}, {
+		"bl" : "1764",
+		"desc" : "1058精通 552急速"
+	}, {
+		"bl" : "1765",
+		"desc" : "966精通 644急速"
+	}, {
+		"bl" : "1766",
+		"desc" : "874精通 736急速"
+	}, {
+		"bl" : "1767",
+		"desc" : "644精通 966急速"
+	}, {
+		"bl" : "1768",
+		"desc" : "552精通 1058急速"
+	}, {
+		"bl" : "1769",
+		"desc" : "460精通 1150急速"
+	}, ]
+}, {
+	"id" : 5,
+	"desc" : "曙光之 全能 急速",
+	"bonusGroups" : [ {
+		"bl" : "1770",
+		"desc" : "460全能 1150急速"
+	}, {
+		"bl" : "1771",
+		"desc" : "552全能 1058急速"
+	}, {
+		"bl" : "1772",
+		"desc" : "644全能 966急速"
+	}, {
+		"bl" : "1773",
+		"desc" : "736全能 874急速"
+	}, {
+		"bl" : "1774",
+		"desc" : "966全能 644急速"
+	}, {
+		"bl" : "1775",
+		"desc" : "1058全能 552急速"
+	}, {
+		"bl" : "1776",
+		"desc" : "1150全能 460急速"
+	}, ]
+}, {
+	"id" : 6,
+	"desc" : "谐律之 全能 精通",
+	"bonusGroups" : [ {
+		"bl" : "1777",
+		"desc" : "460全能 1150精通"
+	}, {
+		"bl" : "1778",
+		"desc" : "552全能 1058精通"
+	}, {
+		"bl" : "1779",
+		"desc" : "644全能 966精通"
+	}, {
+		"bl" : "1780",
+		"desc" : "736全能 874精通"
+	}, {
+		"bl" : "1781",
+		"desc" : "966全能 644精通"
+	}, {
+		"bl" : "1782",
+		"desc" : "1058全能 552精通"
+	}, {
+		"bl" : "1783",
+		"desc" : "1150全能 460精通"
+	}, ]
+}, {
+	"id" : 7,
+	"desc" : "屠夫之 爆击",
+	"bonusGroups" : [ {
+		"bl" : "1784",
+		"desc" : "1611爆击"
+	}, ]
+}, {
+	"id" : 8,
+	"desc" : "应变之 全能",
+	"bonusGroups" : [ {
+		"bl" : "1785",
+		"desc" : "1611全能"
+	}, ]
+}, {
+	"id" : 9,
+	"desc" : "焦躁之 急速",
+	"bonusGroups" : [ {
+		"bl" : "1786",
+		"desc" : "1611急速"
+	}, ]
+}, {
+	"id" : 10,
+	"desc" : "专擅之 精通",
+	"bonusGroups" : [ {
+		"bl" : "1787",
+		"desc" : "1611精通"
+	}, ]
+}, ];
+
+var BonusGroups3 = [ {
+	"id" : 1,
+	"desc" : "快刀之 全能 爆击",
+	"bonusGroups" : [ {
+		"bl" : "3343",
+		"desc" : "460全能 229暴击"
+	}, {
+		"bl" : "3344",
+		"desc" : "575全能 114暴击"
+	}, {
+		"bl" : "3345",
+		"desc" : "690全能"
+	}, {
+		"bl" : "3361",
+		"desc" : "229全能 460暴击"
+	}, {
+		"bl" : "3362",
+		"desc" : "114全能 575暴击"
+	}, {
+		"bl" : "3363",
+		"desc" : "690暴击"
+	}, ]
+}, {
+	"id" : 2,
+	"desc" : "无双之 爆击 精通",
+	"bonusGroups" : [ {
+		"bl" : "3346",
+		"desc" : "229暴击 460精通"
+	}, {
+		"bl" : "3347",
+		"desc" : "114暴击 575精通"
+	}, {
+		"bl" : "3348",
+		"desc" : "690精通"
+	}, {
+		"bl" : "3351",
+		"desc" : "229精通 460暴击"
+	}, {
+		"bl" : "3352",
+		"desc" : "114精通 575暴击"
+	}, {
+		"bl" : "3354",
+		"desc" : "690暴击"
+	}, ]
+}, {
+	"id" : 3,
+	"desc" : "燎火之 爆击 急速",
+	"bonusGroups" : [ {
+		"bl" : "3349",
+		"desc" : "460急速 229暴击"
+	}, {
+		"bl" : "3350",
+		"desc" : "575急速 114暴击"
+	}, {
+		"bl" : "3353",
+		"desc" : "690急速"
+	}, {
+		"bl" : "3370",
+		"desc" : "229急速 460暴击"
+	}, {
+		"bl" : "3371",
+		"desc" : "114急速 575暴击"
+	}, {
+		"bl" : "3372",
+		"desc" : "690暴击"
+	}, ]
+}, {
+	"id" : 4,
+	"desc" : "灼光之 精通 急速",
+	"bonusGroups" : [ {
+		"bl" : "3355",
+		"desc" : "460急速 229精通"
+	}, {
+		"bl" : "3356",
+		"desc" : "575急速 114精通"
+	}, {
+		"bl" : "3357",
+		"desc" : "690急速"
+	}, {
+		"bl" : "3373",
+		"desc" : "229急速 460精通"
+	}, {
+		"bl" : "3374",
+		"desc" : "114急速 575精通"
+	}, {
+		"bl" : "3375",
+		"desc" : "690精通"
+	}, ]
+}, {
+	"id" : 5,
+	"desc" : "谐律之 全能 精通",
+	"bonusGroups" : [ {
+		"bl" : "3358",
+		"desc" : "460全能 229精通"
+	}, {
+		"bl" : "3359",
+		"desc" : "575全能 114精通"
+	}, {
+		"bl" : "3360",
+		"desc" : "690全能"
+	}, {
+		"bl" : "3367",
+		"desc" : "229全能 460精通"
+	}, {
+		"bl" : "3368",
+		"desc" : "114全能 575精通"
+	}, {
+		"bl" : "3369",
+		"desc" : "690精通"
+	}, ]
+}, {
+	"id" : 6,
+	"desc" : "曙光之 全能 急速",
+	"bonusGroups" : [ {
+		"bl" : "3364",
+		"desc" : "229全能 460急速"
+	}, {
+		"bl" : "3365",
+		"desc" : "114全能 575急速"
+	}, {
+		"bl" : "3366",
+		"desc" : "690急速"
+	}, {
+		"bl" : "3376",
+		"desc" : "460全能 229急速"
+	}, {
+		"bl" : "3377",
+		"desc" : "575全能 114急速"
+	}, {
+		"bl" : "3378",
+		"desc" : "690全能"
+	}, ]
+}, ];
+
 // 获取bonus说明，仅用于7.0制造业物品
-function getItemBonusHtml() {
+function getItemBonusHtml(type) {
 	var tmpHtml = "<div class='panel-group' role='tablist' aria-multiselectable='true'>";
-	for (i in BonusGroups) {
-		var bls = BonusGroups[i];
+	if (type == 1) {
+		var bonusGroups = BonusGroups1;
+	} else if (type == 2) {
+		var bonusGroups = BonusGroups2;
+	} else if (type == 3) {
+		var bonusGroups = BonusGroups3;
+	}
+	for (i in bonusGroups) {
+		var bls = bonusGroups[i];
 		tmpHtml += "<div class='panel panel-default'><div class='panel-heading' role='tab' id='heading"+bls.id+"'><h4 class='panel-title'><a class='collapsed' data-toggle='collapse' data-parent='#accordion' href='#collapse"+bls.id+"' aria-expanded='false' aria-controls='collapse"+bls.id+"'>";
 		tmpHtml += bls.desc;
 		tmpHtml += "</a></h4></div><div id='collapse"+bls.id+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading"+bls.id+"'><div class='panel-body'>";
@@ -215,9 +536,16 @@ function itemQueryByName(realm, itemName) {
 				accurateQuery(realm, item.id, itemName);
 			} else {
 				// 多bonus物品
-				if (item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) { // 7.0制造业物品
+				if ((item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) || (item.bonusList[0] >= 1742 && item.bonusList[0] <= 1787) || (item.bonusList[0] >= 3343 && item.bonusList[0] <= 3378)) { // 7.0制造业物品
 					$('#msg').html('7.0制造业装备有多种副属性组合，请选择一种查询');
-					$('#itemListByName').html(getItemBonusHtml());
+					if (item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) {
+						$('#itemListByName').html(getItemBonusHtml(1));
+					} else if (item.bonusList[0] >= 1742 && item.bonusList[0] <= 1787) {
+						$('#itemListByName').html(getItemBonusHtml(2));
+					} else if (item.bonusList[0] >= 3343 && item.bonusList[0] <= 3378) {
+						$('#itemListByName').html(getItemBonusHtml(3));
+					}
+					
 					$(".bonus").click(function() {
 						var regItemId = item.id+"?bl="+$(this).attr('bl');
 						accurateQuery(realm, regItemId, itemName);									
