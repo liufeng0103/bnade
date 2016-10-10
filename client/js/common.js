@@ -50,17 +50,3 @@ function getUrlParam(name) {
     var r = window.location.search.substr(1).match(reg);
     if (r !== null) return decodeURI (r[2]); return null;
 }
-
-function showPic(e,sUrl){ 
-    var x,y; 
-    x = e.clientX; 
-    y = e.clientY; 
-    document.getElementById("Layer1").style.left = x+2+'px'; 
-    document.getElementById("Layer1").style.top = y+2+'px'; 
-    document.getElementById("Layer1").innerHTML = "<img border='0' src=\"" + sUrl + "\">"; 
-    document.getElementById("Layer1").style.display = ""; 
-} 
-function hiddenPic(){ 
-    document.getElementById("Layer1").innerHTML = ""; 
-    document.getElementById("Layer1").style.display = "none"; 
-}
