@@ -110,7 +110,6 @@ block content
 						li 有任何问题请在NGA帖子下留言:
 							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
 				div.col-md-2
-					div(data-spy="affix")
 						ul#fuzzyItemsList.nav.nav-sidebar
 						h4 搜索排行榜
 						ul.nav.nav-tabs(role="tablist")
@@ -124,7 +123,8 @@ block content
 							div#dailyHot.tab-pane.active
 							div#weeklyHot.tab-pane
 							div#monthlyHot.tab-pane
-						a(href="#top",data-spy="scroll",data-target="body") 返回顶部
+						div(data-spy="affix")
+							a(href="#top",data-spy="scroll",data-target="body") 返回顶部
 block pagescript
 	script(src="http://cdn.bootcss.com/highstock/4.2.3/highstock.js")
 	script(src="http://cdn.bootcss.com/highstock/4.2.3/modules/heatmap.js")
