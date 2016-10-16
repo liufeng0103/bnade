@@ -1,6 +1,6 @@
 extends layout
 block title
-	title 魔兽世界物价查询 24小时内价格波动 历史价格 全服务器价格查询比较
+	title BNADE魔兽世界物价查询 24小时内价格波动 历史价格 全服务器价格查询比较
 block content
 	div#itemAucsModal.modal.fade.bs-example-modal-lg
 		div.modal-dialog.modal-lg
@@ -104,9 +104,9 @@ block content
 								tbody#showAllBody
 					p 说明:
 					ul
+						li 如果网站帮到了你，请帮忙推荐给更多的朋友
 						li 装笼宠物价格查询请点击<a href="petQuery.html">宠物价格</a>页面
 						li 最高和平均价格取得是前80%数据计算
-						li 网页会保存你最近搜索的记录，默认是保存5个服务器，15个物品名，如果想要修改这些值，比如服务器个数，请在服务器搜索框输入realmCount在物品名框里输入你想要保存的个数然后按回车或点击查询，成功设置会有信息弹出，修改物品类似，服务器搜索框输入itemCount，如果不需要保存某种数据，请设置他们的值为0
 						li 有任何问题请在NGA帖子下留言:
 							a(href="http://bbs.nga.cn/read.php?tid=8883933") http://bbs.nga.cn/read.php?tid=8883933
 				div.col-md-2
@@ -114,11 +114,11 @@ block content
 						h4 搜索排行榜
 						ul.nav.nav-tabs(role="tablist")
 							li.active(role="presentation")
-								a(href="#dailyHot",aria-controls="dailyHot",role="tab",data-toggle="tab") 每日
+								a(href="#dailyHot",aria-controls="dailyHot",role="tab",data-toggle="tab",style="padding-left: 8px;padding-right: 8px;") 每日
 							li(role="presentation")
-								a(href="#weeklyHot",aria-controls="weeklyHot",role="tab",data-toggle="tab") 每周
+								a.hotSearchA(href="#weeklyHot",aria-controls="weeklyHot",role="tab",data-toggle="tab",style="padding-left: 8px;padding-right: 8px;") 每周
 							li(role="presentation")
-								a(href="#monthlyHot",aria-controls="monthlyHot",role="tab",data-toggle="tab") 每月
+								a.hotSearchA(href="#monthlyHot",aria-controls="monthlyHot",role="tab",data-toggle="tab",style="padding-left: 8px;padding-right: 8px;") 每月
 						div.tab-content
 							div#dailyHot.tab-pane.active
 							div#weeklyHot.tab-pane
