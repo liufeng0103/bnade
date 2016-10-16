@@ -74,7 +74,8 @@ public class ItemResource {
 					itemVo.setIcon(item.getIcon());
 					itemVo.setItemLevel(item.getItemLevel());
 					itemVo.setBonusList(item.getBonusList());
-					result.add(itemVo);
+					itemVo.setCreatedBy(item.getCreatedBy());					
+					result.add(itemVo);					
 				}	
 				if (items.size() > 0) {
 					try {

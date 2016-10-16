@@ -86,7 +86,7 @@ public class WowHeadClient implements WowAPI {
 		try {
 			String url = HOST.replace("@region", region) + "/item=" + id + "&xml";
 			String xml = httpClient.get(url).replaceAll("[\\x00-\\x08\\x0b-\\x0c\\x0e-\\x1f]", "");
-			System.out.println(xml);
+//			System.out.println(xml);
 			return converyToJavaBean(xml, XWowHead.class).getItem();
 		} catch (IOException e) {
 			throw new WowClientException(e);

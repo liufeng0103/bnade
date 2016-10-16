@@ -148,10 +148,10 @@ public class WowClient {
 	
 	public static void main(String[] args) throws WowClientException {
 		WowClient client = new WowClient(WowClient.REGION_US, "4ba623uecansk7kucbv73fwbb5gzr676");
-		System.out.println(client.getItem(124105));
-//		for (int i = 1676; i <= 1721; i++) {
-//			JItem item = client.getItem(123915, String.valueOf(i));
-//			System.out.println(i + " " + item.getName() + item.getBonusStats());
-//		}
+//		System.out.println(client.getItem(124105));
+		for (int i = 1477; i <= 1600; i++) {
+			JItem item = client.getItem(141580, String.valueOf(i));
+			System.out.println(i + " " + item.getItemLevel() + " " + item.getName() + item.getBonusStats());
+		}
 	}
 }

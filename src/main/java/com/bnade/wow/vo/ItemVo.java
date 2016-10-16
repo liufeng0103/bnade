@@ -2,12 +2,15 @@ package com.bnade.wow.vo;
 
 import java.util.List;
 
+import com.bnade.wow.po.ItemCreatedBy;
+
 public class ItemVo {
 	private int id;
 	private String name;
 	private String icon;
 	private int itemLevel;
 	private List<String> bonusList;
+	private List<ItemCreatedBy> createdBy;
 
 	public int getId() {
 		return id;
@@ -47,6 +50,14 @@ public class ItemVo {
 
 	public void setBonusList(List<String> bonusList) {
 		this.bonusList = bonusList;
+	}
+
+	public List<ItemCreatedBy> getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(List<ItemCreatedBy> createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

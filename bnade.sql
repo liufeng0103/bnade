@@ -30,34 +30,68 @@ CREATE TABLE IF NOT EXISTS t_item (
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 数据导入使用items.sql
-ALTER TABLE t_item ADD hot INT NOT NULL; -- 20160813,列已添加到建表语句里，单独添加用
+-- ALTER TABLE t_item ADD hot INT NOT NULL; -- 20160813,列已添加到建表语句里，单独添加用
 
 -- 物品信息内存表， 由于经常使用数据保存到内存中
-CREATE TABLE `mt_item` (
-  `id` int(10) unsigned NOT NULL,		-- ID
-  `name` varchar(80) NOT NULL,			-- 物品名
-  `icon` varchar(64) NOT NULL,			-- 图标名
-  `itemClass` int(11) NOT NULL,			-- 分类
-  `itemSubClass` int(11) NOT NULL,		-- 子类
-  `inventoryType` int(11) NOT NULL,		-- 部位
-  `itemLevel` int(11) NOT NULL,			-- 物品等级
-  `hot` int(11) NOT NULL,				-- 物品热度
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`)
+CREATE TABLE mt_item (
+  id int(10) unsigned NOT NULL,			-- ID
+  name varchar(80) NOT NULL,			-- 物品名
+  icon varchar(64) NOT NULL,			-- 图标名
+  itemClass int(11) NOT NULL,			-- 分类
+  itemSubClass int(11) NOT NULL,		-- 子类
+  inventoryType int(11) NOT NULL,		-- 部位
+  itemLevel int(11) NOT NULL,			-- 物品等级
+  hot int(11) NOT NULL,					-- 物品热度
+  PRIMARY KEY (id)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8
 ALTER TABLE mt_item ADD INDEX(name); -- 通过物品名查询物品信息时使用
 truncate mt_item;
 -- 数据导入到内存中
 insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot) select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot from t_item;
 -- 手动更新那些通过api找不到的物品
-insert into t_item (id,description,name,icon,itemLevel)values(732,'','成熟的秋葵','inv_misc_herb_09',10);
+-- insert into t_item (id,description,name,icon,itemLevel)values(732,'','成熟的秋葵','inv_misc_herb_09',10);
+
 -- 装备奖励表
--- 6.0制造业和fb物品都是拥有相同的itemId但不同的等级，副属性等通过bonus来表示
+-- 制造业和fb物品都是拥有相同的itemId但不同的等级，副属性等通过bonus来表示
 CREATE TABLE IF NOT EXISTS t_item_bonus (
 	itemId	INT UNSIGNED NOT NULL,		-- 物品ID
 	bonusList VARCHAR(20) NOT NULL, 	-- 装备奖励
 	PRIMARY KEY(itemId, bonusList)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 制造业物品配方
+CREATE TABLE IF NOT EXISTS t_item_created_by (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	spellId	INT UNSIGNED NOT NULL,			-- 物品的spell id
+	name VARCHAR(80) NOT NULL,				-- 物品名
+	icon varchar(64) NOT NULL,				-- 图标名
+	PRIMARY KEY (id)	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_item_created_by ADD INDEX(itemId);
+
+-- 制造业物品组成材料
+CREATE TABLE IF NOT EXISTS t_item_reagent (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
+	spellId	INT UNSIGNED NOT NULL,			-- 物品spell id
+	itemId INT UNSIGNED NOT NULL,			-- 物品id
+	name VARCHAR(80) NOT NULL,				-- 物品名
+	quality INT UNSIGNED NOT NULL,			-- 物品品质
+	icon varchar(64) NOT NULL,				-- 图标名
+	count INT UNSIGNED NOT NULL,			-- 需要的数量
+	PRIMARY KEY (id)	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_item_reagent ADD INDEX(spellId);
+
+-- 已经处理过的item，由于各种item处理程序使用
+CREATE TABLE IF NOT EXISTS t_item_processed (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据
+	type INT UNSIGNED NOT NULL,				-- 操作类型
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_item_processed ADD INDEX(type,itemId);
+
 -- 物品和宠物信息表
 CREATE VIEW v_item as 
 select id,name,icon,itemLevel,1 as type,hot from mt_item 
@@ -256,7 +290,7 @@ CREATE TABLE IF NOT EXISTS t_item_market (
 ------------------- 淘宝功能相关表 -------------------
 -- 物品价格配置
 CREATE TABLE IF NOT EXISTS t_item_rule (
-	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	itemId	INT UNSIGNED NOT NULL,		-- 物品ID
 	ltBuy BIGINT UNSIGNED NOT NULL,		-- 低于
 	gtBuy BIGINT UNSIGNED NOT NULL,		-- 高于
 	PRIMARY KEY(itemId)

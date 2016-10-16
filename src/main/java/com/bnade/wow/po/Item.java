@@ -12,6 +12,7 @@ public class Item {
 	private int inventoryType;
 	private int itemLevel;
 	private List<String> bonusList;
+	private List<ItemCreatedBy> createdBy;
 
 	public List<String> getBonusList() {
 		return bonusList;
@@ -85,12 +86,21 @@ public class Item {
 		this.itemLevel = itemLevel;
 	}
 
+	public List<ItemCreatedBy> getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(List<ItemCreatedBy> createdBy) {
+		this.createdBy = createdBy;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", description=" + description + ", name="
 				+ name + ", icon=" + icon + ", itemClass=" + itemClass
 				+ ", itemSubClass=" + itemSubClass + ", inventoryType="
 				+ inventoryType + ", itemLevel=" + itemLevel + ", bonusList="
-				+ bonusList + "]";
+				+ bonusList + ", createdBy=" + createdBy + "]";
 	}
+
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.dao.impl.ItemDaoImpl;
 import com.bnade.wow.po.Item;
+import com.bnade.wow.po.ItemCreatedBy;
+import com.bnade.wow.po.ItemReagent;
 import com.bnade.wow.po.ItemV;
 import com.bnade.wow.service.ItemService;
 
@@ -22,6 +24,14 @@ public class ItemServiceImpl implements ItemService {
 		List<Item> items = itemDao.getItemsByName(name); 
 		for (Item item : items) {
 			item.setBonusList(itemDao.getBonusList(item.getId()));
+			List<ItemCreatedBy> createdBys = itemDao.getItemCreatedBy(item.getId());
+			if (createdBys.size() > 0) {
+				item.setCreatedBy(createdBys);
+				for (ItemCreatedBy createdBy : createdBys) {
+					List<ItemReagent> reagent = itemDao.getItemReagent(createdBy.getSpellId());
+					createdBy.setReagent(reagent);
+				}
+			}
 		}
 		return items;
 	}
@@ -41,6 +51,6 @@ public class ItemServiceImpl implements ItemService {
 	public List<ItemV> get(String name, int offset, int limit)
 			throws SQLException {
 		return null;
-	}
+	}	
 
 }

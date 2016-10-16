@@ -14,8 +14,12 @@ import com.bnade.util.DBUtil;
 import com.bnade.util.HttpClient;
 import com.bnade.wow.client.WowAPI;
 import com.bnade.wow.client.WowClient;
+import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.WowHeadClient;
 import com.bnade.wow.client.model.Item;
+import com.bnade.wow.client.model.XItem;
+import com.bnade.wow.client.model.XItemCreatedBy;
+import com.bnade.wow.client.model.XItemReagent;
 
 
 /**
@@ -64,10 +68,10 @@ public class ItemCatcher {
 					logger.info("找不到物品ID "+ itemId);
 					e1.printStackTrace();
 				}
-//				break;
-				// 用于邮件标题
-				System.out.println("未找到:" + notFound);
+//				break;				
 			}
+			// 用于邮件标题
+			System.out.println("未找到:" + notFound);
 		} catch (Exception e) {
 			logger.error("添加物品出错:{}", e.getMessage());
 			// 用于邮件标题
@@ -149,14 +153,56 @@ public class ItemCatcher {
 			e.printStackTrace();
 		}		 
 	}
+	
+	/*
+	 * 获取所有制造业物品的制造配方
+	 */
+	public void processItemCreatedBy() {		
+		WowHeadClient client = new WowHeadClient();
+		try {			
+			List<Long> ids1 = run.query("select distinct id from mt_item", new ColumnListHandler<Long>());
+			logger.info("现有物品数		: {}", ids1.size());
+			List<Long> ids2 = run.query("select distinct itemId from t_item_processed where type = 1 union all select distinct itemId from t_item_processed where type = 2", new ColumnListHandler<Long>());
+			logger.info("已处理物品数	: {}", ids2.size());
+			ids1.removeAll(ids2);
+			logger.info("需要更新		: {}", ids1.size());
+			for (Long id : ids1) {
+				int itemId = id.intValue();
+				logger.info("开始处理{}", itemId);
+				XItem item = client.getItem2(itemId);
+				if (item.getCreatedBy() != null) {
+					for (XItemCreatedBy itemCb : item.getCreatedBy()) {
+						System.out.println(itemCb);		
+						if (itemCb.getId() != 0 && itemCb.getReagent() != null) {
+							run.update("insert into t_item_created_by (itemId,spellId,name,icon) values (?,?,?,?)", itemId, itemCb.getId(), itemCb.getName(), itemCb.getIcon());
+							for (XItemReagent itemR : itemCb.getReagent()) {								
+								run.update("insert into t_item_reagent (spellId,itemId,name,quality,icon,count) values (?,?,?,?,?,?)", itemCb.getId(), itemR.getId(), itemR.getName(), itemR.getQuality(), itemR.getIcon(), itemR.getCount());								
+							}	
+						} else {
+							logger.info("物品[{}{}]配方获取失败=================================", item.getName(), itemId);
+						}
+					}
+					logger.info("物品[{}{}]制造配方已添加", item.getName(), itemId);
+					run.update("insert into t_item_processed (itemId,type) values (?,?)", itemId, 1);
+				} else {
+					logger.info("物品[{}{}]无法被制造", item.getName(), itemId);
+					run.update("insert into t_item_processed (itemId,type) values (?,?)", itemId, 2);
+				}				
+//				break; // 用于测试
+			}			
+		} catch (WowClientException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-//		itemCatcher.process();
-//		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
+		itemCatcher.process();
+		itemCatcher.refreshItems();
+//		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
+//		itemCatcher.processItemCreatedBy();
 	}	
 
 }
