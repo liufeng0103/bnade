@@ -99,6 +99,21 @@ public class ItemResource {
 	}
 	
 	/*
+	 * 查询物品组成
+	 */
+	@GET
+	@Path("/createdBy/{itemId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object getItemReagent(@PathParam("itemId")int itemId) {
+		try {
+			return 	itemService.getItemCreatedBy(itemId);
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+		}
+	}
+	
+	/*
 	 * 返回包含term的所有物品名
 	 */
 	@GET

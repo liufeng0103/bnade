@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.bnade.wow.po.Item;
+import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemV;
 
 public interface ItemService {
@@ -15,4 +16,6 @@ public interface ItemService {
 	Item getItemById(int id) throws SQLException;
 	
 	List<ItemV> get(String name, int offset, int limit) throws SQLException;
+	
+	List<ItemCreatedBy> getItemCreatedBy(int id) throws SQLException;
 }

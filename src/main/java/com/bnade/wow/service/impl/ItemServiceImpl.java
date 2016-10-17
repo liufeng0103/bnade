@@ -23,15 +23,8 @@ public class ItemServiceImpl implements ItemService {
 	public List<Item> getItemsByName(String name) throws SQLException {
 		List<Item> items = itemDao.getItemsByName(name); 
 		for (Item item : items) {
-			item.setBonusList(itemDao.getBonusList(item.getId()));
-			List<ItemCreatedBy> createdBys = itemDao.getItemCreatedBy(item.getId());
-			item.setCreatedBy(createdBys);
-			if (createdBys.size() > 0) {				
-				for (ItemCreatedBy createdBy : createdBys) {
-					List<ItemReagent> reagent = itemDao.getItemReagent(createdBy.getSpellId());
-					createdBy.setReagent(reagent);
-				}
-			}
+			item.setBonusList(itemDao.getBonusList(item.getId()));			
+			item.setCreatedBy(getItemCreatedBy(item.getId()));			
 		}
 		return items;
 	}
@@ -51,6 +44,18 @@ public class ItemServiceImpl implements ItemService {
 	public List<ItemV> get(String name, int offset, int limit)
 			throws SQLException {
 		return null;
+	}
+
+	@Override
+	public List<ItemCreatedBy> getItemCreatedBy(int id) throws SQLException {
+		List<ItemCreatedBy> createdBys = itemDao.getItemCreatedBy(id);
+		if (createdBys.size() > 0) {				
+			for (ItemCreatedBy createdBy : createdBys) {
+				List<ItemReagent> reagent = itemDao.getItemReagent(createdBy.getSpellId());
+				createdBy.setReagent(reagent);
+			}
+		}
+		return createdBys;
 	}	
 
 }

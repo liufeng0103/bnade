@@ -1,3 +1,31 @@
+var itemQuery = itemQuery || {};
+
+itemQuery.getItemAvgPrice = function(realmId, itemId){
+	var price = 0;
+	$.ajax({url:"wow/auction/past/realm/" + realmId + "/item/" + itemId,async:false,success:function(result){
+		if (result.length > 0) {
+			var calData = [];
+			for(var i in result){
+				var item=result[i];
+				calData[i] = result[i][0];
+			}
+			var calResult = Bnade.getResult(calData);
+			price = Bnade.getGold(calResult.avg);				
+		}					
+	}});
+	return price;
+};
+
+itemQuery.getItemCreatedByPrice = function(realmId, itemCreatedBy) {
+	var price = 0;
+	for (var i in itemCreatedBy.reagent) {
+		var reagent = itemCreatedBy.reagent[i];
+		var reagentPrice = itemQuery.getItemAvgPrice(realmId, reagent.itemId);
+		price += reagentPrice * reagent.count;
+	}
+	return price;
+};
+
 var sortColumn = "sort1";
 var orderByDesc = true;
 var gblData = [];
@@ -1262,10 +1290,12 @@ function loadItemDetail(itemId) {
 		$("#msg").html("物品信息查询出错");
     });
 }
+
+
 var itemReagentTotalPrice = [];
 var itemReagentPrice = {};
 // 获取item的价格并加载
-function getItemCreatedByPrice(realmId, itemCreatedBy, reagent,itemCreatedById) {
+function processItemCreatedByPrice(realmId, itemCreatedBy, reagent,itemCreatedById) {	
 	if (reagent.buyPrice > 0) {
 		var avgBuy = Bnade.getGold(reagent.buyPrice);
 		$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html(avgBuy + "(npc买)");				
@@ -1274,10 +1304,24 @@ function getItemCreatedByPrice(realmId, itemCreatedBy, reagent,itemCreatedById) 
 		$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html(reagentTotal);
 		$("#itemReagentTotalPrice"+itemCreatedBy.spellId).html(itemReagentTotalPrice[itemCreatedById]);
 	} else {
-		$.get("wow/auction/past/realm/" + realmId + "/item/" + reagent.itemId,function(data) {
-			if (data.length === 0) {
-				$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html("0");
-				$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html("0");
+		$.ajax({url:"wow/auction/past/realm/" + realmId + "/item/" + reagent.itemId,async:false,success:function(data) {
+			if (data.length === 0) {				
+				$.ajax({url:"wow/item/createdBy/" + reagent.itemId,async:false,success:function(result){
+					if (result.length > 0) {
+						for (var i in result) {
+							var itemCreatedBy2 = result[i];
+							var itemCreatedByPrice = itemQuery.getItemCreatedByPrice(realmId, itemCreatedBy2);
+							$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html(itemCreatedByPrice);
+							var reagentTotal = toDecimal(itemCreatedByPrice*reagent.count);
+							itemReagentTotalPrice[itemCreatedById]+=reagentTotal;
+							$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html(reagentTotal);
+							break;
+						}
+					} else {
+						$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html("0");
+						$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html("0");
+					}					
+				}});				
 			} else {
 				// 按更新时间排序
 				data.sort(function(a, b){
@@ -1296,7 +1340,7 @@ function getItemCreatedByPrice(realmId, itemCreatedBy, reagent,itemCreatedById) 
 				$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html(reagentTotal);
 			}			
 			$("#itemReagentTotalPrice"+itemCreatedBy.spellId).html(itemReagentTotalPrice[itemCreatedById]);
-		}).fail(function() {
+		}}).fail(function() {
 			$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html("0");
 			$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html("0");
 			alert("查询物品成本价格出错，请联系相关人员解决");
@@ -1349,7 +1393,7 @@ $(document).ready(function() {
 					   if (itemCreatedBy.reagent.length > 1) {
 						   for (var j in itemCreatedBy.reagent) {
 							   var itemReagent = itemCreatedBy.reagent[j];
-							   getItemCreatedByPrice(realmId,itemCreatedBy,itemReagent,i);
+							   processItemCreatedByPrice(realmId,itemCreatedBy,itemReagent,i);
 						   }
 					   }
 				   }
