@@ -25,8 +25,8 @@ public class ItemServiceImpl implements ItemService {
 		for (Item item : items) {
 			item.setBonusList(itemDao.getBonusList(item.getId()));
 			List<ItemCreatedBy> createdBys = itemDao.getItemCreatedBy(item.getId());
-			if (createdBys.size() > 0) {
-				item.setCreatedBy(createdBys);
+			item.setCreatedBy(createdBys);
+			if (createdBys.size() > 0) {				
 				for (ItemCreatedBy createdBy : createdBys) {
 					List<ItemReagent> reagent = itemDao.getItemReagent(createdBy.getSpellId());
 					createdBy.setReagent(reagent);

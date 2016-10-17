@@ -5,7 +5,8 @@ public class ItemReagent {
 	private String name;
 	private int quality;
 	private String icon;
-	private int count;
+	private int count;	
+	private int buyPrice;
 
 	public int getItemId() {
 		return itemId;
@@ -45,6 +46,14 @@ public class ItemReagent {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public int getBuyPrice() {
+		return buyPrice;
+	}
+
+	public void setBuyPrice(int buyPrice) {
+		this.buyPrice = buyPrice;
 	}
 
 }

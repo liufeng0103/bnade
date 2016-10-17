@@ -2,6 +2,7 @@ var sortColumn = "sort1";
 var orderByDesc = true;
 var gblData = [];
 var gblItemId = 0;
+var currentItem;
 
 var BonusGroups1 = [ {
 	"id" : 1,
@@ -532,6 +533,11 @@ function itemQueryByName(realm, itemName) {
 		} else if(data.length === 1) {
 			var item = data[0];
 			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, itemName);
+			if (item.createdBy !=null && item.createdBy.length > 0) {
+				$('#itemCreatedByDiv').show();
+				$('#itemCreatedByDetailDiv').html("");	
+				currentItem = item;
+			}
 			if (item.bonusList.length === 0 || item.bonusList.length === 1) {							
 				accurateQuery(realm, item.id, itemName);
 			} else {
@@ -630,6 +636,7 @@ function clear(){
 	$("#allRealmMsg").html("");			
 	$('#msg').html("");
 	$('#itemDetail').html("");
+	$('#itemCreatedByDiv').hide();
 }
 var isShowAll=true;
 function accurateQuery(realm, itemId, itemName) {		
@@ -1255,6 +1262,47 @@ function loadItemDetail(itemId) {
 		$("#msg").html("物品信息查询出错");
     });
 }
+var itemReagentTotalPrice = [];
+var itemReagentPrice = {};
+// 获取item的价格并加载
+function getItemCreatedByPrice(realmId, itemCreatedBy, reagent,itemCreatedById) {
+	if (reagent.buyPrice > 0) {
+		var avgBuy = Bnade.getGold(reagent.buyPrice);
+		$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html(avgBuy + "(npc买)");				
+		var reagentTotal = toDecimal(avgBuy * reagent.count);
+		itemReagentTotalPrice[itemCreatedById]+=reagentTotal;			
+		$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html(reagentTotal);
+		$("#itemReagentTotalPrice"+itemCreatedBy.spellId).html(itemReagentTotalPrice[itemCreatedById]);
+	} else {
+		$.get("wow/auction/past/realm/" + realmId + "/item/" + reagent.itemId,function(data) {
+			if (data.length === 0) {
+				$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html("0");
+				$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html("0");
+			} else {
+				// 按更新时间排序
+				data.sort(function(a, b){
+					return a[2] - b[2];
+				});
+				var calData = [];
+				for(var i in data){
+					var item=data[i];
+					calData[i] = data[i][0];
+				}
+				var calResult = Bnade.getResult(calData);
+				var avgBuy = Bnade.getGold(calResult.avg);
+				$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html(avgBuy);				
+				var reagentTotal = toDecimal(avgBuy * reagent.count);
+				itemReagentTotalPrice[itemCreatedById]+=reagentTotal;			
+				$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html(reagentTotal);
+			}			
+			$("#itemReagentTotalPrice"+itemCreatedBy.spellId).html(itemReagentTotalPrice[itemCreatedById]);
+		}).fail(function() {
+			$("#reagent"+itemCreatedBy.spellId+reagent.itemId).html("0");
+			$("#reagentTotal"+itemCreatedBy.spellId+reagent.itemId).html("0");
+			alert("查询物品成本价格出错，请联系相关人员解决");
+	    });	
+	}	
+}
 $(document).ready(function() {
 	$("#queryBtn").click(function() {
 		itemQuery();
@@ -1272,11 +1320,53 @@ $(document).ready(function() {
 			fuzzyQueryItems(itemName);			
 		}
 	});	
+   
+   $('#itemCreatedByBtn').click(function(){
+	   var realm = $("#realm").val();
+	   if (realm !== "") {
+			var realmId = Realm.getIdByName(realm);
+			if (realmId > 0) {
+				$('#itemCreatedByDetailDiv').html("正在查询,请稍等...");
+				 var itemCreatedByHtml = "<div class='row'><div class='col-md-6'><table class='table table-bordered table-condensed table-hover'>";
+				   for (var i in currentItem.createdBy) {
+					   var itemCreatedBy = currentItem.createdBy[i];
+					   itemCreatedByHtml += "<tr class='info'><td>配方"+(parseInt(i)+1)+"</td><td>单价</td><td>总价</td></tr>";
+					   if (itemCreatedBy.reagent.length > 1) {
+						   for (var j in itemCreatedBy.reagent) {
+							   var itemReagent = itemCreatedBy.reagent[j];
+							   itemCreatedByHtml += "<tr><td>"+itemReagent.name+" * " + itemReagent.count+"</td>"+"<td id='reagent"+itemCreatedBy.spellId+itemReagent.itemId+"'></td>"+"<td id='reagentTotal"+itemCreatedBy.spellId+itemReagent.itemId+"'></td>"+"</tr>";
+						   }
+					   }
+					   itemCreatedByHtml += "<tr><td colspan='2'>成本</td><td id='itemReagentTotalPrice"+itemCreatedBy.spellId+"'></td></tr>";
+				   }
+				   itemCreatedByHtml += "</table></div></div>";
+				   $('#itemCreatedByDetailDiv').html(itemCreatedByHtml);
+				   // 计算各材料价格
+				   itemReagentTotalPrice = [];
+				   for (var i in currentItem.createdBy) {
+					   var itemCreatedBy = currentItem.createdBy[i];
+					   itemReagentTotalPrice[i] = 0;
+					   if (itemCreatedBy.reagent.length > 1) {
+						   for (var j in itemCreatedBy.reagent) {
+							   var itemReagent = itemCreatedBy.reagent[j];
+							   getItemCreatedByPrice(realmId,itemCreatedBy,itemReagent,i);
+						   }
+					   }
+				   }
+			} else {
+				$('#msg').html("找不到服务器：" + realm);
+			}		
+		} else {
+			$('#itemCreatedByDetailDiv').html("请设置一个服务器");
+		}	  
+	});	
+   
 	!function() { // 页面加载运行
 		$('#past24CtlDiv').hide();
 		$('#pastWeekCtlDiv').hide();
 		$('#allRealmCtlDiv').hide();		
-		$("#fuzzyItemsList").hide();	
+		$("#fuzzyItemsList").hide();
+		$('#itemCreatedByDiv').hide();
 		queryByUrl();
 		loadTopItems();
 	}();
@@ -1290,10 +1380,10 @@ $(document).ready(function() {
 			if (data.length === 0) {
 				$('#msg').html("找不到物品:" + itemName);
 			} else {
-				data.sort(function(a,b){
+				data.sort(function(a,b){ 
 					return a[3]/a[4] - b[3]/b[4];
 				});
-				var tblHtml = "<table class='table table-striped'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th></tr></thead><tbody>";
+				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th></tr></thead><tbody>";
 				for (var i in data) {
 					var item = data[i];
 					tblHtml += "<tr><td>"+(parseInt(i)+1)+"</td><td>"+item[0]+"</td><td>"+item[1]+"</td><td>"+Bnade.getGold(item[2])+"</td><td>"+Bnade.getGold(item[3])+"</td><td>"+item[4]+"</td><td>"+Bnade.getGold(item[3]/item[4])+"</td><td>"+leftTimeMap[item[5]]+"</td></tr>";

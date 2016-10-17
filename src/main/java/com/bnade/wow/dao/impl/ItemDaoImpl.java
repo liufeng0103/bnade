@@ -67,7 +67,7 @@ public class ItemDaoImpl implements ItemDao {
 
 	@Override
 	public List<ItemReagent> getItemReagent(int spellId) throws SQLException {
-		return run.query("select itemId,name,quality,icon,count from t_item_reagent where spellId=?", new BeanListHandler<ItemReagent>(ItemReagent.class), spellId);
+		return run.query("select itemId,name,quality,icon,count,buyPrice from t_item_reagent where spellId=?", new BeanListHandler<ItemReagent>(ItemReagent.class), spellId);
 	}	
 
 }

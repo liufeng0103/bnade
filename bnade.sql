@@ -79,9 +79,12 @@ CREATE TABLE IF NOT EXISTS t_item_reagent (
 	quality INT UNSIGNED NOT NULL,			-- 物品品质
 	icon varchar(64) NOT NULL,				-- 图标名
 	count INT UNSIGNED NOT NULL,			-- 需要的数量
+	buyPrice BIGINT UNSIGNED NOT NULL,		-- npc出售价格
 	PRIMARY KEY (id)	
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_item_reagent ADD INDEX(spellId);
+-- ALTER TABLE t_item_reagent ADD buyPrice BIGINT UNSIGNED NOT NULL;
+-- update t_item_reagent set buyPrice=100 where itemId=3371 -- 手动添加可以在npc那买到的物品
 
 -- 已经处理过的item，由于各种item处理程序使用
 CREATE TABLE IF NOT EXISTS t_item_processed (
