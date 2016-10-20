@@ -79,7 +79,7 @@ public class AuctionHouseDataDaoImpl implements AuctionHouseDataDao {
 		String tableName = TABLE_NAME_PREFIX + realmId;
 		String url = "select auc,item,owner,ownerRealm,bid,buyout,quantity,timeLeft,petSpeciesId,petLevel,petBreedId,context,bonusLists,lastModifed from "
 				+ tableName + " where item=?";
-		if (bounsList != null) {
+		if (bounsList != null && !"all".equals(bounsList)) {
 			url += " and bonusLists=?";
 			return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
 		} else {

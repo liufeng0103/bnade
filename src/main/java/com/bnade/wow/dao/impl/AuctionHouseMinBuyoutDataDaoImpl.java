@@ -62,13 +62,18 @@ public class AuctionHouseMinBuyoutDataDaoImpl implements AuctionHouseMinBuyoutDa
 
 	@Override
 	public List<Auction> getByItemIdAndBounsList(int itemId, String bounsList) throws SQLException {
-		String url = "select auc,item,owner,ownerRealm,bid,buyout,quantity,timeLeft,petSpeciesId,petLevel,petBreedId,context,bonusLists,lastModifed,realmId from t_ah_min_buyout_data where item=?";
-		if (bounsList != null) {
-			url += " and bonusLists=?";
-			return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
+		if ("all".equals(bounsList)) {
+			return run.query("select realmId,min(buyout) as buyout,owner,sum(quantity) as quantity,lastModifed,timeLeft from t_ah_min_buyout_data where item = ? group by realmId", 
+					new BeanListHandler<Auction>(Auction.class), itemId);			
 		} else {
-			return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId);
-		}
+			String url = "select auc,item,owner,ownerRealm,bid,buyout,quantity,timeLeft,petSpeciesId,petLevel,petBreedId,context,bonusLists,lastModifed,realmId from t_ah_min_buyout_data where item=?";
+			if (bounsList != null) {
+				url += " and bonusLists=?";
+				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
+			} else {
+				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId);
+			}
+		}		
 	}
 
 	@Override
