@@ -66,9 +66,13 @@ CREATE TABLE IF NOT EXISTS t_item_created_by (
 	spellId	INT UNSIGNED NOT NULL,			-- 物品的spell id
 	name VARCHAR(80) NOT NULL,				-- 物品名
 	icon varchar(64) NOT NULL,				-- 图标名
+	minCount INT UNSIGNED NOT NULL,			-- 最少制作
+	maxCount INT UNSIGNED NOT NULL,			-- 最多制作
 	PRIMARY KEY (id)	
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_item_created_by ADD INDEX(itemId);
+-- ALTER TABLE t_item_created_by ADD minCount INT UNSIGNED NOT NULL;
+-- ALTER TABLE t_item_created_by ADD maxCount INT UNSIGNED NOT NULL;
 
 -- 制造业物品组成材料
 CREATE TABLE IF NOT EXISTS t_item_reagent (

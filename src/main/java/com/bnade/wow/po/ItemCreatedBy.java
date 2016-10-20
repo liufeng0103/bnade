@@ -6,6 +6,8 @@ public class ItemCreatedBy {
 	private int spellId;
 	private String name;
 	private String icon;
+	private int minCount;
+	private int maxCount;
 	private List<ItemReagent> reagent;
 
 	public int getSpellId() {
@@ -30,6 +32,22 @@ public class ItemCreatedBy {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public int getMinCount() {
+		return minCount;
+	}
+
+	public void setMinCount(int minCount) {
+		this.minCount = minCount;
+	}
+
+	public int getMaxCount() {
+		return maxCount;
+	}
+
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
 	}
 
 	public List<ItemReagent> getReagent() {

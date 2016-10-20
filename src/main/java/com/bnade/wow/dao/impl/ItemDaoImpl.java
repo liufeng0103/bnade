@@ -62,7 +62,7 @@ public class ItemDaoImpl implements ItemDao {
 
 	@Override
 	public List<ItemCreatedBy> getItemCreatedBy(int itemId) throws SQLException {
-		return run.query("select spellId,name,icon from t_item_created_by where itemId=?", new BeanListHandler<ItemCreatedBy>(ItemCreatedBy.class), itemId);
+		return run.query("select spellId,name,icon,minCount,maxCount from t_item_created_by where itemId=?", new BeanListHandler<ItemCreatedBy>(ItemCreatedBy.class), itemId);
 	}
 
 	@Override
