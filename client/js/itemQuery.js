@@ -1107,16 +1107,27 @@ function sortData(column, data, orderByDesc) {
 
 function generateTableBody(itemId,data) {	
 	var tblHtml="";
+	var existedRealm = [];
+	var count = 0;
 	for (var i in data) {
 		var itemArr=data[i];
 		var realmId = itemArr[0];
+		existedRealm[realmId] = 1;
 		var realm=Realm.getConnectedById(realmId);
 		var realmColumnClass="";								
 		if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
 			realmColumnClass = "class='danger'";									
 		}
-		var buyout=Bnade.getGold(itemArr[1]);						
+		var buyout=Bnade.getGold(itemArr[1]);	
+		count++;
 		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+	}
+	for (var i = 1; i <= 170; i++) {
+		if (existedRealm[i] != 1) {
+			count++;
+			var realm=Realm.getConnectedById(i);
+			tblHtml += "<tr><td>"+count+"</td><td>"+realm+"</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+		}
 	}
 	return tblHtml;
 }
