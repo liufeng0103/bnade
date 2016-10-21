@@ -1414,7 +1414,9 @@ $(document).ready(function() {
 					var item = data[i];
 					if (i == "0") {
 						tmpItem = item;
-						continue;
+						if (i != (data.length - 1)) {
+							continue;
+						}						
 					} else if (itemQuery.isSameItem(tmpItem, item)) {						
 						tmpItem[2] +=item[2];
 						tmpItem[3] +=item[3];
@@ -1424,7 +1426,7 @@ $(document).ready(function() {
 					count++;
 					tblHtml += "<tr><td>"+(count)+"</td><td>"+tmpItem[0]+"</td><td>"+tmpItem[1]+"</td><td>"+Bnade.getGold(tmpItem[2])+"</td><td>"+Bnade.getGold(tmpItem[3])+"</td><td>"+tmpItem[4]+"</td><td>"+Bnade.getGold(tmpItem[3]/tmpItem[4])+"</td><td>"+leftTimeMap[tmpItem[5]]+"</td></tr>";
 					tmpItem = item;
-					if (i == (data.length - 1)) {
+					if (i != "0" && i == (data.length - 1)) {
 						count++;
 						tblHtml += "<tr><td>"+(count)+"</td><td>"+tmpItem[0]+"</td><td>"+tmpItem[1]+"</td><td>"+Bnade.getGold(tmpItem[2])+"</td><td>"+Bnade.getGold(tmpItem[3])+"</td><td>"+tmpItem[4]+"</td><td>"+Bnade.getGold(tmpItem[3]/tmpItem[4])+"</td><td>"+leftTimeMap[tmpItem[5]]+"</td></tr>";
 					} 	
