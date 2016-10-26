@@ -285,25 +285,25 @@ var BonusGroups2 = [ {
 	"desc" : "燎火之 爆击 急速",
 	"bonusGroups" : [ {
 		"bl" : "1756",
-		"desc" : "460暴击 1150急速"
+		"desc" : "460急速 1150暴击"
 	}, {
 		"bl" : "1757",
-		"desc" : "598暴击 1012急速"
+		"desc" : "598急速 1012暴击"
 	}, {
 		"bl" : "1758",
-		"desc" : "644暴击 966急速"
+		"desc" : "644急速 966暴击"
 	}, {
 		"bl" : "1759",
-		"desc" : "736暴击 874急速"
+		"desc" : "736急速 874暴击"
 	}, {
 		"bl" : "1760",
-		"desc" : "966暴击 644急速"
+		"desc" : "966急速 644暴击"
 	}, {
 		"bl" : "1761",
-		"desc" : "1058暴击 552急速"
+		"desc" : "1058急速 552暴击"
 	}, {
 		"bl" : "1762",
-		"desc" : "1150暴击 460急速"
+		"desc" : "1150急速 460暴击"
 	}, ]
 }, {
 	"id" : 4,
@@ -1120,7 +1120,7 @@ function generateTableBody(itemId,data) {
 		}
 		var buyout=Bnade.getGold(itemArr[1]);	
 		count++;
-		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
 	}
 	for (var i = 1; i <= 170; i++) {
 		if (existedRealm[i] != 1) {
@@ -1462,6 +1462,10 @@ $(document).ready(function() {
 					}
 					sortData(column, gblData, orderByDesc);	       					
 					$("#showAllBody").html(generateTableBody(gblItemId,gblData));
+					$(".queryRealm").click(function() {
+						$("#realm").val($(this).html());
+						$("#queryBtn").click();
+					});
 					// 修改排序图标
 					for (var j in Column) {
 						var col = Column[j];
