@@ -1120,16 +1120,39 @@ function generateTableBody(itemId,data) {
 		}
 		var buyout=Bnade.getGold(itemArr[1]);	
 		count++;
-		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+HotRealm[realmId]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+	}
+	var tmpArr = [];
+	for (var i = 1; i <= 170; i++) {
+		if (existedRealm[i] != 1) {
+			tmpArr.push([i,HotRealm[i]]);
+		}
+	}
+	tmpArr.sort(function(a,b){
+		return -(a[1] - b[1]);
+	});
+	for (var i in tmpArr) {
+		var arr = tmpArr[i];
+		count++;
+		var realm=Realm.getConnectedById(arr[0]);
+		tblHtml += "<tr><td>"+count+"</td><td>"+realm+"</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>"+arr[1]+"</td><td>N/A</td></tr>";
+	}
+	return tblHtml;
+}
+
+function processRealmsData(data) {
+	var existedRealm = [];
+	for (var i in data) {
+		var itemArr=data[i];
+		var realmId = itemArr[0];
+		itemArr.push(HotRealm[realmId]);
+		existedRealm[realmId] = 1;
 	}
 	for (var i = 1; i <= 170; i++) {
 		if (existedRealm[i] != 1) {
-			count++;
-			var realm=Realm.getConnectedById(i);
-			tblHtml += "<tr><td>"+count+"</td><td>"+realm+"</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>";
+			data.push([i,0,"N/A",0,0,"N/A",HotRealm[i]]);
 		}
 	}
-	return tblHtml;
 }
 
 function getItemByAllRealms(itemId,itemName){
@@ -1142,6 +1165,7 @@ function getItemByAllRealms(itemId,itemName){
 			$('#allRealmCtlDiv').show();
 			// 重置排序数据
 			var isShowAll=true;
+//			processRealmsData(data);
 			gblData = data;			
 			
 			$("#showAllA").click(function(){
