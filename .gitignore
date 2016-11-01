@@ -18,3 +18,4 @@ sh
 /addon/
 appData
 /doc
+/src/main/resources/qqconnectconfig.properties

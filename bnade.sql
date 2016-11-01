@@ -346,3 +346,15 @@ CREATE TABLE IF NOT EXISTS t_tsm_realm_data_version (
     version VARCHAR(20) NOT NULL,			-- 插件版本
     PRIMARY KEY(realmId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+------------------- 用户管理 -------------------
+CREATE TABLE IF NOT EXISTS t_user (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	openId VARCHAR(32) NOT NULL,
+	email VARCHAR(20) NOT NULL default '',
+	nickname VARCHAR(20) NOT NULL,
+	createTime BIGINT UNSIGNED NOT NULL,
+	updateTime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_user ADD INDEX(openId);
