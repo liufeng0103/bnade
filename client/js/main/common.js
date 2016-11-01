@@ -1,3 +1,22 @@
+(function(BN) {
+
+	BN.Cookie = {};
+
+	BN.Cookie.get = function(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i].trim();
+			if (c.indexOf(name) === 0)
+				return c.substring(name.length, c.length);
+		}
+		return "";
+	};
+
+	BN.Cookie.remove = function(name) {
+		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	};
+})(window.BN = window.BN || {});
 Date.prototype.format = function(format) {
 	var o = {
 		"M+" : this.getMonth() + 1, // month

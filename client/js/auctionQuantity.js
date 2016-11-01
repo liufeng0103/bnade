@@ -4,31 +4,27 @@ var Column = {
 	itemQuantity:3,
 	lastModified:4,
 	type:5,
-}
+};
 
 function sortData(column, data, orderByDesc) {
+	var result;
 	data.sort(function(a,b){
 		switch(column) {
 			case Column.auctionQuantity : 
-				var result = a.auctionQuantity - b.auctionQuantity;
+				result = a.auctionQuantity - b.auctionQuantity;
 				return orderByDesc ? -result : result;
-				break;
 			case Column.playerQuantity : 
-				var result = a.playerQuantity - b.playerQuantity;
+				result = a.playerQuantity - b.playerQuantity;
 				return orderByDesc ? -result : result;
-				break;
 			case Column.itemQuantity : 
-				var result = a.itemQuantity - b.itemQuantity;
+				result = a.itemQuantity - b.itemQuantity;
 				return orderByDesc ? -result : result;
-				break;
 			case Column.lastModified : 
-				var result = a.lastModified - b.lastModified;
+				result = a.lastModified - b.lastModified;
 				return orderByDesc ? -result : result;
-				break;
 			case Column.type : 
-				var result = a.type + a.playerQuantity < b.type + b.playerQuantity? -1 : 1;
+				result = a.type + a.playerQuantity < b.type + b.playerQuantity? -1 : 1;
 				return orderByDesc ? -result : result;
-				break;
 		}	
 	});	
 }

@@ -407,7 +407,3 @@ $(document).ready(function() {
 		}	
 	});	
 });
-
-
-
-		

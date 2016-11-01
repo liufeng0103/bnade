@@ -1,3 +1,35 @@
+(function(BN) {
+	BN.Auction = {};
+	
+	// 查询服务器某个物品的所有拍卖，对相同卖家相同一口单价的物品整合
+	BN.Auction.foldByOwnerAndBuyout = function(data) {
+		if (data.length <= 1) {
+			return data;
+		}
+		data.sort(function(a,b){ 
+			return a[3]/a[4] - b[3]/b[4];
+		});
+		var result = [];
+		var preAuc = data[0];
+		for (var i = 1, j = data.length; i < j; i++) {
+			var auc = data[i];
+			if (preAuc[0] === auc[0] && Bnade.getGold(preAuc[3]/preAuc[4]) === Bnade.getGold(auc[3]/auc[4])) {
+				preAuc[2] +=auc[2];
+				preAuc[3] +=auc[3];
+				preAuc[4] +=auc[4];
+			} else {
+				result.push(preAuc);
+				preAuc = auc;
+			}
+			if (i === data.length -1) {
+				result.push(preAuc);
+			}
+		}
+		return result;
+	};
+	
+})(window.BN = window.BN || {});
+
 var itemQuery = itemQuery || {};
 
 itemQuery.getItemAvgPrice = function(realmId, itemId){
@@ -34,14 +66,6 @@ itemQuery.getItemCreatedBy = function(itemId) {
 		}				
 	}});
 	return itemCreatedBy;
-};
-
-itemQuery.isSameItem = function(item1,item2) {
-	var isSame = false;
-	if(item1 && item2 && item1[0] == item2[0] && Bnade.getGold(item1[3]/item1[4]) == Bnade.getGold(item2[3]/item2[4])) {
-		isSame = true;
-	}
-	return isSame;
 };
 
 var sortColumn = "sort1";
@@ -1439,32 +1463,11 @@ $(document).ready(function() {
 			if (data.length === 0) {
 				$('#msg').html("找不到物品:" + itemName);
 			} else {
-				data.sort(function(a,b){ 
-					return a[3]/a[4] - b[3]/b[4];
-				});
-				var tmpItem;
-				var count = 0;
+				var result = BN.Auction.foldByOwnerAndBuyout(data);
 				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th></tr></thead><tbody>";
-				for (var i in data) {
-					var item = data[i];
-					if (i == "0") {
-						tmpItem = item;
-						if (i != (data.length - 1)) {
-							continue;
-						}						
-					} else if (itemQuery.isSameItem(tmpItem, item)) {						
-						tmpItem[2] +=item[2];
-						tmpItem[3] +=item[3];
-						tmpItem[4] +=item[4];
-						continue;											
-					}
-					count++;
-					tblHtml += "<tr><td>"+(count)+"</td><td>"+tmpItem[0]+"</td><td>"+tmpItem[1]+"</td><td>"+Bnade.getGold(tmpItem[2])+"</td><td>"+Bnade.getGold(tmpItem[3])+"</td><td>"+tmpItem[4]+"</td><td>"+Bnade.getGold(tmpItem[3]/tmpItem[4])+"</td><td>"+leftTimeMap[tmpItem[5]]+"</td></tr>";
-					tmpItem = item;
-					if (i != "0" && i == (data.length - 1)) {
-						count++;
-						tblHtml += "<tr><td>"+(count)+"</td><td>"+tmpItem[0]+"</td><td>"+tmpItem[1]+"</td><td>"+Bnade.getGold(tmpItem[2])+"</td><td>"+Bnade.getGold(tmpItem[3])+"</td><td>"+tmpItem[4]+"</td><td>"+Bnade.getGold(tmpItem[3]/tmpItem[4])+"</td><td>"+leftTimeMap[tmpItem[5]]+"</td></tr>";
-					} 	
+				for (var i in result) {
+					var auc = result[i];
+					tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td></tr>";
 				}
 				tblHtml += "</tbody></table>";				
 				modal.find('.modal-body-content').html(tblHtml);

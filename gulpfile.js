@@ -6,9 +6,12 @@ var uglify = require('gulp-uglify');
 var jade = require('gulp-jade');
 var minify = require('gulp-minify');
 var rev = require('gulp-rev-append');
+var minifyCss = require('gulp-minify-css');
 
+var jsDir = "client/js";
 var GulpConfig = {
-    jsSrc: ["client/js/common.js", "client/js/bnade.js", "ie10-viewport-bug-workaround.js"],
+	jsSrc: ["client/js/*.js"],
+    mainJsSrc: [jsDir+"/lib/jquery.min.js",jsDir+"/lib/bootstrap.min.js",jsDir+"/lib/highstock.js",jsDir+"/lib/heatmap.js",jsDir+"/lib/jquery-ui.min.js",jsDir+"/lib/highcharts-more.js",jsDir+"/lib/solid-gauge.js","client/js/main/*.js"],
     jsDist: "dist/js",
     jadeSrc: ["client/templates/*.jade", "!client/templates/layout.jade"],
     jadeDist: "dist/",
@@ -22,7 +25,11 @@ var GulpConfig = {
 
 // css
 gulp.task('css', function () {
+	// 复制字体文件
+	gulp.src(["client/fonts/**"]).pipe(gulp.dest("dist/fonts"));
     return gulp.src(GulpConfig.cssSrc)
+		.pipe(concat("main.css"))
+		.pipe(minifyCss())
         .pipe(gulp.dest(GulpConfig.cssDist));
 });
 
@@ -41,23 +48,23 @@ gulp.task('lint', function () {
 
 // Concat & Minify JS
 gulp.task('minify', function () {
-    gulp.src(["client/js/itemsQuery.js", "client/js/itemRule.js", "client/js/jquery-ui.min.js", "client/js/worthItem.js", "client/js/wowtoken.js", "client/js/topOwner.js", "client/js/petQuery.js", "client/js/ownerQuery.js", "client/js/itemQuery.js", "client/js/auctionQuantity.js"])
-        .pipe(uglify())
-        .pipe(gulp.dest(GulpConfig.jsDist));
-    return gulp.src(GulpConfig.jsSrc)
+	gulp.src(GulpConfig.mainJsSrc)
         .pipe(concat('main.js'))
         //.pipe(gulp.dest(GulpConfig.jsDist))
         //.pipe(rename('all.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(GulpConfig.jsDist));
+    return gulp.src(GulpConfig.jsSrc)
         .pipe(uglify())
         .pipe(gulp.dest(GulpConfig.jsDist));
 });
 
 //Concat & Minify JS Dev
 gulp.task('minify-dev', function () {
-    gulp.src(["client/js/itemsQuery.js", "client/js/itemRule.js", "client/js/jquery-ui.min.js", "client/js/worthItem.js", "client/js/wowtoken.js", "client/js/topOwner.js", "client/js/petQuery.js", "client/js/ownerQuery.js", "client/js/itemQuery.js", "client/js/auctionQuantity.js"])
+	gulp.src(GulpConfig.mainJsSrc)
+        .pipe(concat('main.js'))
         .pipe(gulp.dest(GulpConfig.jsDist));
     return gulp.src(GulpConfig.jsSrc)
-        .pipe(concat('main.js'))
         .pipe(gulp.dest(GulpConfig.jsDist));
 });
 
