@@ -72,7 +72,7 @@ public class AfterLoginRedirectServlet extends HttpServlet {
 				resp.addCookie(item);
 				req.getSession().setAttribute("user", dbUser);
 				logger.info("用户[{}]登录成功", openID);
-				resp.sendRedirect("https://www.bnade.com");
+				resp.sendRedirect("./");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

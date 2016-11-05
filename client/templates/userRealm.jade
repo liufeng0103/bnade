@@ -1,0 +1,26 @@
+extends layout
+block title
+	title 管理服务器
+block content
+	div.container-fluid
+		div.container
+			h1 管理我的服务器
+			div.row
+				h3 添加服务器
+				form.form-inline(onsubmit="return false;")
+					input#realmInput.form-control(type="text",placeholder="服务器名")
+					button#searchBtn.btn.btn-primary 搜索
+					select#realmSlt.form-control
+					button#addRealmBtn.btn.btn-primary <span class="glyphicon glyphicon-plus"></span>添加服务器
+				p#msg
+			div.row
+				h3 所有服务器
+				table#realmTbl.table.table-striped
+					thead
+						tr
+							th 服务器
+							th 数据更新时间
+							th
+					tbody
+block pagescript
+	script(src="js/userRealm.js")

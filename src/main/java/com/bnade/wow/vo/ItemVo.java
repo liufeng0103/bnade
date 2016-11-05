@@ -12,6 +12,14 @@ public class ItemVo {
 	private List<String> bonusList;
 	private List<ItemCreatedBy> createdBy;
 
+	public ItemVo() {
+	}
+
+	public ItemVo(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public int getId() {
 		return id;
 	}

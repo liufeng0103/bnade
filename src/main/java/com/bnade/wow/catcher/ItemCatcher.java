@@ -199,9 +199,9 @@ public class ItemCatcher {
 		ItemCatcher itemCatcher = new ItemCatcher();
 		itemCatcher.process();
 		itemCatcher.refreshItems();
-//		itemCatcher.updateItemBounus();
-//		itemCatcher.addNewPets();
-//		itemCatcher.addPetStats();
+		itemCatcher.updateItemBounus();
+		itemCatcher.addNewPets();
+		itemCatcher.addPetStats();
 //		itemCatcher.processItemCreatedBy();
 	}	
 

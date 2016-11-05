@@ -358,3 +358,22 @@ CREATE TABLE IF NOT EXISTS t_user (
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user ADD INDEX(openId);
+
+CREATE TABLE IF NOT EXISTS t_user_realm (
+	userId INT UNSIGNED NOT NULL,
+	realmId INT UNSIGNED NOT NULL,
+    PRIMARY KEY(userId,realmId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS t_user_item_notification (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	userId INT UNSIGNED NOT NULL,
+	realmId INT UNSIGNED NOT NULL,
+	itemId INT UNSIGNED NOT NULL,
+	isInverted INT UNSIGNED NOT NULL,
+	price BIGINT UNSIGNED NOT NULL,
+	emailNotification INT UNSIGNED NOT NULL default 1,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_user_item_notification ADD INDEX(userId,realmId);
+ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,isInverted);

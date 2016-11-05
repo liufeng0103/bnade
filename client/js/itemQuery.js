@@ -634,7 +634,12 @@ function itemQueryByName(realm, itemName) {
 						tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
 					}
 					tableHtml += '</tbody></table>';
-					$('#itemListByName').html(tableHtml);	
+					tableHtml += "<div><a class='bonus btn btn-default' href='javascript:void(0)' bl='all'>全部</a></div>";
+					$('#itemListByName').html(tableHtml);
+					$(".bonus").click(function() {
+						var regItemId = item.id+"?bl="+$(this).attr('bl');
+						accurateQuery(realm, regItemId, itemName);									
+					});
 					for (var i in item.bonusList) {
 						var itemBonus = item.bonusList[i];
 						$("#itemBonus" + i + item.id).click(function() {
@@ -1464,10 +1469,10 @@ $(document).ready(function() {
 				$('#msg').html("找不到物品:" + itemName);
 			} else {
 				var result = BN.Auction.foldByOwnerAndBuyout(data);
-				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th></tr></thead><tbody>";
+				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th><th>说明</th></tr></thead><tbody>";
 				for (var i in result) {
 					var auc = result[i];
-					tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td></tr>";
+					tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td><td>"+Bnade.getBonusDesc(auc[6])+"</td></tr>";
 				}
 				tblHtml += "</tbody></table>";				
 				modal.find('.modal-body-content').html(tblHtml);

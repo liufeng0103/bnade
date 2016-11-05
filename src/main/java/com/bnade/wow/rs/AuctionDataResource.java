@@ -206,13 +206,14 @@ public class AuctionDataResource {
 			Object[] result = new Object[aucs.size()];
 			for (int i = 0; i < aucs.size(); i++) {
 				Auction auc = aucs.get(i);					
-				Object[] item = new Object[6];
+				Object[] item = new Object[7];
 				item[0] = auc.getOwner();
 				item[1] = auc.getOwnerRealm();
 				item[2] = auc.getBid();
 				item[3] = auc.getBuyout();
 				item[4] = auc.getQuantity();
 				item[5] = auc.getTimeLeft();
+				item[6] = auc.getBonusLists();
 				result[i] = item;			
 			}
 			resp.setHeader("Access-Control-Allow-Origin", "*");

@@ -1,8 +1,9 @@
-(function(BN) {
+"use strict";
+var BN = window.BN || {};
 
-	BN.Cookie = {};
-
-	BN.Cookie.get = function(cname) {
+BN.Cookie = new function() {
+	var self = this;
+	self.get = function(cname) {
 		var name = cname + "=";
 		var ca = document.cookie.split(';');
 		for (var i = 0; i < ca.length; i++) {
@@ -13,10 +14,27 @@
 		return "";
 	};
 
-	BN.Cookie.remove = function(name) {
+	self.remove = function(name) {
 		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	};
-})(window.BN = window.BN || {});
+};
+
+BN.Util = new function() {
+	var self = this;
+	
+	self.toDecimal = function(x) {
+		var f=parseFloat(x);
+		if(isNaN(f)){
+			return;
+		}
+		return Math.floor(x*100)/100;// 舍位
+	};
+	
+	self.getGold = function(value) {
+		return value/10000;
+	};
+};
+
 Date.prototype.format = function(format) {
 	var o = {
 		"M+" : this.getMonth() + 1, // month
