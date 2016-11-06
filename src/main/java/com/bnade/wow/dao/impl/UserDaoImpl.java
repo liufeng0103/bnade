@@ -11,6 +11,7 @@ import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.po.User;
 import com.bnade.wow.po.UserItemNotification;
+import com.bnade.wow.po.UserMailValidation;
 import com.bnade.wow.po.UserRealm;
 
 public class UserDaoImpl implements UserDao {
@@ -30,10 +31,18 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	public void update(User user) throws SQLException {
+		run.update(
+				"update t_user set email=?, validated=?, nickname=? where id=?",
+				user.getEmail(), user.getValidated(), user.getNickname(),
+				user.getId());
+	}
+
+	@Override
 	public User getUserByOpenID(String openID) throws SQLException {
-		return run.query(
-				"select id,openId,email,nickname from t_user where openId=?",
-				new BeanHandler<User>(User.class), openID);
+		return run
+				.query("select id,openId,email,nickname,validated from t_user where openId=?",
+						new BeanHandler<User>(User.class), openID);
 	}
 
 	@Override
@@ -74,12 +83,80 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void deleteItemNotification(UserItemNotification itemN)
+	public void deleteItemNotifications(List<UserItemNotification> itemNs)
+			throws SQLException {
+		Object[][] params = new Object[itemNs.size()][4];
+		for (int i = 0; i < itemNs.size(); i++) {
+			UserItemNotification itemN = itemNs.get(i);
+			params[i][0] = itemN.getUserId();
+			params[i][1] = itemN.getRealmId();
+			params[i][2] = itemN.getItemId();
+			params[i][3] = itemN.getIsInverted();
+		}
+		run.batch(
+				"delete from t_user_item_notification where userId=? and realmId=? and itemId=? and isInverted=?",
+				params);
+	}
+
+	@Override
+	public void updateItemNotification(UserItemNotification itemN)
 			throws SQLException {
 		run.update(
-				"delete from t_user_item_notification where userId=? and realmId=? and itemId=? and isInverted=?",
-				itemN.getUserId(), itemN.getRealmId(), itemN.getItemId(),
-				itemN.getIsInverted());
+				"update t_user_item_notification set price=? where userId=? and realmId=? and itemId=? and isInverted=?",
+				itemN.getPrice(), itemN.getUserId(), itemN.getRealmId(),
+				itemN.getItemId(), itemN.getIsInverted());
+	}
+
+	@Override
+	public void updateEmailNotifications(List<UserItemNotification> itemNs)
+			throws SQLException {
+		Object[][] params = new Object[itemNs.size()][5];
+		for (int i = 0; i < itemNs.size(); i++) {
+			UserItemNotification itemN = itemNs.get(i);
+			params[i][0] = itemN.getEmailNotification();
+			params[i][1] = itemN.getUserId();
+			params[i][2] = itemN.getRealmId();
+			params[i][3] = itemN.getItemId();
+			params[i][4] = itemN.getIsInverted();
+		}
+		run.batch(
+				"update t_user_item_notification set emailNotification=? where userId=? and realmId=? and itemId=? and isInverted=?",
+				params);
+	}
+
+	@Override
+	public void addMailValidation(UserMailValidation userM) throws SQLException {
+		run.update(
+				"insert into t_user_mail_validation (userId,acode,expired) values (?,?,?)",
+				userM.getUserId(), userM.getAcode(), userM.getExpired());
+	}
+
+	@Override
+	public UserMailValidation getMailValidationById(int id) throws SQLException {
+		return run
+				.query("select userId,acode,expired from t_user_mail_validation where userId=?",
+						new BeanHandler<UserMailValidation>(
+								UserMailValidation.class), id);
+	}
+
+	@Override
+	public void deleteMailValidationById(int id) throws SQLException {
+		run.update("delete from t_user_mail_validation where userId=?", id);
+	}
+
+	@Override
+	public void updateMailValidationById(UserMailValidation userM)
+			throws SQLException {
+		run.update(
+				"update t_user_mail_validation set acode=?,expired=? where userId=?",
+				userM.getAcode(), userM.getExpired(), userM.getUserId());
+	}
+
+	@Override
+	public User getUserByID(int id) throws SQLException {
+		return run
+				.query("select id,openId,email,nickname,validated from t_user where id=?",
+						new BeanHandler<User>(User.class), id);
 	}
 
 }

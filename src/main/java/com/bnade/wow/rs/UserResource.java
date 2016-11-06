@@ -1,6 +1,9 @@
 package com.bnade.wow.rs;
 
+import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -13,12 +16,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bnade.util.BnadeProperties;
+import com.bnade.util.MD5Util;
+import com.bnade.util.Mail;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
 import com.bnade.wow.po.UserItemNotification;
+import com.bnade.wow.po.UserMailValidation;
 import com.bnade.wow.po.UserRealm;
 import com.bnade.wow.vo.Result;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Path("/user")
 public class UserResource {
@@ -104,7 +114,7 @@ public class UserResource {
 	}
 
 	@POST
-	@Path("/set-item-notification")
+	@Path("/addItemNotification")
 	@Consumes("application/x-www-form-urlencoded")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItemNotification(@FormParam("realmId") int realmId,
@@ -113,15 +123,21 @@ public class UserResource {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
 
-			UserItemNotification item = new UserItemNotification();
-			item.setUserId(user.getId());
-			item.setRealmId(realmId);
-			item.setItemId(itemId);
-			item.setPrice(price);
-			item.setIsInverted(isInverted);
+			if (userDao.getItemNotifications(user.getId()).size() >= 10) {
+				return Response.ok(Result.ERROR("超过限制")).build();
+			}
+			UserItemNotification itemN = new UserItemNotification();
+			itemN.setUserId(user.getId());
+			itemN.setRealmId(realmId);
+			itemN.setItemId(itemId);
+			itemN.setPrice(price);
+			itemN.setIsInverted(isInverted);
 
+			if (!checkInput(itemN)) {
+				throw new Exception("出错");
+			}
 			// TODO 验证用户和服务器id
-			userDao.addItemNotification(item);
+			userDao.addItemNotification(itemN);
 			return Response.ok(Result.OK("success")).build();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -136,21 +152,20 @@ public class UserResource {
 	}
 
 	@POST
-	@Path("/deleteItemNotification")
-	@Consumes("application/x-www-form-urlencoded")
+	@Path("/deleteItemNotifications")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteItemNotification(@FormParam("realmId") int realmId,
-			@FormParam("itemId") int itemId,
-			@FormParam("isInverted") int isInverted) {
+	public Response deleteItemNotifications(String json) {
 		try {
+			Gson gson = new Gson();
+			Type listType = new TypeToken<ArrayList<UserItemNotification>>() {
+			}.getType();
+			List<UserItemNotification> itemNs = gson.fromJson(json, listType);
 			User user = (User) req.getSession().getAttribute("user");
-			UserItemNotification item = new UserItemNotification();
-			item.setUserId(user.getId());
-			item.setRealmId(realmId);
-			item.setItemId(itemId);
-			item.setIsInverted(isInverted);
-
-			userDao.deleteItemNotification(item);
+			for (UserItemNotification itemN : itemNs) {
+				itemN.setUserId(user.getId());
+			}
+			userDao.deleteItemNotifications(itemNs);
 			return Response.ok(Result.OK("success")).build();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -159,5 +174,124 @@ public class UserResource {
 			e.printStackTrace();
 			return Response.ok(Result.ERROR(e.getMessage())).build();
 		}
+	}
+
+	@POST
+	@Path("/updateItemNotification")
+	@Consumes("application/x-www-form-urlencoded")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateItemNotification(@FormParam("realmId") int realmId,
+			@FormParam("itemId") int itemId, @FormParam("price") long price,
+			@FormParam("isInverted") int isInverted) {
+		try {
+			User user = (User) req.getSession().getAttribute("user");
+			UserItemNotification itemN = new UserItemNotification();
+			itemN.setUserId(user.getId());
+			itemN.setRealmId(realmId);
+			itemN.setItemId(itemId);
+			itemN.setPrice(price);
+			itemN.setIsInverted(isInverted);
+
+			if (!checkInput(itemN)) {
+				throw new Exception("出错");
+			}
+			userDao.updateItemNotification(itemN);
+			return Response.ok(Result.OK("success")).build();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR("出错")).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR(e.getMessage())).build();
+		}
+	}
+
+	private boolean checkInput(UserItemNotification itemN) {
+		if (itemN.getRealmId() == 0 || itemN.getUserId() == 0
+				|| itemN.getItemId() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@POST
+	@Path("/updateEmailNotifications")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateEmailNotifications(String json) {
+		try {
+			Gson gson = new Gson();
+			Type listType = new TypeToken<ArrayList<UserItemNotification>>() {
+			}.getType();
+			List<UserItemNotification> itemNs = gson.fromJson(json, listType);
+			User user = (User) req.getSession().getAttribute("user");
+			for (UserItemNotification itemN : itemNs) {
+				itemN.setUserId(user.getId());
+			}
+			userDao.updateEmailNotifications(itemNs);
+			return Response.ok(Result.OK("success")).build();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR("出错")).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR(e.getMessage())).build();
+		}
+	}
+
+	@GET
+	@Path("/sendMailValidation")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sendMailValidation() {
+		String host = BnadeProperties.getValue("email_validation_host");
+		try {
+			User user = (User) req.getSession().getAttribute("user");
+			UserMailValidation userM = userDao.getMailValidationById(user
+					.getId());
+			String acode;
+			if (userM == null) {
+				userM = new UserMailValidation();
+				userM.setUserId(user.getId());
+				acode = generateAcode(user);
+				userM.setAcode(acode);
+				userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY); // 24
+																				// 小时内有效
+				userDao.addMailValidation(userM);
+			} else {
+				if (userM.getExpired() - System.currentTimeMillis() < TimeUtil.HOUR) { // 有效期小于1小时时重置
+					acode = generateAcode(user);
+					userM.setAcode(acode);
+					userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY);
+				} else {
+					acode = userM.getAcode();
+				}
+				userDao.updateMailValidationById(userM);
+			}
+			System.out.println(host);
+			Mail.sendHtmlEmail(
+					"BNADE邮箱激活",
+					"欢迎使用BNADE，请点击后面link激活邮箱：<a href='"
+							+ host
+							+ "/page/user/mailValidation?id="
+							+ user.getId()
+							+ "&acode="
+							+ acode
+							+ "'>"+host+"/page/user/mailValidation?id="
+							+ user.getId() + "&acode=" + acode + "</a>"
+							+ " 此链接24小时内有效", user.getEmail());
+			return Response.ok(Result.OK("success")).build();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR("error")).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR(e.getMessage())).build();
+		}
+	}
+
+	private String generateAcode(User user) {
+		return MD5Util.MD5("" + user.getId())
+				+ MD5Util.MD5(user.getEmail() + System.currentTimeMillis())
+				+ MD5Util.MD5(user.getOpenID());
 	}
 }

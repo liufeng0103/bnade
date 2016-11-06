@@ -17,14 +17,15 @@ BN.Login = new function() {
 			html += decodeURIComponent(BN.Cookie.get("nickname"));
 			html += "(测试中)<span class='caret'></span></a>";
 			html += "<ul class='dropdown-menu'>";
-			html += "<li><a href='userRealm.html'>管理服务器</a></li>";
-			html += "<li><a href='userItemNotification.html'>物品提醒管理</a></li>";
-			html += "<li><a href='signOut.do'>退出</a></li>";
+			html += "<li><a href='/page/user/mail '>修改邮箱</a></li>";
+			html += "<li><a href='/userRealm.html'>我的服务器</a></li>";
+			html += "<li><a href='/userItemNotification.html'>我的物品提醒</a></li>";
+			html += "<li><a href='/signOut.do'>退出</a></li>";
 			html += "</ul>";
 			$("#login").addClass("dropdown");
 			$("#login").html(html);
 		} else {
-			$("#login").html("<a href='login.do'>QQ登录</a>");
+			$("#login").html("<a href='/login.do'>QQ登录</a>");
 			$("#login").removeClass("dropdown");
 		}
 	};

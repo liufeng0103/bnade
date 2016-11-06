@@ -3,7 +3,7 @@ var BN = window.BN || {};
 
 BN.Resource = new function() {
 	var self = this;
-	var API_ROOT = "./wow";
+	var API_ROOT = "/wow";
 
 	var ERROR = -1;
 	var msg = function(code,msg) {
@@ -79,7 +79,7 @@ BN.Resource = new function() {
 	};
 	
 	self.addUserItemNotification = function(data) {
-		return post(API_ROOT + "/user/set-item-notification", data);
+		return post(API_ROOT + "/user/addItemNotification", data);
 	};
 	
 	self.getUserItemNotifications = function(success,error) {
@@ -89,6 +89,35 @@ BN.Resource = new function() {
 	
 	self.deleteUserItemNotifications = function(data,success,error) {
 		var url = API_ROOT + "/user/deleteItemNotifications";		
+		$.ajax({
+			url : url,
+			type : "POST",
+			data : data,
+			contentType: "application/json",
+			success : success,
+			error : error,
+		});
+	};
+	
+	self.updateUserItemNotification = function(data,success,error) {
+		var url = API_ROOT + "/user/updateItemNotification";		
 		$.post(url,data,success).fail(error);		
+	};
+	
+	self.updateEmailNotifications = function(data,success,error) {
+		var url = API_ROOT + "/user/updateEmailNotifications";		
+		$.ajax({
+			url : url,
+			type : "POST",
+			data : data,
+			contentType: "application/json",
+			success : success,
+			error : error,
+		});
+	};
+	
+	self.sendMailValidation = function(success,error) {
+		var url = API_ROOT + "/user/sendMailValidation";		
+		$.get(url, success).fail(error);		
 	};
 };

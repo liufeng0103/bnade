@@ -127,3 +127,7 @@ input {
 	text-align: left;	
 	font-weight : bold;
 } 
+
+.page-content {
+	padding-top: 20px;
+}

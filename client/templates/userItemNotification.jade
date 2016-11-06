@@ -2,15 +2,20 @@ extends layout
 block title
 	title 物品提醒管理
 block content
+	div#msgModal.modal.fade.bs-example-modal-sm
+		div.modal-dialog.modal-sm
+			div.modal-content
+				div.modal-body
 	div.container-fluid
 		div.container
 			div.row
 				h1 物品提醒管理
 				h3 添加
 				p 服务器请在<a href="userRealm.html">管理服务器页面</a>设置
-				div.form-inline
+				form.form-inline(onsubmit="return false;")
 					input#itemInput.form-control(type="text",placeholder="物品名")
 					button#searchBtn.btn.btn-primary 搜索
+					label#msg.text-danger
 				p
 				div#setItemNForm.form-inline
 					span 当
@@ -24,13 +29,12 @@ block content
 					input#goldInput.form-control(type="text",placeholder="如：1.25")
 					span 金时通知我
 					button#addItemBtn.btn.btn-primary <span class="glyphicon glyphicon-plus"></span>添加
-				p#msg.text-danger
 				h3 所有的物品通知
 				div
-					button#delItemN.btn.btn-sm.btn-danger <span class='glyphicon glyphicon-remove'></span> 删除
-					button.btn.btn-sm.btn-success <span class='glyphicon glyphicon-envelope'></span> 启用邮件通知
-					button.btn.btn-sm.btn-warning <span class='glyphicon glyphicon-minus'></span> 关闭邮件通知
-				table#itemNotificationTbl.table.table-condensed.table-hover
+					button#delItemNBtn.btn.btn-sm.btn-danger <span class='glyphicon glyphicon-remove'></span> 删除
+					button#enableMailBtn.btn.btn-sm.btn-success <span class='glyphicon glyphicon-envelope'></span> 启用邮件通知
+					button#disableMailBtn.btn.btn-sm.btn-warning <span class='glyphicon glyphicon-minus'></span> 关闭邮件通知
+				table.table.table-condensed.table-hover
 					thead
 						tr
 							th 服务器
@@ -40,6 +44,6 @@ block content
 							th 单价一口价
 							th 修改
 							th <input id="selectAllCheckbox" class="checkbox" type="checkbox"/>
-					tbody
+					tbody#itemNotificationBody
 block pagescript
 	script(src="js/userItemNotification.js")

@@ -41,5 +41,8 @@ public class BnadeProperties {
 		return bnadeProperties.getProperty("api_key");
 	}
 
-	
+	public static String getValue(String key) {
+		load();
+		return bnadeProperties.getProperty(key).trim();
+	}
 }

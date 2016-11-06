@@ -4,6 +4,7 @@ public class User {
 	private int id;
 	private String openID;
 	private String email;
+	private int validated;
 	private String nickname;
 
 	public User() {
@@ -39,6 +40,14 @@ public class User {
 		this.email = email;
 	}
 
+	public int getValidated() {
+		return validated;
+	}
+
+	public void setValidated(int validated) {
+		this.validated = validated;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}
@@ -50,7 +59,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", openID=" + openID + ", email=" + email
-				+ ", nickname=" + nickname + "]";
+				+ ", validated=" + validated + ", nickname=" + nickname + "]";
 	}
 
 }

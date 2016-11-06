@@ -352,12 +352,14 @@ CREATE TABLE IF NOT EXISTS t_user (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	openId VARCHAR(32) NOT NULL,
 	email VARCHAR(20) NOT NULL default '',
+	validated INT UNSIGNED default 0,
 	nickname VARCHAR(20) NOT NULL,
 	createTime BIGINT UNSIGNED NOT NULL,
 	updateTime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user ADD INDEX(openId);
+-- ALTER TABLE t_user ADD validated INT UNSIGNED default 0;
 
 CREATE TABLE IF NOT EXISTS t_user_realm (
 	userId INT UNSIGNED NOT NULL,
@@ -377,3 +379,10 @@ CREATE TABLE IF NOT EXISTS t_user_item_notification (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user_item_notification ADD INDEX(userId,realmId);
 ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,isInverted);
+
+CREATE TABLE IF NOT EXISTS t_user_mail_validation (
+	userId INT UNSIGNED NOT NULL,
+	acode VARCHAR(128) NOT NULL,
+	expired BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY(userId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
