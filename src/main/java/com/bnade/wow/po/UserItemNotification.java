@@ -8,6 +8,8 @@ public class UserItemNotification {
 	private int isInverted;
 	private long price;
 	private int emailNotification;
+	private String email;
+	private long minBuyout;
 
 	public int getUserId() {
 		return userId;
@@ -65,12 +67,29 @@ public class UserItemNotification {
 		this.emailNotification = emailNotification;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public long getMinBuyout() {
+		return minBuyout;
+	}
+
+	public void setMinBuyout(long minBuyout) {
+		this.minBuyout = minBuyout;
+	}
+
 	@Override
 	public String toString() {
 		return "UserItemNotification [userId=" + userId + ", realmId="
 				+ realmId + ", itemId=" + itemId + ", itemName=" + itemName
 				+ ", isInverted=" + isInverted + ", price=" + price
-				+ ", emailNotification=" + emailNotification + "]";
+				+ ", emailNotification=" + emailNotification + ", email="
+				+ email + ", minBuyout=" + minBuyout + "]";
 	}
 
 }

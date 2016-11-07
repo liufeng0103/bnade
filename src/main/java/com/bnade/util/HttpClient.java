@@ -62,7 +62,7 @@ public class HttpClient {
 			con.setReadTimeout(readTimeout);
 			if (isGzipSupported) {
 				con.setRequestProperty("Accept-Encoding", "gzip,deflate");
-				logger.debug("接受{}文件", con.getContentEncoding());				
+//				logger.debug("接受{}文件", con.getContentEncoding());				
 				is = new GZIPInputStream(con.getInputStream());
 			} else {
 				is = con.getInputStream();
@@ -96,7 +96,7 @@ public class HttpClient {
 	public String reliableGet(String url) throws IOException {
 		String content = null;	
 		try {
-			logger.debug("reliableGet获取{}内容", url);
+//			logger.debug("reliableGet获取{}内容", url);
 			content = get(url);			
 		} catch (Exception e) {
 			try {

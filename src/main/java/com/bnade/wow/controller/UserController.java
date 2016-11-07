@@ -32,7 +32,7 @@ public class UserController {
 	}
 
 	@POST
-	@Path("/saveMail")
+	@Path("/mail")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Viewable saveMail(
 			@DefaultValue("") @FormParam("email") String email,

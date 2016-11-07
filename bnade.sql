@@ -378,6 +378,7 @@ CREATE TABLE IF NOT EXISTS t_user_item_notification (
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user_item_notification ADD INDEX(userId,realmId);
+ALTER TABLE t_user_item_notification ADD INDEX(realmId);
 ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,isInverted);
 
 CREATE TABLE IF NOT EXISTS t_user_mail_validation (

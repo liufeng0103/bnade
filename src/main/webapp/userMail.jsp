@@ -15,7 +15,7 @@
 	      	<div class="panel panel-default">
 	      		<div class="panel-heading">修改我的邮箱</div>
 	      		<div class="panel-body">
-	      			<form class="form-inline" action="/page/user/saveMail" method="post">
+	      			<form class="form-inline" action="/page/user/mail" method="post">
 	      				<label>邮箱：</label><input name="email" class="form-control" type="email" value="${sessionScope.user.email}" placeholder="请输入您的邮箱">
 	      				<button class="btn btn-primary" type="submit">保存</button>
 	      				<c:if test="${!empty sessionScope.user.email}">

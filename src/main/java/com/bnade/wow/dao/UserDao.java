@@ -26,6 +26,7 @@ public interface UserDao {
 	List<UserItemNotification> getItemNotifications(int userId) throws SQLException;
 	void deleteItemNotifications(List<UserItemNotification> itemNotifications) throws SQLException;
 	void updateItemNotification(UserItemNotification itemNotification) throws SQLException;
+	List<UserItemNotification> getItemNotificationsByRealmId(int realmId) throws SQLException;
 	
 	void updateEmailNotifications(List<UserItemNotification> itemNotifications) throws SQLException;
 	
