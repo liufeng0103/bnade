@@ -9,6 +9,18 @@ public class BnadeUtil {
 		return realmMap.get(id);
 	}
 	
+	public static String getGold(long price) {
+		long gold = price/10000;
+		if (gold < 10) {
+			return "" + price/10000.0;
+		}
+		return "" + gold;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("" + 641000l/10000.0);
+	}
+	
 	private static Map<Integer, String> realmMap = new HashMap<>();
 	static {
 		realmMap.put(1, "万色星辰-奥蕾莉亚-世界之树-布莱恩");

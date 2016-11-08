@@ -4,7 +4,7 @@ public class HotSearchItem {
 	private int id;
 	private String name;
 	private String icon;
-	private int queried;
+	private int queried;	
 
 	public HotSearchItem() {
 		super();
