@@ -205,6 +205,8 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
+	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
+	<script src="//cdn.bootcss.com/highcharts/4.2.7/modules/heatmap.js"></script>
 	<script src="/js/itemQuery.js"></script>
 </body>
 </html>

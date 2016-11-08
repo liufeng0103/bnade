@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS t_item (
 	itemSubClass INT NOT NULL,			-- 子类型
 	inventoryType INT NOT NULL,			-- 装备位置
 	itemLevel INT NOT NULL,				-- 物品等级
-	hot INT NOT NULL,					-- 物品热度
+	hot INT NOT NULL default 0,					-- 物品热度
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 数据导入使用items.sql

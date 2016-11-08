@@ -12,9 +12,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import com.bnade.wow.po.User;
+import com.bnade.wow.vo.Result;
 
-@WebFilter(urlPatterns = "/page/user/*")
-public class SessionFilter implements Filter {
+@WebFilter(urlPatterns = "/wow/user/*")
+public class SessionFilter2 implements Filter {
 	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp,
@@ -22,9 +23,8 @@ public class SessionFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		User user = (User)request.getSession().getAttribute("user");
 		if (user == null) {
-			req.setAttribute("title", "用户未登录");
-			req.setAttribute("message", "用户未登录");
-			req.getServletContext().getRequestDispatcher("/message.jsp").forward(req, resp);
+			resp.setContentType("application/json; charset=utf-8");
+			resp.getWriter().println(Result.ERROR("用户未登录"));
 		} else {
 			chain.doFilter(req, resp);
 		}

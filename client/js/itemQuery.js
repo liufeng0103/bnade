@@ -1149,7 +1149,7 @@ function generateTableBody(itemId,data) {
 		}
 		var buyout=Bnade.getGold(itemArr[1]);	
 		count++;
-		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+HotRealm[realmId]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
+		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent(Realm.getNameById(realmId))+"&owner="+encodeURIComponent(itemArr[2])+"'  target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+HotRealm[realmId]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
 	}
 	var tmpArr = [];
 	for (var i = 1; i <= 170; i++) {

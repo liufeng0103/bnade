@@ -11,7 +11,7 @@ var minifyCss = require('gulp-minify-css');
 var jsDir = "client/js";
 var GulpConfig = {
 	jsSrc: ["client/js/*.js"],
-    mainJsSrc: [jsDir+"/lib/jquery.min.js",jsDir+"/lib/bootstrap.min.js",jsDir+"/lib/highstock.js",jsDir+"/lib/heatmap.js",jsDir+"/lib/jquery-ui.min.js",jsDir+"/lib/highcharts-more.js",jsDir+"/lib/solid-gauge.js","client/js/main/*.js"],
+    mainJsSrc: [jsDir+"/lib/jquery-ui.min.js","client/js/main/*.js"],
     jsDist: "dist/js",
     jadeSrc: ["client/templates/*.jade", "!client/templates/layout.jade"],
     jadeDist: "dist/",

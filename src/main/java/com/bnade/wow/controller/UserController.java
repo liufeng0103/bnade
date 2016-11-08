@@ -22,13 +22,39 @@ import com.sun.jersey.api.view.Viewable;
 @Path("/user")
 public class UserController {
 
+	@Context
+	private HttpServletRequest req;
+	private UserDao userDao;
+	
 	public UserController() {
+		userDao = new UserDaoImpl();
 	}
 
 	@GET
 	@Path("/mail")
 	public Viewable mail() {
 		return new Viewable("/userMail.jsp");
+	}
+	
+	@GET
+	@Path("/realm")
+	public Viewable realm() {
+		User user = (User) req.getSession().getAttribute("user");
+		try {
+			req.setAttribute("realms", userDao.getRealms(user.getId()));
+			return new Viewable("/userRealm.jsp");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			req.setAttribute("title", "出错");
+			req.setAttribute("message", "出错，请联系管理员");
+			return new Viewable("/message.jsp");
+		}		
+	}
+	
+	@GET
+	@Path("/itemNotification")
+	public Viewable itemNotification() {
+		return new Viewable("/userItemNotification.jsp");
 	}
 
 	@POST
