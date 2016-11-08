@@ -29,7 +29,7 @@ gulp.task('css', function () {
 	gulp.src(["client/fonts/**"]).pipe(gulp.dest("dist/fonts"));
     return gulp.src(GulpConfig.cssSrc)
 		.pipe(concat("main.css"))
-		.pipe(minifyCss())
+		//.pipe(minifyCss())
         .pipe(gulp.dest(GulpConfig.cssDist));
 });
 
