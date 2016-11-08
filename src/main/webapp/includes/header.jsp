@@ -17,14 +17,14 @@
 					role="button" aria-haspopup="true" aria-expanded="false"
 					class="dropdown-toggle">物品价格<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="/itemQuery.html">普通物品</a></li>
-						<li><a href="/petQuery.html">宠物价格</a></li>
-						<li><a href="/wowtoken.html">时光徽章</a></li>
-						<li><a href="/ownerQuery.html">玩家物品</a></li>
+						<li><a href="/itemQuery.jsp">普通物品</a></li>
+						<li><a href="/petQuery.jsp">宠物价格</a></li>
+						<li><a href="/wowtoken.jsp">时光徽章</a></li>
+						<li><a href="/ownerQuery.jsp">玩家物品</a></li>
 					</ul></li>
-				<li><a href="/auctionQuantity.html">拍卖排行</a></li>
-				<li><a href="/topOwner.html">玩家排行</a></li>
-				<li><a href="/download.html">下载</a></li>
+				<li><a href="/auctionQuantity.jsp">拍卖排行</a></li>
+				<li><a href="/topOwner.jsp">玩家排行</a></li>
+				<li><a href="/download.jsp">下载</a></li>
 				<li id="login"></li>
 			</ul>
 		</div>

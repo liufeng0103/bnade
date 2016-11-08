@@ -18,8 +18,8 @@ BN.Login = new function() {
 			html += "(测试中)<span class='caret'></span></a>";
 			html += "<ul class='dropdown-menu'>";
 			html += "<li><a href='/page/user/mail '>修改邮箱</a></li>";
-			html += "<li><a href='/userRealm.html'>我的服务器</a></li>";
-			html += "<li><a href='/userItemNotification.html'>我的物品提醒</a></li>";
+			html += "<li><a href='/userRealm.jsp'>我的服务器</a></li>";
+			html += "<li><a href='/userItemNotification.jsp'>我的物品提醒</a></li>";
 			html += "<li><a href='/signOut.do'>退出</a></li>";
 			html += "</ul>";
 			$("#login").addClass("dropdown");
