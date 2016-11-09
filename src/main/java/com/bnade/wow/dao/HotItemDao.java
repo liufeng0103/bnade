@@ -29,4 +29,7 @@ public interface HotItemDao {
 	List<HotItem> getGroupItemIdAfterDatetime(long datetime, int offset, int limit) throws SQLException;
 	
 	List<HotItem> getHotItems(long datetime, int offset, int limit) throws SQLException;
+	
+	List<HotItem> getHotItemsById(int id) throws SQLException;
+	
 }

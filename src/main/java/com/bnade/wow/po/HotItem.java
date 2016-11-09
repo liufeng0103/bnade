@@ -1,5 +1,7 @@
 package com.bnade.wow.po;
 
+import java.util.Date;
+
 import com.bnade.util.BnadeUtil;
 
 public class HotItem {
@@ -14,6 +16,10 @@ public class HotItem {
 	private long buy;
 	private int queried;
 	private long dateTime;
+	
+	public Date getDate() {
+		return new Date(dateTime);
+	}
 
 	public String getPrice() {
 		return BnadeUtil.getGold(buy);

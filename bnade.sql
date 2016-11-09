@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS t_hot_item (
 	dateTime BIGINT UNSIGNED NOT NULL,  -- 查询的日期时间
 	PRIMARY KEY(dateTime,itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+ALTER TABLE t_hot_item ADD INDEX(itemId);
 ------------------- 参考价格功能相关表 -------------------
 -- 记录处理过的item id
 CREATE TABLE IF NOT EXISTS t_item_analysis (

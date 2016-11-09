@@ -13,20 +13,21 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/itemQuery.jsp">普通物品</a></li>
+				<li><a href="/wowtoken.jsp">时光徽章</a></li>
+				<li><a href="/page/item/hotSearch">搜索排行(测试)</a></li>
 				<li class="dropdown">
-					<a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">物品价格<span class="caret"></span></a>
+					<a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">拍卖<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="/itemQuery.jsp">普通物品</a></li>
 						<li><a href="/petQuery.jsp">宠物价格</a></li>
-						<li><a href="/wowtoken.jsp">时光徽章</a></li>
 						<li><a href="/ownerQuery.jsp">玩家物品</a></li>
+						<li><a href="/auctionQuantity.jsp">拍卖排行</a></li>
+						<li><a href="/topOwner.jsp">玩家排行</a></li>
+						<li><a href="/download.jsp">下载</a></li>
 					</ul>
 				</li>
-				<li><a href="/auctionQuantity.jsp">拍卖排行</a></li>
-				<li><a href="/topOwner.jsp">玩家排行</a></li>
-				<li><a href="/download.jsp">下载</a></li>
 				<c:if test="${empty sessionScope.user}">
-					<li><a href="/login.do">QQ登录</a></li>
+					<li><a href="/login.do"><span class="glyphicon glyphicon-user"></span> QQ</a></li>
 				</c:if>
 				<c:if test="${!empty sessionScope.user}">
 					<li class="dropdown">
