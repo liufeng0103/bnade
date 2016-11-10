@@ -89,11 +89,11 @@ gulp.task('watch', function () {
 });
 
 //Default for dev
-gulp.task('default', ['img', 'css', 'jade-dev', 'lint', 'minify-dev', 'watch']);
+gulp.task('default', ['img', 'css', 'lint', 'minify-dev', 'watch']);
 
 //prod
 // 前端资源文件增加hash 用于清除缓存
-gulp.task('prod', ['img', 'css', 'jade', 'lint', 'minify'], function () {
+gulp.task('prod', ['img', 'css', 'lint', 'minify'], function () {
     gulp.src(GulpConfig.htmlSrc)
         .pipe(rev())
         .pipe(gulp.dest(GulpConfig.htmlDist));

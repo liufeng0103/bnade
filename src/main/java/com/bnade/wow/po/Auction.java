@@ -1,5 +1,9 @@
 package com.bnade.wow.po;
 
+import java.util.Date;
+
+import com.bnade.util.BnadeUtil;
+
 public class Auction {
 	private int auc;
 	private int item;
@@ -19,6 +23,26 @@ public class Auction {
 	private long lastModifed;
 	private int realmId;
 
+	public String getRealmName() {
+		return BnadeUtil.getRealmNameById(realmId);
+	}
+	
+	public String getPrice() {
+		return BnadeUtil.getGold(buyout);
+	}
+	
+	public Date getUpdated() {
+		return new Date(lastModifed);
+	}
+	
+	public String getTimeLeftCN() {
+		return BnadeUtil.getTimeLeft(timeLeft);
+	}
+	
+	public int getRealmHot() {
+		return BnadeUtil.getRealmHot(realmId);
+	}
+	
 	public int getAuc() {
 		return auc;
 	}

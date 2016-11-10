@@ -48,17 +48,18 @@ public class ItemMarketPriceAnalysis {
 	}
 
 	public void calculateAndSaveMarketPrice() throws SQLException {
+		long currentTime = System.currentTimeMillis();
 		// 获取所有物品参考价格信息
 		List<MarketItem> items = run.query("select itemId,buy,realmQuantity from t_item_market", new BeanListHandler<MarketItem>(MarketItem.class));
 		Map<Integer, MarketItem> itemMap = getItemMap(items);
 		logger.info("数据库中已有物品参考价格{}条", itemMap.size());
 		// 获取所有的物品id
-		List<Long> ids1 = run.query("select id from t_item where id<>"+Pet.PET_ITEM_ID, new ColumnListHandler<Long>());
+		List<Long> ids1 = run.query("select id from mt_item where id<>"+Pet.PET_ITEM_ID, new ColumnListHandler<Long>());
 		logger.info("物品总数量{}条", ids1.size());
-		// 获取已处理过的所有物品id
-		List<Long> ids2 = run.query("select itemId from t_item_analysis", new ColumnListHandler<Long>());
-		ids1.removeAll(ids2);
-		logger.info("已处理{}条，需要处理{}条", ids2.size(), ids1.size());
+//		// 获取已处理过的所有物品id
+//		List<Long> ids2 = run.query("select itemId from t_item_analysis", new ColumnListHandler<Long>());
+//		ids1.removeAll(ids2);
+//		logger.info("已处理{}条，需要处理{}条", ids2.size(), ids1.size());
 		int count = 0;
 		for (long id : ids1) {
 			int itemId = new Long(id).intValue();
@@ -72,6 +73,7 @@ public class ItemMarketPriceAnalysis {
 		        });
 //				logger.info("Items:{}",aucs);
 				long price = getPrice(aucs);
+				int totalQuantity = getTotalQuantity(aucs);
 				int realmQuantity = aucs.size();
 //				logger.info("Item {} Price {}", id, price);
 				MarketItem marketItem = itemMap.get(itemId);
@@ -90,8 +92,10 @@ public class ItemMarketPriceAnalysis {
 				} else {
 					run.update("insert into t_item_market (itemId,petSpeciesId,petBreedId,bonusLists,buy,realmQuantity) values(?,?,?,?,?,?)", itemId, 0, 0, "", price, realmQuantity);
 				}
+				run.update("insert into t_item_market_history (itemId,petSpeciesId,petBreedId,bonusLists,buy,realmQuantity,totalQuantity,dateTime) values(?,?,?,?,?,?,?,?)", itemId, 0, 0, "", price, realmQuantity, totalQuantity, currentTime);
+//				break;
 			}
-			run.update("insert into t_item_analysis (itemId) values(?)", itemId);			
+//			run.update("insert into t_item_analysis (itemId) values(?)", itemId);			
 			count++;
 			if (count % 200 == 0) {
 				logger.info("已保存{}条处理{}", count, (count * 100 / ids1.size()) + "%");
@@ -164,9 +168,17 @@ public class ItemMarketPriceAnalysis {
 		}		
 	}
 	
+	private int getTotalQuantity(List<Auction> aucs) {	
+		int quantity = 0;
+		for (Auction auc : aucs) {
+			quantity += auc.getQuantity();
+		}
+		return quantity;
+	}
+	
 	public static void main(String[] args) {
 		try {
-			new ItemMarketPriceAnalysis().clearMarketPrice();
+//			new ItemMarketPriceAnalysis().clearMarketPrice();
 			new ItemMarketPriceAnalysis().calculateAndSaveMarketPrice();
 			new ItemMarketPriceAnalysis().exportMarketPriceFile();
 		} catch (SQLException e) {

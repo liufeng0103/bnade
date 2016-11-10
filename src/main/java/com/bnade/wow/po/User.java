@@ -1,6 +1,9 @@
 package com.bnade.wow.po;
 
 public class User {
+	
+	public static final String SESSION_USER = "user";
+	
 	private int id;
 	private String openID;
 	private String email;

@@ -20,7 +20,7 @@ import com.bnade.wow.po.UserMailValidation;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/user")
-public class UserController {
+public class UserController extends BaseController {
 
 	@Context
 	private HttpServletRequest req;
@@ -33,6 +33,7 @@ public class UserController {
 	@GET
 	@Path("/mail")
 	public Viewable mail() {
+		System.out.println(getUser());
 		return new Viewable("/userMail.jsp");
 	}
 	
@@ -55,6 +56,12 @@ public class UserController {
 	@Path("/itemNotification")
 	public Viewable itemNotification() {
 		return new Viewable("/userItemNotification.jsp");
+	}
+	
+	@GET
+	@Path("/activation")
+	public Viewable activation() {
+		return new Viewable("/userActivation.jsp");
 	}
 
 	@POST

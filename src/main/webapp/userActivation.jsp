@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
 <%@ include file="includes/meta.jsp"%>
-<title></title>
+<title>用户激活</title>
 <%@ include file="includes/link.jsp"%>
 </head>
 <body>
@@ -11,15 +11,19 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"></h1>
+				<h1 class="page-header">用户激活</h1>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">						
-					</div>
+					<div class="panel-heading">激活</div>
 					<div class="panel-body">
+						<form class="form-inline" action="/page/user/activation" method="post">
+		      				<input name="activationCode" class="form-control" type="text" placeholder="请输入激活码">
+		      				<button class="btn btn-primary" type="submit">确定</button>
+		      				<label class="text-success">激活成功</label>
+		      			</form>
 					</div>
 				</div>
 			</div>

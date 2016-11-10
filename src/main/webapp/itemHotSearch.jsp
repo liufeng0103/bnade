@@ -33,7 +33,7 @@
 		      			<c:forEach items="${items}" var="item" varStatus="status">
 		      				<tr>
 		      					<td>${offset + status.count}</td>
-		      					<td><img src="http://content.battlenet.com.cn/wow/icons/18/${item.icon}.jpg" alt="${item.name}"/> ${item.name}</td>
+		      					<td><a href="/page/auction/item/${item.itemId}"><img src="http://content.battlenet.com.cn/wow/icons/18/${item.icon}.jpg" alt="${item.name}"/> ${item.name}</a></td>
 		      					<td>${item.queried}</td>
 		      					<td>${item.price}</td>
 		      					<td><a href="/page/item/searchHistory/${item.itemId}">查看</a></td>

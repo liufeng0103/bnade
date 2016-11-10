@@ -291,8 +291,24 @@ CREATE TABLE IF NOT EXISTS t_item_market (
 	bonusLists VARCHAR(20) NOT NULL,		-- 奖励
 	buy BIGINT UNSIGNED NOT NULL,			-- 市场价
 	realmQuantity INT UNSIGNED NOT NULL,	-- 参考服务器数
+	totalQuantity INT UNSIGNED NOT NULL,	-- 物品总数量
 	PRIMARY KEY(itemId,petSpeciesId,petBreedId,bonusLists)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 物品的参考价格历史
+CREATE TABLE IF NOT EXISTS t_item_market_history (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	itemId	INT UNSIGNED NOT NULL,			-- 物品ID
+	petSpeciesId INT UNSIGNED NOT NULL,		-- 宠物ID
+	petBreedId INT UNSIGNED NOT NULL,		-- 宠物类型
+	bonusLists VARCHAR(20) NOT NULL,		-- 奖励
+	buy BIGINT UNSIGNED NOT NULL,			-- 市场价
+	realmQuantity INT UNSIGNED NOT NULL,	-- 参考服务器数
+	totalQuantity INT UNSIGNED NOT NULL,	-- 物品总数量
+	dateTime BIGINT UNSIGNED NOT NULL,		-- 数据更新时间
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_hot_item ADD INDEX(itemId,petSpeciesId,petBreedId,bonusLists);
 
 ------------------- 淘宝功能相关表 -------------------
 -- 物品价格配置
@@ -355,7 +371,7 @@ CREATE TABLE IF NOT EXISTS t_user (
 	validated INT UNSIGNED default 0,
 	nickname VARCHAR(20) NOT NULL,
 	createTime BIGINT UNSIGNED NOT NULL,
-	updateTime timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
+	updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user ADD INDEX(openId);
@@ -386,4 +402,17 @@ CREATE TABLE IF NOT EXISTS t_user_mail_validation (
 	acode VARCHAR(128) NOT NULL,
 	expired BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY(userId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 激活码
+CREATE TABLE IF NOT EXISTS t_user_activation (
+	activationCode VARCHAR(16) NOT NULL,
+    PRIMARY KEY(activationCode)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 激活历史
+CREATE TABLE IF NOT EXISTS t_user_activation_history (
+	activationCode VARCHAR(16) NOT NULL,	
+	userId INT UNSIGNED NOT NULL,
+	dateTime timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(activationCode)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -71,7 +71,7 @@ public class AuctionHouseMinBuyoutDataDaoImpl implements AuctionHouseMinBuyoutDa
 				url += " and bonusLists=?";
 				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
 			} else {
-				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId);
+				return run.query(url + " order by buyout", new BeanListHandler<Auction>(Auction.class), itemId);
 			}
 		}		
 	}
