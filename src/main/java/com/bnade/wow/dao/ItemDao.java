@@ -15,6 +15,7 @@ public interface ItemDao {
 	List<Item> getItemsByName(String name, boolean isFuzzy, int offset, int limit) throws SQLException;
 
 	Item getItemById(int id) throws SQLException;
+	Item getPetItemById(int id) throws SQLException;
 
 	List<String> getBonusList(int itemId) throws SQLException;
 

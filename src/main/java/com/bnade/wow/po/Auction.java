@@ -22,9 +22,22 @@ public class Auction {
 	private String bonusLists;	
 	private long lastModifed;
 	private int realmId;
+	private Item itemObj;
 
+	public String getUrlOwner() {
+		return BnadeUtil.encodeURIComponent(owner);
+	}
+	
 	public String getRealmName() {
 		return BnadeUtil.getRealmNameById(realmId);
+	}
+	
+	public String getBidGold() {
+		return BnadeUtil.getGold(bid);
+	}
+	
+	public String getUnitPrice() {
+		return BnadeUtil.getGold(buyout/quantity);
 	}
 	
 	public String getPrice() {
@@ -179,8 +192,24 @@ public class Auction {
 		this.lastModifed = lastModifed;
 	}
 
+	public Item getItemObj() {
+		return itemObj;
+	}
+
+	public void setItemObj(Item itemObj) {
+		this.itemObj = itemObj;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("item=%d, buyout=%d", item, buyout);
+		return "Auction [auc=" + auc + ", item=" + item + ", owner=" + owner
+				+ ", ownerRealm=" + ownerRealm + ", bid=" + bid + ", buyout="
+				+ buyout + ", quantity=" + quantity + ", timeLeft=" + timeLeft
+				+ ", rand=" + rand + ", seed=" + seed + ", petSpeciesId="
+				+ petSpeciesId + ", petLevel=" + petLevel + ", petBreedId="
+				+ petBreedId + ", context=" + context + ", bonusLists="
+				+ bonusLists + ", lastModifed=" + lastModifed + ", realmId="
+				+ realmId + ", itemObj=" + itemObj + "]";
 	}
+
 }

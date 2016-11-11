@@ -42,7 +42,7 @@ $(document).ready(function() {
        			for (var i in data) {
        				var item = data[i];
        				var worth = Bnade.getGold(item.worth);
-       				tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.html?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(item.owner)+"'  target='_blank'>"+item.owner+"</a></td><td>"+worth+"</td><td>"+item.itemCategeryCount+"</td><td>"+item.quantity+"</td></tr>";
+       				tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(item.owner)+"'  target='_blank'>"+item.owner+"</a></td><td>"+worth+"</td><td>"+item.itemCategeryCount+"</td><td>"+item.quantity+"</td></tr>";
        			}
        			tblHtml+="</tbody></table>";
        			$('#'+contentDiv).html(tblHtml);				

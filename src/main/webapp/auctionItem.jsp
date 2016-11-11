@@ -43,7 +43,6 @@
 									<th>一口价</th>
 									<th>数量</th>
 									<th>服务器</th>
-									<th>人气</th>
 									<th>卖家</th>
 									<th>剩余时间</th>
 									<th>更新时间</th>
@@ -56,8 +55,7 @@
 									<td>${auction.price}</td>
 									<td>${auction.quantity}</td>
 									<td>${auction.realmName}</td>
-									<td>${auction.realmHot}</td>
-									<td>${auction.owner}</td>
+									<td><a href="/page/auction/owner/${auction.urlOwner}/${auction.realmId}">${auction.owner}</a></td>
 									<td>${auction.timeLeftCN}</td>
 									<td><fmt:formatDate pattern="HH:mm" value="${auction.updated}"/></td>
 								</tr>

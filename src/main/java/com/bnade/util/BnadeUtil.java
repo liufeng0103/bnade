@@ -1,5 +1,7 @@
 package com.bnade.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,14 @@ public class BnadeUtil {
 	
 	public static String getRealmNameById(int id) {
 		return realmMap.get(id);
+	}
+	
+	public static String encodeURIComponent(String value) {
+		try {
+			return URLEncoder.encode(value, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			return value;
+		}
 	}
 	
 	public static String getGold(long price) {
