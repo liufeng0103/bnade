@@ -11,8 +11,10 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.po.Item;
+import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
+import com.bnade.wow.po.ItemSubclass;
 import com.bnade.wow.po.ItemV;
 
 public class ItemDaoImpl implements ItemDao {
@@ -73,6 +75,38 @@ public class ItemDaoImpl implements ItemDao {
 	@Override
 	public List<ItemReagent> getItemReagent(int spellId) throws SQLException {
 		return run.query("select itemId,name,quality,icon,count,buyPrice from t_item_reagent where spellId=?", new BeanListHandler<ItemReagent>(ItemReagent.class), spellId);
-	}	
+	}
+
+	@Override
+	public List<ItemClass> getItemClasses() throws SQLException {
+		List<ItemClass> itemClasses = run.query(
+				"select class as itemClass,name from t_item_class",
+				new BeanListHandler<ItemClass>(ItemClass.class));
+		for (ItemClass itemClass : itemClasses) {
+			itemClass.setSubclasses(
+				run.query("select subclass,name from t_item_subclass where class=?",
+				new BeanListHandler<ItemSubclass>(ItemSubclass.class), itemClass.getItemClass()));
+		}
+		return itemClasses;
+	}
+
+	@Override
+	public List<Item> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit)
+			throws SQLException {
+		String sql = "select id,name,icon,itemLevel from mt_item where 1=1 ";
+		if (itemClass != null) {
+			sql += " and itemClass=" + itemClass;
+		}
+		if (subclass != null) {
+			sql += " and itemSubClass=" + subclass;
+		}
+		if (name != null && !"".equals(name)) {
+			sql += " and name like '%?%' ";
+			sql += " order by hot desc limit ?,?";
+			return run.query(sql , new BeanListHandler<Item>(Item.class), name, offset, limit);
+		}
+		sql += " order by hot desc limit ?,?";
+		return run.query(sql , new BeanListHandler<Item>(Item.class), offset, limit);
+	}
 
 }

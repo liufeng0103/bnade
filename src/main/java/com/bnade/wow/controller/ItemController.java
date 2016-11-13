@@ -24,8 +24,10 @@ import com.sun.jersey.api.view.Viewable;
 public class ItemController {
 	
 	private HotItemDao hotItemDao;
+	private ItemDao itemDao;
 	
 	public ItemController() {
+		itemDao = new ItemDaoImpl();
 		hotItemDao = new HotItemDaoImpl();
 	}
 
@@ -43,6 +45,7 @@ public class ItemController {
 			req.setAttribute("limit", limit);
 			return new Viewable("/itemHotSearch.jsp");
 		} catch (Exception e) {
+			e.printStackTrace();
 			req.setAttribute("title", "出错");
 			req.setAttribute("message", "出错，请联系管理员");
 			return new Viewable("/message.jsp");
@@ -70,10 +73,29 @@ public class ItemController {
 			req.setAttribute("items", items);
 			return new Viewable("/itemSearchHistory.jsp");
 		} catch (Exception e) {
+			e.printStackTrace();
 			req.setAttribute("title", "出错");
 			req.setAttribute("message", "出错，请联系管理员");
 			return new Viewable("/message.jsp");
 		}
 	}
 	
+	@GET
+	@Path("/search")
+	public Viewable search(@QueryParam("name") String name,
+			@QueryParam("itemClass") Integer itemClass,
+			@QueryParam("subclass") Integer subclass,
+			@Context HttpServletRequest req) {
+		int limit = 15;
+		try {
+			req.setAttribute("items", itemDao.getItems(name, itemClass, subclass, 0, limit));
+			req.setAttribute("itemClasses", itemDao.getItemClasses());
+			return new Viewable("/itemSearch.jsp");
+		} catch (Exception e) {
+			e.printStackTrace();
+			req.setAttribute("title", "出错");
+			req.setAttribute("message", "出错，请联系管理员");
+			return new Viewable("/message.jsp");
+		}
+	}
 }

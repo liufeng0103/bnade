@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.bnade.wow.po.Item;
+import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
 import com.bnade.wow.po.ItemV;
@@ -24,5 +25,14 @@ public interface ItemDao {
 	List<ItemCreatedBy> getItemCreatedBy(int itemId) throws SQLException;
 	
 	List<ItemReagent> getItemReagent(int spellId) throws SQLException;
+	
+	/**
+	 * 获取物品的所有分类信息
+	 * @return
+	 * @throws SQLException
+	 */
+	List<ItemClass> getItemClasses() throws SQLException;
+	
+	List<Item> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit) throws SQLException;
 	
 }

@@ -31,10 +31,10 @@
 								<tr>
 									<th>#</th>
 									<th>物品</th>
-									<th>竞价</th>
-									<th>一口价</th>
-									<th>数量</th>
 									<th>单价</th>
+									<th>数量</th>
+									<th>一口价</th>
+									<th>竞价</th>
 									<th>剩余时间</th>
 									<th>更新时间</th>
 								</tr>
@@ -44,10 +44,10 @@
 								<tr>
 									<td>${status.count}</td>
 									<td><img src="http://content.battlenet.com.cn/wow/icons/18/${auction.itemObj.icon}.jpg" alt="${auction.itemObj.name}"/> ${auction.itemObj.name}</td>
-									<td>${auction.bidGold}</td>
-									<td>${auction.price}</td>
-									<td>${auction.quantity}</td>
 									<td>${auction.unitPrice}</td>
+									<td>${auction.quantity}</td>
+									<td>${auction.price}</td>
+									<td>${auction.bidGold}</td>
 									<td>${auction.timeLeftCN}</td>
 									<td><fmt:formatDate pattern="HH:mm" value="${auction.updated}"/></td>
 								</tr>

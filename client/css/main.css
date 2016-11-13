@@ -14,6 +14,11 @@ input {
 	margin-left: 1px;
 }
 
+/*所有物品类别导航，去掉group间间距*/
+.itemClass .panel-group {
+	margin-bottom: 0px;
+}
+
 /*
  * Global add-ons
  */

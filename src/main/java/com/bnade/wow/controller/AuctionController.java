@@ -12,11 +12,9 @@ import javax.ws.rs.core.Context;
 import com.bnade.util.BnadeUtil;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.Item;
-import com.bnade.wow.service.AuctionHouseDataService;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDataService;
 import com.bnade.wow.service.AuctionService;
 import com.bnade.wow.service.ItemService;
-import com.bnade.wow.service.impl.AuctionHouseDataServiceImpl;
 import com.bnade.wow.service.impl.AuctionMinBuyoutDataServiceImpl;
 import com.bnade.wow.service.impl.AuctionServiceImpl;
 import com.bnade.wow.service.impl.ItemServiceImpl;
@@ -81,7 +79,7 @@ public class AuctionController {
 	@GET
 	@Path("/owner/{name}/{realmId}")
 	public Viewable owner(@PathParam("name") String name, @PathParam("realmId") int realmId, @Context HttpServletRequest req) {
-		if (name == null || "".equals(name) || realmId <= 0 || realmId >= 170) {
+		if (name == null || "".equals(name) || realmId < 1 || realmId > 170) {
 			req.setAttribute("title", "出错");
 			req.setAttribute("message", "出错");
 			return new Viewable("/message.jsp");
@@ -93,6 +91,7 @@ public class AuctionController {
 				req.setAttribute("auctions", aucs);
 				return new Viewable("/auctionOwner.jsp");
 			} catch (Exception e) {
+				e.printStackTrace();
 				req.setAttribute("title", "出错");
 				req.setAttribute("message", "出错");
 				return new Viewable("/message.jsp");

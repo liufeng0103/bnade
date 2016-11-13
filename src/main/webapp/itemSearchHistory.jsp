@@ -5,7 +5,7 @@
 <html lang="zh-CN">
 <head>
 <%@ include file="includes/meta.jsp"%>
-<title>${item.name}搜索历史</title>
+<title>${item.name} 搜索历史 | BNADE</title>
 <%@ include file="includes/link.jsp"%>
 </head>
 <body>

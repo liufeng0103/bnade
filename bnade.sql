@@ -51,6 +51,22 @@ insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel
 -- 手动更新那些通过api找不到的物品
 -- insert into t_item (id,description,name,icon,itemLevel)values(732,'','成熟的秋葵','inv_misc_herb_09',10);
 
+-- 物品类型
+CREATE TABLE IF NOT EXISTS t_item_class (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，用于排序
+	class INT UNSIGNED NOT NULL,
+	name VARCHAR(80) NOT NULL,
+	PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 物品子类
+CREATE TABLE IF NOT EXISTS t_item_subclass (
+	class INT UNSIGNED NOT NULL,
+	subclass INT UNSIGNED NOT NULL,		
+	name VARCHAR(80) NOT NULL,			
+	PRIMARY KEY(class,subclass)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 装备奖励表
 -- 制造业和fb物品都是拥有相同的itemId但不同的等级，副属性等通过bonus来表示
 CREATE TABLE IF NOT EXISTS t_item_bonus (

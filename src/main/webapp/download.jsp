@@ -34,7 +34,7 @@
 				<li><img src="images/bnade-addon.png" alt="插件效果"
 					class="img-rounded"></li>
 			</ol>
-			<h3 class="sub-header">插件客户端(08-23)</h3>
+			<h3 class="sub-header">插件客户端(11-11)</h3>
 			<a href="./BnadeClient.zip" class="btn btn-primary">客户端下载</a>
 			<p>插件客户端用于更新bnade插件以及tsm插件数据</p>
 			<p>

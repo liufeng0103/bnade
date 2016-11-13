@@ -17,6 +17,7 @@
 				<li><a href="/wowtoken.jsp">时光徽章</a></li>
 				<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 				<li><a href="/page/item/hotSearch">搜索排行</a></li>
+				<li><a href="/page/item/search">物品搜索</a></li>
 				<li class="dropdown">
 					<a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">拍卖行<span class="caret"></span></a>
 					<ul class="dropdown-menu">

@@ -40,7 +40,7 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>一口价</th>
+									<th>单价</th>
 									<th>数量</th>
 									<th>服务器</th>
 									<th>卖家</th>
