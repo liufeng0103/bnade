@@ -2,7 +2,6 @@ package com.bnade.wow.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bnade.util.MD5Util;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
@@ -66,13 +66,15 @@ public class AfterLoginRedirectServlet extends HttpServlet {
 				} else {
 					nickname = dbUser.getNickname();
 				}
-				Cookie item = new Cookie("nickname", URLEncoder.encode(nickname, "utf-8"));
-//				item.setMaxAge(-1);
-//				item.setPath("/");
+				String newToken = MD5Util.MD5("" + dbUser.getId() + System.currentTimeMillis());
+				userDao.updateUserToken(dbUser.getId(), newToken);
+				Cookie item = new Cookie("token", newToken);
+				item.setMaxAge(60 * 60 * 24 * 10);
+				item.setPath("/");
 				resp.addCookie(item);
 				req.getSession().setAttribute("user", dbUser);
 				logger.info("用户[{}]登录成功", openID);
-				resp.sendRedirect("./");
+				resp.sendRedirect("/");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

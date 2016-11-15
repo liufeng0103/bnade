@@ -168,4 +168,15 @@ public class UserDaoImpl implements UserDao {
 								UserItemNotification.class), realmId);
 	}
 
+	@Override
+	public User getUserByToken(String token) throws SQLException {
+		return run.query("select id,openId,email,nickname,validated from t_user where token=?",
+				new BeanHandler<User>(User.class), token);
+	}
+
+	@Override
+	public void updateUserToken(int id, String token) throws SQLException {
+		run.update("update t_user set token=? where id=?", token, id);		
+	}
+
 }

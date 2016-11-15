@@ -16,6 +16,8 @@ public interface UserDao {
 
 	User getUserByOpenID(String openID) throws SQLException;
 	User getUserByID(int id) throws SQLException;
+	User getUserByToken(String token) throws SQLException;
+	void updateUserToken(int id, String token) throws SQLException;
 	// ---------------------- 用户服务器 ----------------------
 	void addRealm(UserRealm realm) throws SQLException;
 	void deleteRealm(UserRealm realm) throws SQLException;

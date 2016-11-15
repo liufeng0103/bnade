@@ -386,12 +386,16 @@ CREATE TABLE IF NOT EXISTS t_user (
 	email VARCHAR(20) NOT NULL default '',
 	validated INT UNSIGNED default 0,
 	nickname VARCHAR(20) NOT NULL,
+	token VARCHAR(32) NOT NULL default '',
 	createTime BIGINT UNSIGNED NOT NULL,
 	updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_user ADD INDEX(openId);
+ALTER TABLE t_user ADD INDEX(token);
 -- ALTER TABLE t_user ADD validated INT UNSIGNED default 0;
+-- ALTER TABLE t_user ADD token VARCHAR(32) NOT NULL default '';
+
 
 CREATE TABLE IF NOT EXISTS t_user_realm (
 	userId INT UNSIGNED NOT NULL,
