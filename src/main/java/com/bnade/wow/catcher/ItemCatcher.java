@@ -174,9 +174,9 @@ public class ItemCatcher {
 					for (XItemCreatedBy itemCb : item.getCreatedBy()) {
 						System.out.println(itemCb);		
 						if (itemCb.getId() != 0 && itemCb.getReagent() != null) {
-							run.update("insert into t_item_created_by (itemId,spellId,name,icon) values (?,?,?,?)", itemId, itemCb.getId(), itemCb.getName(), itemCb.getIcon());
+							run.update("insert into t_item_created_by (itemId,spellId,name,icon,minCount,maxCount) values (?,?,?,?,?,?)", itemId, itemCb.getId(), itemCb.getName(), itemCb.getIcon(), itemCb.getMinCount(), itemCb.getMaxCount());
 							for (XItemReagent itemR : itemCb.getReagent()) {								
-								run.update("insert into t_item_reagent (spellId,itemId,name,quality,icon,count) values (?,?,?,?,?,?)", itemCb.getId(), itemR.getId(), itemR.getName(), itemR.getQuality(), itemR.getIcon(), itemR.getCount());								
+								run.update("insert into t_item_reagent (spellId,itemId,name,quality,icon,count,buyPrice) values (?,?,?,?,?,?,?)", itemCb.getId(), itemR.getId(), itemR.getName(), itemR.getQuality(), itemR.getIcon(), itemR.getCount(),0);								
 							}	
 						} else {
 							logger.info("物品[{}{}]配方获取失败=================================", item.getName(), itemId);
@@ -197,12 +197,12 @@ public class ItemCatcher {
 
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
-		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
+//		itemCatcher.process();
+//		itemCatcher.refreshItems();
+//		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
-//		itemCatcher.processItemCreatedBy();
+		itemCatcher.processItemCreatedBy();
 	}	
 
 }

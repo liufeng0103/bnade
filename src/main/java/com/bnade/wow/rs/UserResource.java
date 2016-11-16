@@ -123,7 +123,7 @@ public class UserResource {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
 
-			if (userDao.getItemNotifications(user.getId()).size() >= 10) {
+			if (userDao.getItemNotifications(user.getId()).size() >= 5) {
 				return Response.ok(Result.ERROR("超过限制")).build();
 			}
 			UserItemNotification itemN = new UserItemNotification();
