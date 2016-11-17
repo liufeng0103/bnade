@@ -10,12 +10,12 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
 import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.ItemDao;
+import com.bnade.wow.po.AuctionItem;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
 import com.bnade.wow.po.ItemSubclass;
-import com.bnade.wow.po.ItemV;
 
 public class ItemDaoImpl implements ItemDao {
 
@@ -62,12 +62,6 @@ public class ItemDaoImpl implements ItemDao {
 	}
 
 	@Override
-	public List<ItemV> get(String name, int offset, int limit) throws SQLException {
-		name = "%" + name + "%";
-		return run.query("select id,name,icon,itemLevel,type from v_item where name like ? order by hot desc limit ?,?", new BeanListHandler<ItemV>(ItemV.class), name, offset, limit);
-	}
-
-	@Override
 	public List<ItemCreatedBy> getItemCreatedBy(int itemId) throws SQLException {
 		return run.query("select spellId,name,icon,minCount,maxCount from t_item_created_by where itemId=?", new BeanListHandler<ItemCreatedBy>(ItemCreatedBy.class), itemId);
 	}
@@ -91,9 +85,9 @@ public class ItemDaoImpl implements ItemDao {
 	}
 
 	@Override
-	public List<Item> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit)
+	public List<AuctionItem> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit)
 			throws SQLException {
-		String sql = "select id,name,icon,itemLevel from mt_item where 1=1 ";
+		String sql = "select id,name,icon,itemLevel from v_item where 1=1 ";
 		if (itemClass != null) {
 			sql += " and itemClass=" + itemClass;
 		}
@@ -101,12 +95,20 @@ public class ItemDaoImpl implements ItemDao {
 			sql += " and itemSubClass=" + subclass;
 		}
 		if (name != null && !"".equals(name)) {
-			sql += " and name like '%?%' ";
+			name = "%" + name + "%";
+			sql += " and name like ? ";
 			sql += " order by hot desc limit ?,?";
-			return run.query(sql , new BeanListHandler<Item>(Item.class), name, offset, limit);
+			return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), name, offset, limit);
 		}
 		sql += " order by hot desc limit ?,?";
-		return run.query(sql , new BeanListHandler<Item>(Item.class), offset, limit);
+		return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), offset, limit);
+	}
+
+	@Override
+	public List<AuctionItem> getAuctionItems(String name, int offset, int limit)
+			throws SQLException {
+		String sql = "select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,petSpeciesId,hot from v_item where name like '%?%' order by hot desc limit ?,?";
+		return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), name, offset, limit);
 	}
 
 }

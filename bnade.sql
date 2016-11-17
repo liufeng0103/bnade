@@ -117,9 +117,9 @@ ALTER TABLE t_item_processed ADD INDEX(type,itemId);
 
 -- 物品和宠物信息表
 CREATE VIEW v_item as 
-select id,name,icon,itemLevel,1 as type,hot from mt_item 
-union all
-select id,name,icon,0 as itemLevel,2 as type,0 as hot from t_pet
+select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,0 as petSpeciesId,hot from mt_item
+union all 
+select 82800,name,icon,10,0,0,0,id,hot from t_pet
 
 -- 超值的物品
 CREATE TABLE IF NOT EXISTS t_item_worthbuy (	
@@ -144,9 +144,12 @@ CREATE TABLE IF NOT EXISTS t_pet (
 	id INT UNSIGNED NOT NULL,		-- 宠物id				
 	name VARCHAR(16) NOT NULL,		-- 宠物名
 	icon VARCHAR(64) NOT NULL,		-- 宠物图标
+	hot int UNSIGNED NOT NULL default 0,
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE t_pet ADD INDEX(name); -- 通过宠物名查询宠物信息
+-- ALTER TABLE t_pet ADD hot int UNSIGNED NOT NULL default 0;
+
 -- 数据导入使用pets.sql
 
 -- 宠物类型以及属性值

@@ -14,42 +14,15 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					物品查询				
+					物品查询
 				</h1>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-3 itemClass">
-			<div class="panel panel-default">
-				<div class="panel-heading">全部</div>
-					
-						<c:forEach items="${itemClasses}" var="classes" varStatus="status">
-						<div class="panel-group" role="tablist">
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" href="#collapseListGroup${classes.itemClass}" aria-expanded="true" aria-controls="collapseListGroup1">
-											${classes.name}
-										</a>
-									</h4>
-								</div>
-								<div id="collapseListGroup${classes.itemClass}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading1" aria-expanded="true">
-									<ul class="list-group">
-									<c:forEach items="${classes.subclasses}" var="subclasses" varStatus="status">
-										<li class="list-group-item"><a href="/page/item/search?itemClass=${classes.itemClass}&subclass=${subclasses.subclass}">${subclasses.name}</a></li>
-									</c:forEach>
-									</ul>
-								</div>
-							</div>
-						</div>
-						</c:forEach>
-					
-				</div>
-			</div>
-			<div class="col-lg-9">
-				<table class="table table-hover table-bordered">
+			<div class="col-lg-12">
+				<table id="itemTable" class="table table-hover ">
 					<thead>
-						<tr class="active">
+						<tr>
 							<th>#</th>
 							<th>物品</th>
 							<th>等级</th>
@@ -59,7 +32,12 @@
 						<c:forEach items="${items}" var="item" varStatus="status">
 						<tr>
 							<td>${status.count}</td>
-							<td><a href="/page/auction/item/${item.id}"><img src="http://content.battlenet.com.cn/wow/icons/18/${item.icon}.jpg" alt="${item.name}"/> ${item.name}</a></td>
+							<c:if test="${item.id == 82800}">
+							<td><a href="/petQuery.jsp?name=${item.name}"><img src="http://content.battlenet.com.cn/wow/icons/18/${item.icon}.jpg" alt="${item.name}"/> ${item.name}</a></td>
+							</c:if>
+							<c:if test="${item.id != 82800}">
+							<td><a href="/itemQuery.jsp?itemName=${item.name}"><img src="http://content.battlenet.com.cn/wow/icons/18/${item.icon}.jpg" alt="${item.name}"/> ${item.name}</a></td>
+							</c:if>
 							<td>${item.itemLevel}</td>
 						</tr>
 						</c:forEach>
@@ -75,7 +53,23 @@
 	<script src="/js/dataTables.responsive.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
 	<script>
-	
+	$('#itemTable').DataTable({
+		responsive : true,
+		"language" : {
+			"lengthMenu" : "每页显示 _MENU_ 条记录",
+			"zeroRecords" : "数据未找到",
+			"info" : "第_PAGE_页, 共_PAGES_页",
+			"infoEmpty" : "找不到数据",
+			"infoFiltered" : "(总数 _MAX_条)",
+			"search" : "搜索:",
+			"paginate" : {
+				"first" : "首页",
+				"last" : "末页",
+				"next" : "下一页",
+				"previous" : "上一页"
+			},
+		}
+	});
 	</script>
 </body>
 </html>

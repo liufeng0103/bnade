@@ -42,6 +42,14 @@
 					</li>
 				</c:if>
 			</ul>
+			<form class="navbar-form navbar-right" action="/page/item/search">
+				<div class="input-group">
+					<input id="itemName2" name="name" type="text" class="form-control" placeholder="物品名称" value="${searchName }">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
+				</div>
+			</form>
 		</div>
 	</div>
 </nav>

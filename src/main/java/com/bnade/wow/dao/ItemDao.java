@@ -3,11 +3,11 @@ package com.bnade.wow.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.bnade.wow.po.AuctionItem;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
-import com.bnade.wow.po.ItemV;
 
 public interface ItemDao {
 
@@ -20,7 +20,7 @@ public interface ItemDao {
 
 	List<String> getBonusList(int itemId) throws SQLException;
 
-	List<ItemV> get(String name, int offset, int limit) throws SQLException;
+	List<AuctionItem> getAuctionItems(String name, int offset, int limit) throws SQLException;
 	
 	List<ItemCreatedBy> getItemCreatedBy(int itemId) throws SQLException;
 	
@@ -33,6 +33,6 @@ public interface ItemDao {
 	 */
 	List<ItemClass> getItemClasses() throws SQLException;
 	
-	List<Item> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit) throws SQLException;
+	List<AuctionItem> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit) throws SQLException;
 	
 }

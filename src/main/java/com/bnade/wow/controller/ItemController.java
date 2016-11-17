@@ -86,10 +86,11 @@ public class ItemController {
 			@QueryParam("itemClass") Integer itemClass,
 			@QueryParam("subclass") Integer subclass,
 			@Context HttpServletRequest req) {
-		int limit = 15;
+		int limit = 100;
 		try {
+			req.setAttribute("searchName", name);
 			req.setAttribute("items", itemDao.getItems(name, itemClass, subclass, 0, limit));
-			req.setAttribute("itemClasses", itemDao.getItemClasses());
+//			req.setAttribute("itemClasses", itemDao.getItemClasses());
 			return new Viewable("/itemSearch.jsp");
 		} catch (Exception e) {
 			e.printStackTrace();
