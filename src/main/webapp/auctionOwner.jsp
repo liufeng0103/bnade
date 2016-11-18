@@ -23,39 +23,38 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading"><span class="glyphicon glyphicon-list"></span> [${owner}]的所有拍卖物品</div>
-					<div class="panel-body">
-						<table id="ownerAuctionTable" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>物品</th>
-									<th>单价</th>
-									<th>数量</th>
-									<th>一口价</th>
-									<th>竞价</th>
-									<th>剩余时间</th>
-									<th>更新时间</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach items="${auctions}" var="auction" varStatus="status">
-								<tr>
-									<td>${status.count}</td>
-									<td><img src="http://content.battlenet.com.cn/wow/icons/18/${auction.itemObj.icon}.jpg" alt="${auction.itemObj.name}"/> ${auction.itemObj.name}</td>
-									<td>${auction.unitPrice}</td>
-									<td>${auction.quantity}</td>
-									<td>${auction.price}</td>
-									<td>${auction.bidGold}</td>
-									<td>${auction.timeLeftCN}</td>
-									<td><fmt:formatDate pattern="HH:mm" value="${auction.updated}"/></td>
-								</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-				</div>
+				<table id="ownerAuctionTable" class="table table-hover" data-page-length="25">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>物品</th>
+							<th>单价</th>
+							<th>数量</th>
+							<th>一口价</th>
+							<th>竞价</th>
+							<th>剩余时间</th>
+							<th>更新时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${auctions}" var="auction" varStatus="status">
+						<tr>
+							<td>${status.count}</td>
+							<td>
+								<a href="/page/auction/item/${auction.itemObj.id}">
+									<img src="http://content.battlenet.com.cn/wow/icons/18/${auction.itemObj.icon}.jpg" alt="${auction.itemObj.name}"/> ${auction.itemObj.name}
+								</a>
+							</td>
+							<td>${auction.unitPrice}</td>
+							<td>${auction.quantity}</td>
+							<td>${auction.price}</td>
+							<td>${auction.bidGold}</td>
+							<td>${auction.timeLeftCN}</td>
+							<td><fmt:formatDate pattern="HH:mm" value="${auction.updated}"/></td>
+						</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

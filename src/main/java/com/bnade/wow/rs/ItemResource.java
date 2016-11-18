@@ -21,6 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import com.bnade.util.HttpClient;
 import com.bnade.util.TimeUtil;
+import com.bnade.wow.dao.ItemDao;
+import com.bnade.wow.dao.impl.ItemDaoImpl;
+import com.bnade.wow.po.AuctionItem;
 import com.bnade.wow.po.HotItem;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.po.QueryItem;
@@ -122,9 +125,11 @@ public class ItemResource {
 	public Object getItemNamesByTerm(@QueryParam("term") String term, @Context HttpServletResponse resp) {
 		int max_length = 10;
 		try {			
-			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
+			ItemDao itemDao = new ItemDaoImpl();
+			List<AuctionItem> items = itemDao.getItems(term, null, null, 0, max_length);
+//			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
 			List<String> result = new ArrayList<>();
-			for (Item item : items) {
+			for (AuctionItem item : items) {
 				result.add(item.getName());
 			}
 			resp.setHeader("Access-Control-Allow-Origin", "*");

@@ -36,7 +36,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading"><span class="glyphicon glyphicon-list"></span> [${item.name}]在所有服务器详情</div>
 					<div class="panel-body">
-						<table id="itemAuctionTable" class="table table-striped table-bordered table-hover" width="100%">
+						<table id="itemAuctionTable" class="table table-hover" data-page-length="25">
 							<thead>
 								<tr>
 									<th>#</th>

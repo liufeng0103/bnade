@@ -20,7 +20,7 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<table id="itemTable" class="table table-hover ">
+				<table id="itemTable" class="table table-hover" data-page-length="25">
 					<thead>
 						<tr>
 							<th>#</th>
