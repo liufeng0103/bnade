@@ -41,8 +41,20 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getUserByOpenID(String openID) throws SQLException {
 		return run
-				.query("select id,openId,email,nickname,validated from t_user where openId=?",
+				.query("select id,openId,email,nickname,validated,expire from t_user where openId=?",
 						new BeanHandler<User>(User.class), openID);
+	}
+
+	@Override
+	public User getUserByID(int id) throws SQLException {
+		return run.query("select id,openId,email,nickname,validated,expire from t_user where id=?",
+				new BeanHandler<User>(User.class), id);
+	}
+
+	@Override
+	public User getUserByToken(String token) throws SQLException {
+		return run.query("select id,openId,email,nickname,validated,expire from t_user where token=?",
+				new BeanHandler<User>(User.class), token);
 	}
 
 	@Override
@@ -153,25 +165,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User getUserByID(int id) throws SQLException {
-		return run
-				.query("select id,openId,email,nickname,validated from t_user where id=?",
-						new BeanHandler<User>(User.class), id);
-	}
-
-	@Override
 	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
 			throws SQLException {
 		return run
 				.query(" select userId,realmId,itemId,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1",
 						new BeanListHandler<UserItemNotification>(
 								UserItemNotification.class), realmId);
-	}
-
-	@Override
-	public User getUserByToken(String token) throws SQLException {
-		return run.query("select id,openId,email,nickname,validated from t_user where token=?",
-				new BeanHandler<User>(User.class), token);
 	}
 
 	@Override

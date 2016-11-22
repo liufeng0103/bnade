@@ -132,7 +132,7 @@
 				var rows = [];
 				var trs = getCheckedRows();
 				for (var i in trs) {
-					var $tr = $(this);
+					var $tr = trs[i];
 					var itemN = {itemId : $tr.attr("itemId"),
 							realmId : $tr.attr("realmId"),
 							isInverted : $tr.attr("isInverted")};

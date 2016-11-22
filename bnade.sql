@@ -390,6 +390,7 @@ CREATE TABLE IF NOT EXISTS t_user (
 	validated INT UNSIGNED default 0,
 	nickname VARCHAR(20) NOT NULL,
 	token VARCHAR(32) NOT NULL default '',
+	expire BIGINT NOT NULL default 0,
 	createTime BIGINT UNSIGNED NOT NULL,
 	updateTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,	
     PRIMARY KEY(id)
@@ -398,7 +399,15 @@ ALTER TABLE t_user ADD INDEX(openId);
 ALTER TABLE t_user ADD INDEX(token);
 -- ALTER TABLE t_user ADD validated INT UNSIGNED default 0;
 -- ALTER TABLE t_user ADD token VARCHAR(32) NOT NULL default '';
+ALTER TABLE t_user ADD expire BIGINT NOT NULL default 0;
 
+-- 封杀的ip
+CREATE TABLE IF NOT EXISTS t_user_block_ip (
+	ip VARCHAR(16) NOT NULL,
+	message VARCHAR(128) NOT NULL default '',
+    PRIMARY KEY(ip)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ALTER TABLE t_user_block_ip ADD message VARCHAR(128) NOT NULL default '';
 
 CREATE TABLE IF NOT EXISTS t_user_realm (
 	userId INT UNSIGNED NOT NULL,

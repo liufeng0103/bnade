@@ -45,4 +45,9 @@ public class BnadeProperties {
 		load();
 		return bnadeProperties.getProperty(key).trim();
 	}
+	
+	public static String getValue(String key, String defaultValue) {
+		load();
+		return bnadeProperties.getProperty(key, defaultValue).trim();
+	}
 }

@@ -122,8 +122,8 @@ public class UserResource {
 			@FormParam("isInverted") int isInverted) {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
-
-			if (userDao.getItemNotifications(user.getId()).size() >= 5) {
+			
+			if ((user.getExpire() - System.currentTimeMillis()) < 0 && userDao.getItemNotifications(user.getId()).size() >= 5) {
 				return Response.ok(Result.ERROR("超过限制")).build();
 			}
 			UserItemNotification itemN = new UserItemNotification();
@@ -158,8 +158,7 @@ public class UserResource {
 	public Response deleteItemNotifications(String json) {
 		try {
 			Gson gson = new Gson();
-			Type listType = new TypeToken<ArrayList<UserItemNotification>>() {
-			}.getType();
+			Type listType = new TypeToken<ArrayList<UserItemNotification>>() {}.getType();
 			List<UserItemNotification> itemNs = gson.fromJson(json, listType);
 			User user = (User) req.getSession().getAttribute("user");
 			for (UserItemNotification itemN : itemNs) {

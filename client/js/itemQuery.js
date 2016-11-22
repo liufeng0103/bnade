@@ -1357,6 +1357,7 @@ function fuzzyQueryItems(itemName) {
 }
 function loadItemDetail(itemId) {
 	$('#itemDetail').html("");
+	$('#itemDetail').append("<p>物品ID："+itemId+"</p>");
 	if (itemId.toString().indexOf("?") > -1) {
 		itemId += "&tooltip=true";
 	} else {
@@ -1366,7 +1367,7 @@ function loadItemDetail(itemId) {
 		if (data.code === 201) {
 			$('#msg').append("物品信息查询失败:" + data.errorMessage);								
 		} else {
-			$('#itemDetail').html(data);
+			$('#itemDetail').append(data);
 		}
 	}).fail(function() {
 		$("#msg").html("物品信息查询出错");

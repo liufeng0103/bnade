@@ -9,6 +9,7 @@ public class User {
 	private String email;
 	private int validated;
 	private String nickname;
+	private long expire;
 
 	public User() {
 	}
@@ -59,10 +60,19 @@ public class User {
 		this.nickname = nickname;
 	}
 
+	public long getExpire() {
+		return expire;
+	}
+
+	public void setExpire(long expire) {
+		this.expire = expire;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", openID=" + openID + ", email=" + email
-				+ ", validated=" + validated + ", nickname=" + nickname + "]";
+				+ ", validated=" + validated + ", nickname=" + nickname
+				+ ", expire=" + expire + "]";
 	}
 
 }
