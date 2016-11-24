@@ -2,6 +2,8 @@ package com.bnade.wow.service.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.bnade.wow.dao.AuctionDao;
@@ -67,6 +69,12 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 	
 	private List<Auction2> foldAuctionsByOwnerBuyout2(List<Auction2> aucs) {
+		Collections.sort(aucs, new Comparator<Auction2>() {
+			public int compare(Auction2 auc1, Auction2 auc2) {
+				return auc1.getBuyout() / auc1.getQuantity() - auc2.getBuyout()
+						/ auc2.getQuantity() > 0 ? -1 : 1;
+			}
+		});
 		int size = aucs.size();
 		if (size <= 1) {
 			return aucs;

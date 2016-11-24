@@ -94,7 +94,7 @@ gulp.task('default', ['img', 'css', 'lint', 'minify-dev', 'watch']);
 //prod
 // 前端资源文件增加hash 用于清除缓存
 gulp.task('prod', ['img', 'css', 'lint', 'minify'], function () {
-    gulp.src(['src/main/webapp/*.jsp','src/main/webapp/includes/*.jsp'])
+    gulp.src(GulpConfig.htmlSrc)
         .pipe(rev())
         .pipe(gulp.dest(GulpConfig.htmlDist));
 });
