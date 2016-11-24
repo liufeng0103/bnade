@@ -4,6 +4,7 @@ public class UserItemNotification {
 	private int userId;
 	private int realmId;
 	private int itemId;
+	private String bonusList;
 	private String itemName;
 	private int isInverted;
 	private long price;
@@ -33,6 +34,14 @@ public class UserItemNotification {
 
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
+	}
+
+	public String getBonusList() {
+		return bonusList;
+	}
+
+	public void setBonusList(String bonusList) {
+		this.bonusList = bonusList;
 	}
 
 	public int getIsInverted() {
@@ -86,10 +95,11 @@ public class UserItemNotification {
 	@Override
 	public String toString() {
 		return "UserItemNotification [userId=" + userId + ", realmId="
-				+ realmId + ", itemId=" + itemId + ", itemName=" + itemName
-				+ ", isInverted=" + isInverted + ", price=" + price
-				+ ", emailNotification=" + emailNotification + ", email="
-				+ email + ", minBuyout=" + minBuyout + "]";
+				+ realmId + ", itemId=" + itemId + ", bonusList=" + bonusList
+				+ ", itemName=" + itemName + ", isInverted=" + isInverted
+				+ ", price=" + price + ", emailNotification="
+				+ emailNotification + ", email=" + email + ", minBuyout="
+				+ minBuyout + "]";
 	}
 
 }

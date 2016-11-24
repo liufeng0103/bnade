@@ -9,6 +9,7 @@ import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.dao.impl.AuctionDaoImpl;
 import com.bnade.wow.dao.impl.ItemDaoImpl;
 import com.bnade.wow.po.Auction;
+import com.bnade.wow.po.Auction2;
 import com.bnade.wow.po.Pet;
 import com.bnade.wow.service.AuctionService;
 
@@ -63,6 +64,36 @@ public class AuctionServiceImpl implements AuctionService {
 			}
 		}
 		return result;
+	}
+	
+	private List<Auction2> foldAuctionsByOwnerBuyout2(List<Auction2> aucs) {
+		int size = aucs.size();
+		if (size <= 1) {
+			return aucs;
+		}
+		List<Auction2> result = new ArrayList<>();
+		Auction2 preAuc = aucs.get(0);
+		for (int i = 1; i < size; i++) {
+			Auction2 auc = aucs.get(i);
+			if (preAuc.getOwner().equals(auc.getOwner()) && (preAuc.getBuyout()/preAuc.getQuantity() == auc.getBuyout()/auc.getQuantity())) {
+				preAuc.setBid(preAuc.getBid() + auc.getBid());
+				preAuc.setBuyout(preAuc.getBuyout() + auc.getBuyout());
+				preAuc.setQuantity(preAuc.getQuantity() + auc.getQuantity());
+			} else {
+				result.add(preAuc);
+				preAuc = auc;
+			}
+			if (i == size - 1) {
+				result.add(preAuc);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<Auction2> getAuctionsByRealmOwner2(int realmId, String name) throws SQLException {
+		List<Auction2> aucs = auctionDao.getAuctionsByRealmOwner(realmId, name);
+		return foldAuctionsByOwnerBuyout2(aucs);
 	}
 	
 }

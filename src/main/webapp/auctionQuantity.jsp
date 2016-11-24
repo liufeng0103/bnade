@@ -1581,6 +1581,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/auctionQuantity.js"></script>
+	<script src="/js/auctionQuantity.js?rev=@@hash"></script>
 </body>
 </html>

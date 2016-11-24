@@ -55,6 +55,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/ownerQuery.js"></script>
+	<script src="/js/ownerQuery.js?rev=@@hash"></script>
 </body>
 </html>

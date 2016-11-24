@@ -1,5 +1,7 @@
 package com.bnade.wow.po;
 
+import java.util.List;
+
 public class AuctionItem {
 	private int id;
 	private String name;
@@ -10,6 +12,7 @@ public class AuctionItem {
 	private int itemLevel;
 	private int petSpeciesId;
 	private int hot;
+	private List<String> bonusList;
 
 	public int getId() {
 		return id;
@@ -83,12 +86,21 @@ public class AuctionItem {
 		this.hot = hot;
 	}
 
+	public List<String> getBonusList() {
+		return bonusList;
+	}
+
+	public void setBonusList(List<String> bonusList) {
+		this.bonusList = bonusList;
+	}
+
 	@Override
 	public String toString() {
 		return "AuctionItem [id=" + id + ", name=" + name + ", icon=" + icon
 				+ ", itemClass=" + itemClass + ", itemSubClass=" + itemSubClass
-				+ ", inventoryType=" + inventoryType + ", petSpeciesId="
-				+ petSpeciesId + ", hot=" + hot + "]";
+				+ ", inventoryType=" + inventoryType + ", itemLevel="
+				+ itemLevel + ", petSpeciesId=" + petSpeciesId + ", hot=" + hot
+				+ ", bonusList=" + bonusList + "]";
 	}
 
 }

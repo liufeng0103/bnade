@@ -36,6 +36,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/page/user/mail">修改邮箱</a></li>
 							<li><a href="/page/user/realm">我的服务器</a></li>
+							<li><a href="/page/user/character">我的角色</a></li>
 							<li><a href="/page/user/itemNotification">我的物品提醒</a></li>
 							<li><a href="/page/user/signOut">退出</a></li>
 						</ul>

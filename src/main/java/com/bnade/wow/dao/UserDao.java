@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.bnade.wow.po.User;
+import com.bnade.wow.po.UserCharacter;
 import com.bnade.wow.po.UserItemNotification;
 import com.bnade.wow.po.UserMailValidation;
 import com.bnade.wow.po.UserRealm;
@@ -22,7 +23,10 @@ public interface UserDao {
 	void addRealm(UserRealm realm) throws SQLException;
 	void deleteRealm(UserRealm realm) throws SQLException;
 	List<UserRealm> getRealms(int userId) throws SQLException;
-	
+	// ---------------------- 用户角色 ----------------------
+	void addCharacter(UserCharacter character) throws SQLException;
+	void deleteCharacter(UserCharacter character) throws SQLException;
+	List<UserCharacter> getCharacters(int userId) throws SQLException;
 	// ---------------------- 用户物品通知 ----------------------
 	void addItemNotification(UserItemNotification itemNotification) throws SQLException;
 	List<UserItemNotification> getItemNotifications(int userId) throws SQLException;

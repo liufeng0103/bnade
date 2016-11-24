@@ -27,6 +27,7 @@
 		      				</c:if>
 	      				</c:if>
 	      			</form>
+	      			<label class="text-danger">近期发现来自qq邮箱的大量退信，大家设置邮箱尽量选用其它邮箱，或者设置bnade1@163.com到白名单</label>
 	      			<label>${message}</label>
 	      			<label id="msg"></label>
 	      		</div>

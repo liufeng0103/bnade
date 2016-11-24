@@ -11,8 +11,8 @@
 	<jsp:include page="includes/header.jsp" />
 	<div class="container-fluid">
 		<div class="container">
-			<h1>管理我的服务器</h1>
 			<div class="row">
+				<h1 class="page-header">管理我的服务器</h1>
 				<h3>添加服务器</h3>
 				<form onsubmit="return false;" class="form-inline">
 					<input id="realmInput" type="text" placeholder="服务器名" class="form-control">

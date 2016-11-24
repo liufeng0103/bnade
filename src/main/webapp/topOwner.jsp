@@ -59,6 +59,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/topOwner.js"></script>
+	<script src="/js/topOwner.js?rev=@@hash"></script>
 </body>
 </html>

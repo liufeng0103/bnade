@@ -77,6 +77,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/petQuery.js"></script>
+	<script src="/js/petQuery.js?rev=@@hash"></script>
 </body>
 </html>

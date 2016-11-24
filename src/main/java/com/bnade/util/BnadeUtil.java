@@ -27,6 +27,23 @@ public class BnadeUtil {
 		return "" + gold;
 	}
 	
+	public static String getBonus(String bonusList) {
+		String bonusDesc = "";
+		if (bonusList == null || "".equals(bonusList)) {
+			return bonusDesc;
+		} else {
+			for (String bonus : bonusList.split(",")) {
+				 String desc = bonusMap.get(Integer.valueOf(bonus));
+				 if (desc == null) {
+					 bonusDesc += "未知 ";
+				 } else {
+					 bonusDesc += desc + " ";
+				 }				 
+			}
+		}
+		return bonusDesc;
+	}
+	
 	public static String getTimeLeft(String timeLeft) {
 		String s = "";
 		if ("LONG".equals(timeLeft)) {
@@ -51,6 +68,7 @@ public class BnadeUtil {
 	
 	private static Map<Integer, String> realmMap = new HashMap<>();
 	private static Map<Integer, Integer> realmHotMap = new HashMap<>();
+	private static Map<Integer, String> bonusMap = new HashMap<>();
 	static {
 		realmMap.put(1, "万色星辰-奥蕾莉亚-世界之树-布莱恩");
 		realmMap.put(2, "丹莫德-克苏恩");
@@ -393,5 +411,174 @@ public class BnadeUtil {
 		realmHotMap.put(135, 168);
 		realmHotMap.put(117, 169);
 		realmHotMap.put(51, 170);
+		
+		bonusMap.put(525  , "1阶");
+		bonusMap.put(526  , "2阶");
+		bonusMap.put(527  , "3阶");
+		bonusMap.put(593  , "4阶");
+		bonusMap.put(617  , "5阶");
+		bonusMap.put(618  , "6阶");
+		bonusMap.put(558  , "2阶");
+		bonusMap.put(559  , "3阶");
+		bonusMap.put(594  , "4阶");
+		bonusMap.put(619  , "5阶");
+		bonusMap.put(620  , "6阶");
+		bonusMap.put(560  , "普通 战火");
+		bonusMap.put(561  , "战火");
+		bonusMap.put(562  , "战火");
+		bonusMap.put(563  , "普通 带插槽");
+		bonusMap.put(564  , "带插槽");
+		bonusMap.put(565  , "带插槽");
+		bonusMap.put(566  , "英雄级别");
+		bonusMap.put(567  , "史诗");
+		bonusMap.put(1477 , "815");
+		bonusMap.put(1482 , "820");
+		bonusMap.put(1487 , "825");
+		bonusMap.put(1492 , "830");
+		bonusMap.put(1497 , "835");
+		bonusMap.put(1502 , "840");
+		bonusMap.put(1507 , "845");
+		bonusMap.put(1512 , "850");
+		bonusMap.put(1517 , "855");
+		bonusMap.put(1522 , "860");
+		bonusMap.put(1527 , "865");
+		bonusMap.put(1532 , "870");
+		bonusMap.put(1537 , "875");
+		bonusMap.put(1542 , "880");
+		bonusMap.put(1547 , "885");
+		bonusMap.put(1552 , "890");
+		bonusMap.put(1808 , "棱彩插槽");
+		bonusMap.put(40   , "躲闪");
+		bonusMap.put(41   , "吸血");
+		bonusMap.put(42   , "速度");
+		bonusMap.put(3398 , "按等级缩放");
+		bonusMap.put(1676 , "快刀之 245全能 614暴击");
+		bonusMap.put(1677 , "快刀之 307全能 552暴击");
+		bonusMap.put(1678 , "快刀之 368全能 491暴击");
+		bonusMap.put(1679 , "快刀之 429全能 429暴击");
+		bonusMap.put(1680 , "快刀之 491全能 368暴击");
+		bonusMap.put(1681 , "快刀之 552全能 307暴击");
+		bonusMap.put(1682 , "快刀之 614全能 245暴击");
+		bonusMap.put(1683 , "无双之 614暴击 245精通");
+		bonusMap.put(1684 , "无双之 552暴击 307精通");
+		bonusMap.put(1685 , "无双之 491暴击 368精通");
+		bonusMap.put(1686 , "无双之 429暴击 429精通");
+		bonusMap.put(1687 , "无双之 368暴击 491精通");
+		bonusMap.put(1688 , "无双之 307暴击 552精通");
+		bonusMap.put(1689 , "无双之 245暴击 614精通");
+		bonusMap.put(1690 , "燎火之 614暴击 245急速");
+		bonusMap.put(1691 , "燎火之 552暴击 307急速");
+		bonusMap.put(1692 , "燎火之 491暴击 368急速");
+		bonusMap.put(1693 , "燎火之 429暴击 429急速");
+		bonusMap.put(1694 , "燎火之 368暴击 491急速");
+		bonusMap.put(1695 , "燎火之 307暴击 552急速");
+		bonusMap.put(1696 , "燎火之 245暴击 614急速");
+		bonusMap.put(1697 , "灼光之 245精通 614急速");
+		bonusMap.put(1698 , "灼光之 307精通 552急速");
+		bonusMap.put(1699 , "灼光之 368精通 491急速");
+		bonusMap.put(1700 , "灼光之 429精通 429急速");
+		bonusMap.put(1701 , "灼光之 491精通 368急速");
+		bonusMap.put(1702 , "灼光之 552精通 307急速");
+		bonusMap.put(1703 , "灼光之 614精通 245急速");
+		bonusMap.put(1704 , "曙光之 245全能 614急速");
+		bonusMap.put(1705 , "曙光之 307全能 552急速");
+		bonusMap.put(1706 , "曙光之 368全能 491急速");
+		bonusMap.put(1707 , "曙光之 429全能 429急速");
+		bonusMap.put(1708 , "曙光之 491全能 368急速");
+		bonusMap.put(1709 , "曙光之 552全能 307急速");
+		bonusMap.put(1710 , "曙光之 614全能 245急速");
+		bonusMap.put(1711 , "谐律之 245全能 614精通");
+		bonusMap.put(1712 , "谐律之 307全能 552精通");
+		bonusMap.put(1713 , "谐律之 368全能 491精通");
+		bonusMap.put(1714 , "谐律之 429全能 429精通");
+		bonusMap.put(1715 , "谐律之 491全能 368精通");
+		bonusMap.put(1716 , "谐律之 552全能 307精通");
+		bonusMap.put(1717 , "谐律之 614全能 245精通");
+		bonusMap.put(1718 , "屠夫之 859爆击");
+		bonusMap.put(1719 , "应变之 859全能");
+		bonusMap.put(1720 , "焦躁之 859急速");
+		bonusMap.put(1721 , "专擅之 859精通");
+		bonusMap.put(1742 , "快刀之 460全能 1150暴击");
+		bonusMap.put(1743 , "快刀之 552全能 1058暴击");
+		bonusMap.put(1744 , "快刀之 644全能 966暴击");
+		bonusMap.put(1745 , "快刀之 736全能 874暴击");
+		bonusMap.put(1746 , "快刀之 966全能 644暴击");
+		bonusMap.put(1747 , "快刀之 1058全能 552暴击");
+		bonusMap.put(1748 , "快刀之 1150全能 460暴击");
+		bonusMap.put(1749 , "无双之 1150暴击 460精通");
+		bonusMap.put(1750 , "无双之 1058暴击 552精通");
+		bonusMap.put(1751 , "无双之 966暴击 644精通");
+		bonusMap.put(1752 , "无双之 874暴击 736精通");
+		bonusMap.put(1753 , "无双之 644暴击 966精通");
+		bonusMap.put(1754 , "无双之 552暴击 1058精通");
+		bonusMap.put(1755 , "无双之 460暴击 1150精通");
+		bonusMap.put(1756 , "燎火之 460急速 1150暴击");
+		bonusMap.put(1757 , "燎火之 598急速 1012暴击");
+		bonusMap.put(1758 , "燎火之 644急速 966暴击");
+		bonusMap.put(1759 , "燎火之 736急速 874暴击");
+		bonusMap.put(1760 , "燎火之 966急速 644暴击");
+		bonusMap.put(1761 , "燎火之 1058急速 552暴击");
+		bonusMap.put(1762 , "燎火之 1150急速 460暴击");
+		bonusMap.put(1763 , "灼光之 1150精通 460急速");
+		bonusMap.put(1764 , "灼光之 1058精通 552急速");
+		bonusMap.put(1765 , "灼光之 966精通 644急速");
+		bonusMap.put(1766 , "灼光之 874精通 736急速");
+		bonusMap.put(1767 , "灼光之 644精通 966急速");
+		bonusMap.put(1768 , "灼光之 552精通 1058急速");
+		bonusMap.put(1769 , "灼光之 460精通 1150急速");
+		bonusMap.put(1770 , "曙光之 460全能 1150急速");
+		bonusMap.put(1771 , "曙光之 552全能 1058急速");
+		bonusMap.put(1772 , "曙光之 644全能 966急速");
+		bonusMap.put(1773 , "曙光之 736全能 874急速");
+		bonusMap.put(1774 , "曙光之 966全能 644急速");
+		bonusMap.put(1775 , "曙光之 1058全能 552急速");
+		bonusMap.put(1776 , "曙光之 1150全能 460急速");
+		bonusMap.put(1777 , "谐律之 460全能 1150精通");
+		bonusMap.put(1778 , "谐律之 552全能 1058精通");
+		bonusMap.put(1779 , "谐律之 644全能 966精通");
+		bonusMap.put(1780 , "谐律之 736全能 874精通");
+		bonusMap.put(1781 , "谐律之 966全能 644精通");
+		bonusMap.put(1782 , "谐律之 1058全能 552精通");
+		bonusMap.put(1783 , "谐律之 1150全能 460精通");
+		bonusMap.put(1784 , "屠夫之 1611爆击");
+		bonusMap.put(1785 , "应变之 1611全能");
+		bonusMap.put(1786 , "焦躁之 1611急速");
+		bonusMap.put(1787 , "专擅之 1611精通");
+		bonusMap.put(3343 , "快刀之 460全能 229暴击");
+		bonusMap.put(3344 , "快刀之 575全能 114暴击");
+		bonusMap.put(3345 , "快刀之 690全能");
+		bonusMap.put(3361 , "快刀之 229全能 460暴击");
+		bonusMap.put(3362 , "快刀之 114全能 575暴击");
+		bonusMap.put(3363 , "快刀之 690暴击");
+		bonusMap.put(3346 , "无双之 229暴击 460精通");
+		bonusMap.put(3347 , "无双之 114暴击 575精通");
+		bonusMap.put(3348 , "无双之 690精通");
+		bonusMap.put(3351 , "无双之 229精通 460暴击");
+		bonusMap.put(3352 , "无双之 114精通 575暴击");
+		bonusMap.put(3354 , "无双之 690暴击");
+		bonusMap.put(3349 , "燎火之 460急速 229暴击");
+		bonusMap.put(3350 , "燎火之 575急速 114暴击");
+		bonusMap.put(3353 , "燎火之 690急速");
+		bonusMap.put(3370 , "燎火之 229急速 460暴击");
+		bonusMap.put(3371 , "燎火之 114急速 575暴击");
+		bonusMap.put(3372 , "燎火之 690暴击");
+		bonusMap.put(3355 , "灼光之 460急速 229精通");
+		bonusMap.put(3356 , "灼光之 575急速 114精通");
+		bonusMap.put(3357 , "灼光之 690急速");
+		bonusMap.put(3373 , "灼光之 229急速 460精通");
+		bonusMap.put(3374 , "灼光之 114急速 575精通");
+		bonusMap.put(3375 , "灼光之 690精通");
+		bonusMap.put(3358 , "谐律之 460全能 229精通");
+		bonusMap.put(3359 , "谐律之 575全能 114精通");
+		bonusMap.put(3360 , "谐律之 690全能");
+		bonusMap.put(3367 , "谐律之 229全能 460精通");
+		bonusMap.put(3368 , "谐律之 114全能 575精通");
+		bonusMap.put(3369 , "谐律之 690精通");
+		bonusMap.put(3364 , "曙光之 229全能 460急速");
+		bonusMap.put(3365 , "曙光之 114全能 575急速");
+		bonusMap.put(3366 , "曙光之 690急速");
+		bonusMap.put(3376 , "曙光之 460全能 229急速");
+		bonusMap.put(3377 , "曙光之 575全能 114急速");
+		bonusMap.put(3378 , "曙光之 690全能");
 	}
 }

@@ -23,6 +23,7 @@ import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
+import com.bnade.wow.po.UserCharacter;
 import com.bnade.wow.po.UserItemNotification;
 import com.bnade.wow.po.UserMailValidation;
 import com.bnade.wow.po.UserRealm;
@@ -77,6 +78,45 @@ public class UserResource {
 			return Response.ok(Result.ERROR(e.getMessage())).build();
 		}
 	}
+	
+	@POST
+	@Path("/addCharacter")
+	@Consumes("application/x-www-form-urlencoded")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCharacter(@FormParam("realmId") int realmId, @FormParam("name") String name) {
+		try {
+			User user = (User) req.getSession().getAttribute("user");
+			userDao.addCharacter(new UserCharacter(user.getId(), realmId, name));
+			return Response.ok(Result.OK("success")).build();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR("出错")).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (e.getMessage().contains("Duplicate entry")) {
+				return Response.ok(Result.ERROR("该角色已添加")).build();
+			}
+			return Response.ok(Result.ERROR(e.getMessage())).build();
+		}
+	}
+	
+	@POST
+	@Path("/deleteCharacter")
+	@Consumes("application/x-www-form-urlencoded")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteCharacter(@FormParam("realmId") int realmId, @FormParam("name") String name) {
+		try {
+			User user = (User) req.getSession().getAttribute("user");
+			userDao.deleteCharacter(new UserCharacter(user.getId(), realmId, name));
+			return Response.ok(Result.OK("success")).build();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR("出错")).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok(Result.ERROR(e.getMessage())).build();
+		}
+	}
 
 	@POST
 	@Path("/deleteRealm")
@@ -118,7 +158,7 @@ public class UserResource {
 	@Consumes("application/x-www-form-urlencoded")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItemNotification(@FormParam("realmId") int realmId,
-			@FormParam("itemId") int itemId, @FormParam("price") long price,
+			@FormParam("itemId") int itemId, @FormParam("bonusList") String bonusList, @FormParam("price") long price,
 			@FormParam("isInverted") int isInverted) {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
@@ -130,6 +170,7 @@ public class UserResource {
 			itemN.setUserId(user.getId());
 			itemN.setRealmId(realmId);
 			itemN.setItemId(itemId);
+			itemN.setBonusList(bonusList == null ? "" : bonusList);
 			itemN.setPrice(price);
 			itemN.setIsInverted(isInverted);
 
@@ -206,7 +247,7 @@ public class UserResource {
 	}
 
 	private boolean checkInput(UserItemNotification itemN) {
-		if (itemN.getRealmId() == 0 || itemN.getUserId() == 0
+		if (itemN.getRealmId() <= 0 || itemN.getRealmId() > 175 || itemN.getUserId() == 0
 				|| itemN.getItemId() == 0) {
 			return false;
 		}

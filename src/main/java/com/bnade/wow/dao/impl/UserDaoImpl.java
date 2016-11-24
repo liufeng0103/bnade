@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.po.User;
+import com.bnade.wow.po.UserCharacter;
 import com.bnade.wow.po.UserItemNotification;
 import com.bnade.wow.po.UserMailValidation;
 import com.bnade.wow.po.UserRealm;
@@ -80,8 +81,8 @@ public class UserDaoImpl implements UserDao {
 	public void addItemNotification(UserItemNotification item)
 			throws SQLException {
 		run.update(
-				"insert into t_user_item_notification (userId,realmId,itemId,isInverted,price) values (?,?,?,?,?)",
-				item.getUserId(), item.getRealmId(), item.getItemId(),
+				"insert into t_user_item_notification (userId,realmId,itemId,bonusList,isInverted,price) values (?,?,?,?,?,?)",
+				item.getUserId(), item.getRealmId(), item.getItemId(), item.getBonusList(),
 				item.getIsInverted(), item.getPrice());
 	}
 
@@ -89,7 +90,7 @@ public class UserDaoImpl implements UserDao {
 	public List<UserItemNotification> getItemNotifications(int userId)
 			throws SQLException {
 		return run
-				.query("select userId,realmId,itemId,i.name as itemName,isInverted,price,emailNotification from t_user_item_notification n join mt_item i on n.itemId = i.id  where n.userId=?",
+				.query("select userId,realmId,itemId,i.name as itemName,bonusList, isInverted,price,emailNotification from t_user_item_notification n join mt_item i on n.itemId = i.id  where n.userId=?",
 						new BeanListHandler<UserItemNotification>(
 								UserItemNotification.class), userId);
 	}
@@ -168,7 +169,7 @@ public class UserDaoImpl implements UserDao {
 	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
 			throws SQLException {
 		return run
-				.query(" select userId,realmId,itemId,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1",
+				.query(" select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1",
 						new BeanListHandler<UserItemNotification>(
 								UserItemNotification.class), realmId);
 	}
@@ -176,6 +177,25 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void updateUserToken(int id, String token) throws SQLException {
 		run.update("update t_user set token=? where id=?", token, id);		
+	}
+
+	@Override
+	public void addCharacter(UserCharacter character) throws SQLException {
+		run.update("insert into t_user_character (userId,realmId,name) values (?,?,?)",
+				character.getUserId(), character.getRealmId(), character.getName());
+	}
+
+	@Override
+	public void deleteCharacter(UserCharacter character) throws SQLException {
+		run.update("delete from t_user_character where userId=? and realmId=? and name=?",
+				character.getUserId(), character.getRealmId(), character.getName());
+	}
+
+	@Override
+	public List<UserCharacter> getCharacters(int userId) throws SQLException {
+		return run.query(
+				"select userId,realmId,name from t_user_character where userId=?",
+				new BeanListHandler<UserCharacter>(UserCharacter.class), userId);
 	}
 
 }

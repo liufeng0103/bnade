@@ -4,8 +4,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +49,34 @@ public class Mail {
 			log.error(e.getMessage(), e);
 		}
 	}
+	
+	public static void sendSimpleEmail(String subject, String msg, String to) {
+		try {
+			Email email = new SimpleEmail();
+			email.setHostName(EMAIL_HOSTNAME);
+			email.setSmtpPort(465);
+			email.setAuthenticator(new DefaultAuthenticator(EMAIL_USERNAME, EMAIL_PASSWORD));
+			email.setSSLOnConnect(true);
+			email.setFrom(EMAIL_USERNAME, EMAIL_NAME);
+			email.setSubject(subject);
+			email.setMsg(msg);
+			email.addTo(to);
+			email.send();
+		} catch (EmailException e) {
+			e.printStackTrace();
+			log.error(e.getMessage(), e);
+		}
+	}
 
+	public static void asynSendSimpleEmail(String subject, String msg, String to) {
+		pool.execute(new Runnable() {
+			@Override
+			public void run() {
+				sendSimpleEmail(subject, msg, to);
+			}
+		});
+	}
+	
 	public static void asynSendHtmlEmail(String subject, String msg, String to) {
 		pool.execute(new Runnable() {
 			@Override
@@ -67,10 +96,11 @@ public class Mail {
 	}
 
 	public static void main(String[] args) {
-		Mail.asynSendHtmlEmail2("test", "test", "liufeng0103@163.com");
-		Mail.asynSendHtmlEmail2("test1",
-				"<a href='http://www.bnade.com'>test1</a>",
-				"liufeng0103@163.com");
+		Mail.sendSimpleEmail("test", "test", "liufeng0103@163.com");
+//		Mail.asynSendHtmlEmail2("test", "test", "liufeng0103@163.com");
+//		Mail.asynSendHtmlEmail2("test1",
+//				"<a href='http://www.bnade.com'>test1</a>",
+//				"liufeng0103@163.com");
 	}
 
 }

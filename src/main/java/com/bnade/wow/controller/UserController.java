@@ -123,6 +123,22 @@ public class UserController extends BaseController {
 	}
 	
 	@GET
+	@Path("/character")
+	public Viewable character() {
+		User user = getUser();
+		try {
+			req.setAttribute("realms", userDao.getRealms(user.getId()));
+			req.setAttribute("characters", userDao.getCharacters(user.getId()));
+			return new Viewable("/userCharacter.jsp");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			req.setAttribute("title", "出错");
+			req.setAttribute("message", "出错，请联系管理员");
+			return new Viewable("/message.jsp");
+		}		
+	}
+	
+	@GET
 	@Path("/itemNotification")
 	public Viewable itemNotification() {
 		return new Viewable("/userItemNotification.jsp");

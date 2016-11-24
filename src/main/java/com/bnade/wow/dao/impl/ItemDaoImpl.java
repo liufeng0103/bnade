@@ -94,21 +94,27 @@ public class ItemDaoImpl implements ItemDao {
 		if (subclass != null) {
 			sql += " and itemSubClass=" + subclass;
 		}
+		List<AuctionItem> items;
 		if (name != null && !"".equals(name)) {
 			name = "%" + name + "%";
 			sql += " and name like ? ";
 			sql += " order by hot desc limit ?,?";
-			return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), name, offset, limit);
+			items = run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), name, offset, limit);
+		} else {
+			sql += " order by hot desc limit ?,?";
+			items = run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), offset, limit);	
 		}
-		sql += " order by hot desc limit ?,?";
-		return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), offset, limit);
+		return items;
 	}
 
 	@Override
-	public List<AuctionItem> getAuctionItems(String name, int offset, int limit)
-			throws SQLException {
-		String sql = "select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,petSpeciesId,hot from v_item where name like '%?%' order by hot desc limit ?,?";
-		return run.query(sql , new BeanListHandler<AuctionItem>(AuctionItem.class), name, offset, limit);
+	public List<AuctionItem> getItemsWithBonuslist(String name, int offset,
+			int limit) throws SQLException {
+		List<AuctionItem> items = getItems(name, null, null, 0, limit);
+		for (AuctionItem item : items) {
+			item.setBonusList(getBonusList(item.getId()));
+		}
+		return items;
 	}
 
 }

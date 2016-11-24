@@ -28,6 +28,6 @@
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highcharts-more.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/modules/solid-gauge.js"></script>
-	<script src="js/wowtoken.js"></script>
+	<script src="js/wowtoken.js?rev=@@hash"></script>
 </body>
 </html>

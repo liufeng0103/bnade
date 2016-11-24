@@ -34,7 +34,7 @@ public class AuctionItemNotificationTask {
 				Map<Integer, List<UserItemNotification>> matchedItems = new HashMap<>();
 				logger.info("找到{}条服务器{}的物品通知", itemNs.size(), realmId);
 				for (UserItemNotification itemN : itemNs) {
-					String key = "" + itemN.getItemId() + 0 + 0 + "";
+					String key = "" + itemN.getItemId() + 0 + 0 + itemN.getBonusList();
 					JAuction auc = minByoutAuctions.get(key);
 					if (auc != null) {
 						if (itemN.getIsInverted() == 0) { // 低于
@@ -82,7 +82,7 @@ public class AuctionItemNotificationTask {
 				String mail = null;
 				String mailContent = "";
 				for (UserItemNotification item : items) {
-					mailContent += "<h3>";
+					mailContent += "";
 					mail = item.getEmail();
 					mailContent += item.getItemName() + " 当前最低一口单价：" + getGold(item.getMinBuyout());
 					if (item.getIsInverted() == 0) {
@@ -90,9 +90,9 @@ public class AuctionItemNotificationTask {
 					} else {
 						mailContent += "高与您的价格：" + getGold(item.getPrice());
 					}
-					mailContent += "</h3>";
+					mailContent += "\r\n";
 				}
-				Mail.asynSendHtmlEmail("[BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
+				Mail.asynSendSimpleEmail("[BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
 			}
 			
 		}		

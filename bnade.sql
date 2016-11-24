@@ -415,19 +415,30 @@ CREATE TABLE IF NOT EXISTS t_user_realm (
     PRIMARY KEY(userId,realmId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS t_user_character (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	userId INT UNSIGNED NOT NULL,
+	realmId INT UNSIGNED NOT NULL,
+	name VARCHAR(12) NOT NULL,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE t_user_character ADD INDEX(userId);
+
 CREATE TABLE IF NOT EXISTS t_user_item_notification (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	userId INT UNSIGNED NOT NULL,
 	realmId INT UNSIGNED NOT NULL,
 	itemId INT UNSIGNED NOT NULL,
-	isInverted INT UNSIGNED NOT NULL,
+	bonusList VARCHAR(20) NOT NULL default '',
+	isInverted INT UNSIGNED NOT NULL,	-- 0-低于 其它-高于
 	price BIGINT UNSIGNED NOT NULL,
 	emailNotification INT UNSIGNED NOT NULL default 1,
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ALTER TABLE t_user_item_notification ADD bonusList VARCHAR(20) NOT NULL default '';
 ALTER TABLE t_user_item_notification ADD INDEX(userId,realmId);
 ALTER TABLE t_user_item_notification ADD INDEX(realmId);
-ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,isInverted);
+ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,bonusList,isInverted);
 
 CREATE TABLE IF NOT EXISTS t_user_mail_validation (
 	userId INT UNSIGNED NOT NULL,

@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 
 import com.bnade.util.BnadeUtil;
 import com.bnade.wow.po.Auction;
+import com.bnade.wow.po.Auction2;
 import com.bnade.wow.po.Item;
 import com.bnade.wow.service.AuctionHouseMinBuyoutDataService;
 import com.bnade.wow.service.AuctionService;
@@ -90,6 +91,30 @@ public class AuctionController {
 				req.setAttribute("realmName", BnadeUtil.getRealmNameById(realmId));
 				req.setAttribute("auctions", aucs);
 				return new Viewable("/auctionOwner.jsp");
+			} catch (Exception e) {
+				e.printStackTrace();
+				req.setAttribute("title", "出错");
+				req.setAttribute("message", "出错");
+				return new Viewable("/message.jsp");
+			}
+		}
+	}
+	
+	@GET
+	@Path("/owneritems/{name}/{realmId}")
+	public Viewable owneritems(@PathParam("name") String name, @PathParam("realmId") int realmId, @Context HttpServletRequest req) {
+		if (name == null || "".equals(name) || realmId < 1 || realmId > 170) {
+			req.setAttribute("title", "出错");
+			req.setAttribute("message", "出错");
+			return new Viewable("/message.jsp");
+		} else {
+			try {
+				List<Auction2> aucs = auctionService.getAuctionsByRealmOwner2(realmId, name);
+				req.setAttribute("owner", name);
+				req.setAttribute("realmId", realmId);
+				req.setAttribute("realmName", BnadeUtil.getRealmNameById(realmId));
+				req.setAttribute("auctions", aucs);
+				return new Viewable("/auctionOwnerItems.jsp");
 			} catch (Exception e) {
 				e.printStackTrace();
 				req.setAttribute("title", "出错");

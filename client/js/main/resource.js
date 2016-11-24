@@ -120,4 +120,12 @@ BN.Resource = new function() {
 		var url = API_ROOT + "/user/sendMailValidation";		
 		$.get(url, success).fail(error);		
 	};
+	
+	self.addUserCharacter = function(character) {
+		return post(API_ROOT + "/user/addCharacter",character);
+	};
+	
+	self.deleteUserCharacter = function(character) {
+		return post(API_ROOT + "/user/deleteCharacter",character);
+	};
 };
