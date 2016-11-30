@@ -16,7 +16,9 @@ import com.bnade.wow.client.WowAPI;
 import com.bnade.wow.client.WowClient;
 import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.WowHeadClient;
+import com.bnade.wow.client.model.Bonus;
 import com.bnade.wow.client.model.Item;
+import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.XItem;
 import com.bnade.wow.client.model.XItemCreatedBy;
 import com.bnade.wow.client.model.XItemReagent;
@@ -195,14 +197,50 @@ public class ItemCatcher {
 		}
 	}
 
+	public void getNewBonus() {
+		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
+		WowClient client = new WowClient();
+		try {
+			List<Integer> ids = run.query("select bonusId from t_item_bonus_desc", new ColumnListHandler<Integer>());
+			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
+			for (JAuction auc : aucs) {
+				if (auc.getAllBonus() != null) {
+					for (Bonus bonus : auc.getAllBonus()) {
+						if (bonus.getBonusListId() > 1000) {
+							if (!ids.contains(Integer.valueOf(bonus.getBonusListId()))) {
+								System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
+							}
+						}
+					}
+				}
+			}
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void getNewBonus2() {
+		List<Integer> ids;
+		try {
+			ids = run.query("select bonusId from t_item_bonus_desc", new ColumnListHandler<Integer>());
+			System.out.println(ids);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
-		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
+//		itemCatcher.process();
+//		itemCatcher.refreshItems();
+//		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
 //		itemCatcher.processItemCreatedBy();
+		itemCatcher.getNewBonus();
+//		itemCatcher.getNewBonus2();
 	}	
 
 }

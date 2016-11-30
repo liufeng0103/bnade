@@ -75,6 +75,14 @@ CREATE TABLE IF NOT EXISTS t_item_bonus (
 	PRIMARY KEY(itemId, bonusList)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 记录每种bonus代表的意思
+CREATE TABLE IF NOT EXISTS t_item_bonus_desc (
+	bonusId INT NOT NULL,
+	bonusDesc VARCHAR(16) NOT NULL default '', 
+	comment VARCHAR(64) NOT NULL default '', 
+	PRIMARY KEY(bonusId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 制造业物品配方
 CREATE TABLE IF NOT EXISTS t_item_created_by (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,-- 自增ID，便于插入数据

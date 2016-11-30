@@ -68,7 +68,7 @@ public class BnadeUtil {
 	
 	private static Map<Integer, String> realmMap = new HashMap<>();
 	private static Map<Integer, Integer> realmHotMap = new HashMap<>();
-	private static Map<Integer, String> bonusMap = new HashMap<>();
+	public static Map<Integer, String> bonusMap = new HashMap<>();
 	static {
 		realmMap.put(1, "万色星辰-奥蕾莉亚-世界之树-布莱恩");
 		realmMap.put(2, "丹莫德-克苏恩");
@@ -580,5 +580,23 @@ public class BnadeUtil {
 		bonusMap.put(3376 , "曙光之 460全能 229急速");
 		bonusMap.put(3377 , "曙光之 575全能 114急速");
 		bonusMap.put(3378 , "曙光之 690全能");
+		
+		bonusMap.put(1637, "845");
+		bonusMap.put(1632, "840");
+		bonusMap.put(1627, "835");
+		bonusMap.put(1622, "830");
+		bonusMap.put(1617, "825");
+		bonusMap.put(1612, "820");
+		bonusMap.put(1472, "850");
+		bonusMap.put(1467, "845");
+		bonusMap.put(1462, "840");
+		bonusMap.put(1457, "835");
+		bonusMap.put(3406, "谐律之 全能 精通");
+		bonusMap.put(3405, "曙光之 全能 急速");
+		bonusMap.put(3404, "灼光之 精通 急速");
+		bonusMap.put(3403, "燎火之 暴击 急速");
+		bonusMap.put(3402, "无双之 暴击 精通");
+		bonusMap.put(3401, "快刀之 全能 暴击"); 
+		
 	}
 }
