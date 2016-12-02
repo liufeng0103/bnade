@@ -1,5 +1,7 @@
 package com.bnade.wow.po;
 
+import com.bnade.util.TimeUtil;
+
 public class User {
 	
 	public static final String SESSION_USER = "user";
@@ -10,10 +12,30 @@ public class User {
 	private int validated;
 	private String nickname;
 	private long expire;
-
+	private int count;
+	
 	public User() {
 	}
+	
+	public String getExpireDate() {
+		if (getIsVip()) {
+			return TimeUtil.getDate2(expire) + "到期";
+		}
+		return "未激活";
+	}
+	
+	public boolean getIsVip() {
+		return expire > System.currentTimeMillis();
+	}
+	
+	public int getCount() {
+		return count;
+	}
 
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
 	public User(String openID, String nickname) {
 		super();
 		this.openID = openID;
@@ -72,7 +94,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", openID=" + openID + ", email=" + email
 				+ ", validated=" + validated + ", nickname=" + nickname
-				+ ", expire=" + expire + "]";
+				+ ", expire=" + expire + ", count=" + count + "]";
 	}
 
 }

@@ -407,7 +407,7 @@ ALTER TABLE t_user ADD INDEX(openId);
 ALTER TABLE t_user ADD INDEX(token);
 -- ALTER TABLE t_user ADD validated INT UNSIGNED default 0;
 -- ALTER TABLE t_user ADD token VARCHAR(32) NOT NULL default '';
-ALTER TABLE t_user ADD expire BIGINT NOT NULL default 0;
+-- ALTER TABLE t_user ADD expire BIGINT NOT NULL default 0;
 
 -- 封杀的ip
 CREATE TABLE IF NOT EXISTS t_user_block_ip (

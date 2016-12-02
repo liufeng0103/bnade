@@ -8,6 +8,7 @@ import java.util.Date;
 public class TimeUtil {
 	
 	private static SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+	private static SimpleDateFormat sf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 	
 	public static final long SECOND = 1000;
 	public static final long MINUTE = 60 * SECOND;
@@ -45,6 +46,10 @@ public class TimeUtil {
 			sb.append("毫秒");
 		}
 		return sb.toString();
+	}
+	
+	public static String getDate2(long time) {
+		return sf2.format(time);
 	}
 	
 	/**
@@ -119,5 +124,6 @@ public class TimeUtil {
 		System.out.println(TimeUtil.parse(TimeUtil.getDate(0)).getTime());
 		System.out.println(TimeUtil.getDate(TimeUtil.parse("20160610"), -1));
 		System.out.println(System.currentTimeMillis() + DAY * 365);
+		System.out.println(System.currentTimeMillis());
 	}
 }

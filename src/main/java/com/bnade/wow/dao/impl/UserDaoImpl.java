@@ -59,6 +59,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	public User getUserByMail(String mail) throws SQLException {
+		return run.query("select id,openId,email,nickname,validated,expire from t_user where email=?",
+				new BeanHandler<User>(User.class), mail);
+	}
+
+	@Override
 	public void addRealm(UserRealm realm) throws SQLException {
 		run.update("insert into t_user_realm (userId,realmId) values (?,?)",
 				realm.getUserId(), realm.getRealmId());

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.bnade.util.BnadeUtil;
 import com.bnade.util.Mail;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
@@ -92,7 +93,7 @@ public class AuctionItemNotificationTask {
 					}
 					mailContent += "\r\n";
 				}
-				Mail.asynSendSimpleEmail("[BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
+				Mail.asynSendSimpleEmail(TimeUtil.getDate2(System.currentTimeMillis()) + " [BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
 			}
 			
 		}		

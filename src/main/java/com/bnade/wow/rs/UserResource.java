@@ -307,7 +307,7 @@ public class UserResource {
 				}
 				userDao.updateMailValidationById(userM);
 			}
-			System.out.println(host);
+//			System.out.println(host);
 			Mail.sendHtmlEmail(
 					"BNADE邮箱激活",
 					"欢迎使用BNADE，请点击后面link激活邮箱：<a href='"

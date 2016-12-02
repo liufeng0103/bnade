@@ -20,16 +20,15 @@
 	      				<button class="btn btn-primary" type="submit">保存</button>
 	      				<c:if test="${!empty sessionScope.user.email}">
 	      					<c:if test="${sessionScope.user.validated != 1}">
-		      					<label class="text-danger">未验证，<a id="validateMail" href="javascript:void(0)">点击发送验证</a></label>
+		      					<label id="msg" class="text-danger">未验证，<a id="validateMail" href="javascript:void(0)">点击发送验证</a></label>
 		      				</c:if>
 		      				<c:if test="${sessionScope.user.validated == 1}">
 		      					<label class="text-success">已验证</label>
 		      				</c:if>
 	      				</c:if>
 	      			</form>
-	      			<label class="text-danger">近期发现来自qq邮箱的大量退信，大家设置邮箱尽量选用其它邮箱，或者设置bnade1@163.com到白名单</label>
 	      			<label>${message}</label>
-	      			<label id="msg"></label>
+	      			<p><label class="text-danger">近期发现来自qq邮箱的大量退信，大家设置邮箱尽量选用其它邮箱，或者设置bnade1@163.com到白名单</label></p>
 	      		</div>
 	      	</div>
       	</div>
@@ -39,11 +38,12 @@
     <%@ include file="includes/script.jsp" %>
     <script>
     	$("#validateMail").click(function(){
+    		$("#msg").html("正在发送验证邮件,请稍等...");
     		BN.Resource.sendMailValidation(function(result){
     			if (result.code === 0) {
-    				alert("验证邮件已发送，请激活");
+    				$("#msg").html("验证邮件已发送，请打开邮箱链接激活");
     			} else {
-    				alert("出错："+result.message);
+    				$("#msg").html("出错："+result.message);
     			}
     		});
     	});

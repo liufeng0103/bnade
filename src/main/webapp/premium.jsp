@@ -10,7 +10,7 @@
 ------------------------- */
 
 .featurette-divider {
-  margin: 80px 0; /* Space out the Bootstrap <hr> more */
+  margin: 20px 0; /* Space out the Bootstrap <hr> more */
 }
 
 /* Thin out the marketing headings */
@@ -36,32 +36,55 @@
 <body>
 	<jsp:include page="includes/header.jsp" />
 	<div class="container">
-		<h1 class="page-header">BNADE 高级版</h1>
-		<p>高级版用户将可以使用BNADE额外的功能，下面列表列出了目前高级版用户的功能。</p>
-		<p class="text-center">
-			<a href="#premium-div" class="btn btn-danger btn-lg">开通高级版</a>
-		</p>
-		<hr class="featurette-divider">
-		<div class="row featurette">
-			<div class="col-lg-6">
-				<h2 class="featurette-heading">物品提醒</h2>
-				<p class="lead">用户可以设置服务器物品的提醒规则，当物品高于或低于某个价格时将第一时间提醒用户。普通用户限制设置5个物品通知，高级版用户将不受限制的使用此功能！</p>
-			</div>
-			<div class="col-lg-6">
-				<img class="img-responsive" alt="物品提醒" src="/images/itemN.png">
-			</div>
+		<div class="row">
+			<h1 class="page-header">BNADE 高级版</h1>
+			<p>高级版用户将可以使用BNADE额外的功能，下面列表列出了目前高级版用户的功能。</p>
+			<p class="text-center">
+				<a href="#activeDiv" class="btn btn-danger btn-lg">开通高级版</a>
+			</p>
 		</div>
 		<hr class="featurette-divider">
-		<div class="row" id="premium-div">
-			<p class="text-center">目前提供2种方式开通高级版，微信或支付宝扫码支付。</p>
-			<div class="col-lg-6 text-center">
-				<img src="/images/wx.jpg">
-				<p>微信 10元/月</p>
-			</div>
-			<div class="col-lg-6 text-center">
-				<img src="/images/zfb.jpg">
-				<p>支付宝  10元/月</p>
-			</div>
+		<div class="row">
+			<h3>1. 物品拍卖历史查看</h3>
+			<p>用户可以查看物品2天内的详细拍卖数据，以及2个月内的历史数据</p>
+		</div>
+		<hr class="featurette-divider">
+		<div class="row">
+			<h3>2. 物品提醒</h3>
+			<p>用户可以设置服务器物品的提醒规则，当物品高于或低于某个价格时将第一时间提醒用户</p>
+		</div>
+		<hr class="featurette-divider">
+		<div class="row">
+			<h3>3. 压价查看</h3>
+			<p>用户可以添加自己的服务器角色，并查看角色拍卖的物品情况以及哪些物品被压价了</p>
+		</div>
+		<hr class="featurette-divider">
+		<div class="row">
+			<h3>4. 热门物品查看</h3>
+			<p>用户可以查看每天所有的热门物品，并快速的查看这些物品在各服务器的拍卖情况</p>
+		</div>
+		<hr class="featurette-divider">
+		<div class="row">
+			<h3>5. 玩家排行</h3>
+			<p>用户可以查看各服务器，拍卖行玩家的排行情况，了解服务器大地精们的动向</p>
+		</div>
+		<hr class="featurette-divider">
+		<div class="row">
+			<h3>6. 新功能优先体验</h3>
+			<p>我们将不断的完善和开发新功能，用户将优先体验这部分内容</p>
+		</div>
+		<hr class="featurette-divider">
+		<div id="activeDiv" class="row">
+			<h2>开通步骤:</h2>
+			<p>高级版为网站增值服务，需要按照以下步骤获取激活码并激活</p>
+			<ol>
+				<li>支付宝扫码支付</li>
+				<li>支付宝联系获取激活码(网店准备中，稍后会发布网店地址)</li>
+				<li>网站登录后打开激活高级版页面</li>
+				<li>输入激活码激活</li>
+			</ol>
+			<img alt="支付宝付款" src="/images/zfb20.jpg">
+			<p>支付宝 20元/月</p>
 		</div>
 	</div>
 	<%@ include file="includes/footer.jsp"%>

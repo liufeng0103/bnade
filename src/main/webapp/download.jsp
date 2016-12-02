@@ -10,9 +10,17 @@
 	<jsp:include page="includes/header.jsp" />
 	<div class="container-fluid">
 		<div class="container">
-			<h3 class="sub-header">魔兽世界插件(每日凌晨4点会更新)</h3>
+			<h3 class="sub-header">魔兽世界插件(每6小时更新一次)</h3>
 			<a href="./Bnade.zip" class="btn btn-primary">插件下载</a>
 			<p>通过物品在所有服务器的价格计算的参考价格，玩家可以通过插件在游戏的提示框中查看到参考价格</p>
+			<p>安装说明：</p>
+			<ol>
+				<li>解压bnade.zip文件</li>
+				<li>复制Bnade文件夹到魔兽世界安装目录的\Interface\AddOns中</li>
+				<li>启动游戏，在聊天框看到打印的数据更新时间或鼠标移动到可拍卖物品的参考价格(如下图)，则表示安装成功</li>
+				<li><img src="images/bnade-addon.png" alt="插件效果"
+					class="img-rounded"></li>
+			</ol>
 			<p>插件的一些说明：</p>
 			<ul>
 				<li>提示框中显示物品的参考价格</li>
@@ -26,14 +34,6 @@
 					</ol>
 				</li>
 			</ul>
-			<p>安装说明：</p>
-			<ol>
-				<li>解压bnade.zip文件</li>
-				<li>复制Bnade文件夹到魔兽世界安装目录的\Interface\AddOns中</li>
-				<li>启动游戏，在聊天框看到打印的数据更新时间或鼠标移动到可拍卖物品的参考价格(如下图)，则表示安装成功</li>
-				<li><img src="images/bnade-addon.png" alt="插件效果"
-					class="img-rounded"></li>
-			</ol>
 			<h3 class="sub-header">插件客户端(11-11)</h3>
 			<a href="./BnadeClient.zip" class="btn btn-primary">客户端下载</a>
 			<p>插件客户端用于更新bnade插件以及tsm插件数据</p>
@@ -57,12 +57,6 @@
 					</ol>
 				</li>
 			</ul>
-			<h3>BNADE交流QQ群:518160038</h3>
-			<h3 class="sub-header">微信公众号</h3>
-			<div>
-				<p>目前主要同于通知网站的更新</p>
-				<img src="./images/weixin.jpg">
-			</div>
 		</div>
 	</div>
 	<%@ include file="includes/footer.jsp"%>

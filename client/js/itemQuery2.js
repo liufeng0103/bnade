@@ -721,8 +721,8 @@ function accurateQuery(realm, itemId, itemName) {
 	if (realm !== "") {
 		var realmId = Realm.getIdByName(realm);
 		if (realmId > 0) {
-			//getPast24(realmId, realm, itemId, itemName);
-			//getPastWeek(realmId, realm, itemId, itemName);
+			getPast24(realmId, realm, itemId, itemName);
+			getPastWeek(realmId, realm, itemId, itemName);
 		} else {
 			$('#msg').html("找不到服务器：" + realm);
 		}		

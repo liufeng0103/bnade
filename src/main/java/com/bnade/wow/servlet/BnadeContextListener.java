@@ -22,7 +22,7 @@ public class BnadeContextListener implements ServletContextListener {
 			@Override
 			public void run() {
 				SessionFilter3.USER_API_LIMITION.clear();
-				logger.info("重置用户调用");
+//				logger.info("重置用户调用");
 			}
 		}, 0, 1000 * 60);
 	}

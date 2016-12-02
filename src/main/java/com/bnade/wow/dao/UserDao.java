@@ -12,12 +12,12 @@ import com.bnade.wow.po.UserRealm;
 public interface UserDao {
 	
 	void save(User user) throws SQLException;
-	
 	void update(User user) throws SQLException;
 
 	User getUserByOpenID(String openID) throws SQLException;
 	User getUserByID(int id) throws SQLException;
 	User getUserByToken(String token) throws SQLException;
+	User getUserByMail(String mail) throws SQLException;
 	void updateUserToken(int id, String token) throws SQLException;
 	// ---------------------- 用户服务器 ----------------------
 	void addRealm(UserRealm realm) throws SQLException;
@@ -35,9 +35,10 @@ public interface UserDao {
 	List<UserItemNotification> getItemNotificationsByRealmId(int realmId) throws SQLException;
 	
 	void updateEmailNotifications(List<UserItemNotification> itemNotifications) throws SQLException;
-	
+	// ---------------------- 用户邮件验证 ----------------------
 	void addMailValidation(UserMailValidation userMailValidation) throws SQLException;
 	UserMailValidation getMailValidationById(int id) throws SQLException;
 	void deleteMailValidationById(int id) throws SQLException;
 	void updateMailValidationById(UserMailValidation userMailValidation) throws SQLException;
+	
 }

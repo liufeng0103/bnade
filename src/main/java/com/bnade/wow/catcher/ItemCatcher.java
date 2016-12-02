@@ -236,10 +236,10 @@ public class ItemCatcher {
 //		itemCatcher.process();
 //		itemCatcher.refreshItems();
 //		itemCatcher.updateItemBounus();
-//		itemCatcher.addNewPets();
-//		itemCatcher.addPetStats();
+		itemCatcher.addNewPets();
+		itemCatcher.addPetStats();
 //		itemCatcher.processItemCreatedBy();
-		itemCatcher.getNewBonus();
+//		itemCatcher.getNewBonus();
 //		itemCatcher.getNewBonus2();
 	}	
 
