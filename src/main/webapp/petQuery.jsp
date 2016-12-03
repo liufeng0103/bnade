@@ -62,11 +62,7 @@
 					</div>
 					<p>说明:</p>
 					<ul>
-						<li>如果网站帮到了你，请帮忙推荐给更多的朋友</li>
 						<li>所有宠物不区分等级和品质，默认25级蓝色品质</li>
-						<li>晴日峰和丽丽服务器请用后面的名字作为服务器:晴日峰-江苏 丽丽-四川</li>
-						<li>有任何问题请在NGA帖子下留言:<a
-							href="http://bbs.nga.cn/read.php?tid=8883933">http://bbs.nga.cn/read.php?tid=8883933</a></li>
 					</ul>
 				</div>
 				<div class="col-md-2">
@@ -77,6 +73,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/petQuery.js?rev=@@hash"></script>
+	<script src="/js/petQuery.js"></script>
 </body>
 </html>

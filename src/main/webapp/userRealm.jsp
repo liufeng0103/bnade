@@ -71,7 +71,9 @@
 			var optionsHtml = "";
 			for (var i in realms) {
 				var realm = realms[i];
-				optionsHtml += "<option value='"+realm.id+"'>"+realm.connected+"</option>";
+				if (realm.id > 0) {
+					optionsHtml += "<option value='"+realm.id+"'>"+realm.connected+"</option>";
+				}
 			}
 			realmSelect.html(optionsHtml);
 			$("#searchBtn").click(function(){

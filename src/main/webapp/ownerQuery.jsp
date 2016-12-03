@@ -42,12 +42,6 @@
 						</div>
 					</form>
 					<div id="ownerItemsContainer"></div>
-					<p>说明:</p>
-					<ul>
-						<li>如果网站帮到了你，请帮忙推荐给更多的朋友</li>
-						<li>有任何问题请在NGA帖子下留言:<a
-							href="http://bbs.nga.cn/read.php?tid=8883933">http://bbs.nga.cn/read.php?tid=8883933</a></li>
-					</ul>
 				</div>
 				<div class="col-md-2"></div>
 			</div>

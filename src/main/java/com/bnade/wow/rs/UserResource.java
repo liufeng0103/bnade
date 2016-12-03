@@ -247,7 +247,7 @@ public class UserResource {
 	}
 
 	private boolean checkInput(UserItemNotification itemN) {
-		if (itemN.getRealmId() <= 0 || itemN.getRealmId() > 175 || itemN.getUserId() == 0
+		if (itemN.getRealmId() < 0 || itemN.getRealmId() > 175 || itemN.getUserId() == 0
 				|| itemN.getItemId() == 0) {
 			return false;
 		}

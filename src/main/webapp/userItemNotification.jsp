@@ -206,7 +206,7 @@
 			if (userRealms.code === -1) {
 				$("#msg").html("服务器数据加载失败");
 			} else {
-				var options = "";
+				var options = "<option value='0'>所有服务器</option>";
 				for ( var i in userRealms) {
 					var realm = userRealms[i];
 					var realmName = BN.Realm.getRealmById(realm.realmId).connected;

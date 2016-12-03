@@ -175,7 +175,8 @@ public class UserDaoImpl implements UserDao {
 	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
 			throws SQLException {
 		return run
-				.query(" select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1",
+				.query("select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1 "
+						+ " union all select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=0 and n.emailNotification=1 and u.validated=1",
 						new BeanListHandler<UserItemNotification>(
 								UserItemNotification.class), realmId);
 	}
