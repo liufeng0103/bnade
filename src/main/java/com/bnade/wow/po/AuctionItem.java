@@ -13,6 +13,7 @@ public class AuctionItem {
 	private int petSpeciesId;
 	private int hot;
 	private List<String> bonusList;
+	private List<PetStats> petStatsList;
 
 	public int getId() {
 		return id;
@@ -94,13 +95,22 @@ public class AuctionItem {
 		this.bonusList = bonusList;
 	}
 
+	public List<PetStats> getPetStatsList() {
+		return petStatsList;
+	}
+
+	public void setPetStatsList(List<PetStats> petStatsList) {
+		this.petStatsList = petStatsList;
+	}
+
 	@Override
 	public String toString() {
 		return "AuctionItem [id=" + id + ", name=" + name + ", icon=" + icon
 				+ ", itemClass=" + itemClass + ", itemSubClass=" + itemSubClass
 				+ ", inventoryType=" + inventoryType + ", itemLevel="
 				+ itemLevel + ", petSpeciesId=" + petSpeciesId + ", hot=" + hot
-				+ ", bonusList=" + bonusList + "]";
+				+ ", bonusList=" + bonusList + ", petStatsList=" + petStatsList
+				+ "]";
 	}
 
 }

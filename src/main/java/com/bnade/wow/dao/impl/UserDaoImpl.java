@@ -9,6 +9,8 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.UserDao;
+import com.bnade.wow.po.Pet;
+import com.bnade.wow.po.PetStats;
 import com.bnade.wow.po.User;
 import com.bnade.wow.po.UserCharacter;
 import com.bnade.wow.po.UserItemNotification;
@@ -87,18 +89,33 @@ public class UserDaoImpl implements UserDao {
 	public void addItemNotification(UserItemNotification item)
 			throws SQLException {
 		run.update(
-				"insert into t_user_item_notification (userId,realmId,itemId,bonusList,isInverted,price) values (?,?,?,?,?,?)",
-				item.getUserId(), item.getRealmId(), item.getItemId(), item.getBonusList(),
+				"insert into t_user_item_notification (userId,realmId,itemId,petSpeciesId,petBreedId,bonusList,isInverted,price) values (?,?,?,?,?,?,?,?)",
+				item.getUserId(), item.getRealmId(), item.getItemId(), item.getPetSpeciesId(), item.getPetBreedId(), item.getBonusList(),
 				item.getIsInverted(), item.getPrice());
 	}
 
 	@Override
 	public List<UserItemNotification> getItemNotifications(int userId)
 			throws SQLException {
+		List<UserItemNotification> items = run.query("select userId,realmId,itemId,i.name as itemName,petSpeciesId,petBreedId,bonusList, isInverted,price,emailNotification from t_user_item_notification n join mt_item i on n.itemId = i.id where n.userId=? and n.itemId != 82800 " 
+				+ " union all select userId,realmId,82800,p.name as itemName,petSpeciesId,petBreedId,bonusList, isInverted,price,emailNotification from t_user_item_notification n join t_pet p on n.petSpeciesId=p.id where n.userId=? and n.itemId = 82800 ",
+						new BeanListHandler<UserItemNotification>(UserItemNotification.class), userId, userId);
+		for (UserItemNotification item : items) {
+			if (item.getItemId() == Pet.PET_ITEM_ID) {
+				item.setPetStats(run.query("select speciesId,breedId,petQualityId,level,health,power,speed from t_pet_stats where speciesId=? and breedId=?", new BeanHandler<PetStats>(PetStats.class), item.getPetSpeciesId(), item.getPetBreedId()));
+			}
+		}
+		return items;
+	}
+
+	@Override
+	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
+			throws SQLException {
 		return run
-				.query("select userId,realmId,itemId,i.name as itemName,bonusList, isInverted,price,emailNotification from t_user_item_notification n join mt_item i on n.itemId = i.id  where n.userId=?",
+				.query("select userId,realmId,itemId,petSpeciesId,petBreedId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where (n.realmId=? or n.realmId=0) and n.itemId!=82800 and n.emailNotification=1 and u.validated=1"
+						+ " union all select userId,realmId,82800,petSpeciesId,petBreedId,bonusList,p.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join t_pet p on p.id=n.petSpeciesId where (n.realmId=? or n.realmId=0) and n.itemId=82800 and n.emailNotification=1 and u.validated=1",
 						new BeanListHandler<UserItemNotification>(
-								UserItemNotification.class), userId);
+								UserItemNotification.class), realmId, realmId);
 	}
 
 	@Override
@@ -169,16 +186,6 @@ public class UserDaoImpl implements UserDao {
 		run.update(
 				"update t_user_mail_validation set acode=?,expired=? where userId=?",
 				userM.getAcode(), userM.getExpired(), userM.getUserId());
-	}
-
-	@Override
-	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
-			throws SQLException {
-		return run
-				.query("select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=? and n.emailNotification=1 and u.validated=1 "
-						+ " union all select userId,realmId,itemId,bonusList,i.name as itemName,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where n.realmId=0 and n.emailNotification=1 and u.validated=1",
-						new BeanListHandler<UserItemNotification>(
-								UserItemNotification.class), realmId);
 	}
 
 	@Override

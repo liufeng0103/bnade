@@ -22,6 +22,7 @@ import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.XItem;
 import com.bnade.wow.client.model.XItemCreatedBy;
 import com.bnade.wow.client.model.XItemReagent;
+import com.bnade.wow.dao.impl.UserDaoImpl;
 
 
 /**
@@ -204,14 +205,17 @@ public class ItemCatcher {
 			List<Integer> ids = run.query("select bonusId from t_item_bonus_desc", new ColumnListHandler<Integer>());
 			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
 			for (JAuction auc : aucs) {
-				if (auc.getAllBonus() != null) {
-					for (Bonus bonus : auc.getAllBonus()) {
-						if (bonus.getBonusListId() > 1000) {
-							if (!ids.contains(Integer.valueOf(bonus.getBonusListId()))) {
-								System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
-							}
-						}
-					}
+//				if (auc.getAllBonus() != null) {
+//					for (Bonus bonus : auc.getAllBonus()) {
+//						if (bonus.getBonusListId() > 1000) {
+//							if (!ids.contains(Integer.valueOf(bonus.getBonusListId()))) {
+//								System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
+//							}
+//						}
+//					}
+//				}
+				if (auc.getItem() == 142541) {
+					System.out.println(auc);
 				}
 			}
 		} catch (IOException | SQLException e) {
@@ -231,16 +235,17 @@ public class ItemCatcher {
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
-		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
+//		itemCatcher.process();
+//		itemCatcher.refreshItems();
+//		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
 //		itemCatcher.processItemCreatedBy();
 //		itemCatcher.getNewBonus();
 //		itemCatcher.getNewBonus2();
+		System.out.println(new UserDaoImpl().getItemNotificationsByRealmId(67));
 	}	
 
 }

@@ -437,6 +437,8 @@ CREATE TABLE IF NOT EXISTS t_user_item_notification (
 	userId INT UNSIGNED NOT NULL,
 	realmId INT UNSIGNED NOT NULL,
 	itemId INT UNSIGNED NOT NULL,
+	petSpeciesId INT UNSIGNED NOT NULL default 0,
+	petBreedId INT UNSIGNED NOT NULL default 0,
 	bonusList VARCHAR(20) NOT NULL default '',
 	isInverted INT UNSIGNED NOT NULL,	-- 0-低于 其它-高于
 	price BIGINT UNSIGNED NOT NULL,
@@ -446,7 +448,10 @@ CREATE TABLE IF NOT EXISTS t_user_item_notification (
 -- ALTER TABLE t_user_item_notification ADD bonusList VARCHAR(20) NOT NULL default '';
 ALTER TABLE t_user_item_notification ADD INDEX(userId,realmId);
 ALTER TABLE t_user_item_notification ADD INDEX(realmId);
-ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,bonusList,isInverted);
+ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,petSpeciesId,petBreedId,bonusList,isInverted);
+
+-- ALTER TABLE t_user_item_notification ADD petSpeciesId INT UNSIGNED NOT NULL default 0;
+-- ALTER TABLE t_user_item_notification ADD petBreedId INT UNSIGNED NOT NULL default 0;
 
 CREATE TABLE IF NOT EXISTS t_user_mail_validation (
 	userId INT UNSIGNED NOT NULL,

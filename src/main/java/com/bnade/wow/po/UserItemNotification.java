@@ -4,6 +4,8 @@ public class UserItemNotification {
 	private int userId;
 	private int realmId;
 	private int itemId;
+	private int petSpeciesId;
+	private int petBreedId;
 	private String bonusList;
 	private String itemName;
 	private int isInverted;
@@ -11,6 +13,7 @@ public class UserItemNotification {
 	private int emailNotification;
 	private String email;
 	private long minBuyout;
+	private PetStats petStats;
 
 	public int getUserId() {
 		return userId;
@@ -92,14 +95,39 @@ public class UserItemNotification {
 		this.minBuyout = minBuyout;
 	}
 
+	public int getPetSpeciesId() {
+		return petSpeciesId;
+	}
+
+	public void setPetSpeciesId(int petSpeciesId) {
+		this.petSpeciesId = petSpeciesId;
+	}
+
+	public int getPetBreedId() {
+		return petBreedId;
+	}
+
+	public void setPetBreedId(int petBreedId) {
+		this.petBreedId = petBreedId;
+	}
+
+	public PetStats getPetStats() {
+		return petStats;
+	}
+
+	public void setPetStats(PetStats petStats) {
+		this.petStats = petStats;
+	}
+
 	@Override
 	public String toString() {
 		return "UserItemNotification [userId=" + userId + ", realmId="
-				+ realmId + ", itemId=" + itemId + ", bonusList=" + bonusList
-				+ ", itemName=" + itemName + ", isInverted=" + isInverted
-				+ ", price=" + price + ", emailNotification="
+				+ realmId + ", itemId=" + itemId + ", petSpeciesId="
+				+ petSpeciesId + ", petBreedId=" + petBreedId + ", bonusList="
+				+ bonusList + ", itemName=" + itemName + ", isInverted="
+				+ isInverted + ", price=" + price + ", emailNotification="
 				+ emailNotification + ", email=" + email + ", minBuyout="
-				+ minBuyout + "]";
+				+ minBuyout + ", petStats=" + petStats + "]";
 	}
 
 }

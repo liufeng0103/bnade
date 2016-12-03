@@ -1134,7 +1134,8 @@ function sortData(column, data, orderByDesc) {
 	});	
 }
 
-function generateTableBody(itemId,data) {	
+function generateTableBody(itemId,data) {
+	$('#past24Msg').html("");
 	var tblHtml="";
 	var existedRealm = [];
 	var count = 0;
@@ -1145,7 +1146,9 @@ function generateTableBody(itemId,data) {
 		var realm=Realm.getConnectedById(realmId);
 		var realmColumnClass="";								
 		if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
-			realmColumnClass = "class='danger'";									
+			realmColumnClass = "class='danger'";
+			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.realm.key, $("#realm").val());
+			$('#past24Msg').html("<table class='table'><thead><tr><th>#</th><th>服务器</th><th>最低一口价</th><th>卖家</th><th>剩余时间</th><th>总数量</th><th>服务器人气</th><th>更新时间</th></tr></thead><tbody><tr><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/page/auction/owner/" + encodeURIComponent(itemArr[2]) + "/"+realmId+"' target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+HotRealm[realmId]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr></tbody></table>");
 		}
 		var buyout=Bnade.getGold(itemArr[1]);	
 		count++;

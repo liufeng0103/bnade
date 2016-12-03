@@ -35,7 +35,7 @@ public class AuctionItemNotificationTask {
 				Map<Integer, List<UserItemNotification>> matchedItems = new HashMap<>();
 				logger.info("找到{}条服务器{}的物品通知", itemNs.size(), realmId);
 				for (UserItemNotification itemN : itemNs) {
-					String key = "" + itemN.getItemId() + 0 + 0 + itemN.getBonusList();
+					String key = "" + itemN.getItemId() + itemN.getPetSpeciesId() + itemN.getPetBreedId() + itemN.getBonusList();
 					JAuction auc = minByoutAuctions.get(key);
 					if (auc != null) {
 						if (itemN.getIsInverted() == 0) { // 低于

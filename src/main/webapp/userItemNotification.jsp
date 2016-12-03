@@ -18,7 +18,7 @@
 	<div class="container-fluid">
 		<div class="container">
 			<div class="row">
-				<h1>物品提醒管理</h1>
+				<h1 class="page-header">物品提醒管理</h1>
 				<h3>添加</h3>
 				<p>
 					服务器请在<a href="userRealm.html">管理服务器页面</a>设置
@@ -56,6 +56,7 @@
 				<table class="table table-condensed table-hover">
 					<thead>
 						<tr>
+							<th>#</th>
 							<th>服务器</th>
 							<th>物品</th>
 							<th>说明</th>
@@ -75,6 +76,7 @@
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
 	<script>
+	var count = 0;
 	function myAlert(msg) {
 		$("#msgModal").on("show.bs.modal", function(event){
 			$(".modal-body").html("<div class='modal-body'><div class='modal-body-content'>"+msg+"</div></div><div class='modal-footer'><button class='btn btn-default' type='button' data-dismiss='modal'>关闭</button></div>");
@@ -92,12 +94,20 @@
 	}
 
 	function generateRow(itemN) {
+		var desc = "";
+		if (itemN.itemId == 82800 && itemN.petStats != null) {
+			desc = "类型"+itemN.petBreedId+" 生命值"+itemN.petStats.health+" 攻击"+itemN.petStats.power+" 速度"+itemN.petStats.speed;
+		} else {
+			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : Bnade.getBonusDesc(itemN.bonusList)
+		}
 		var row = "<tr realmId='"+itemN.realmId+"' itemId='"+itemN.itemId+"' isInverted='"+itemN.isInverted+"'><td>"
+				+ (++count)
+				+ "</td><td>"
 				+ BN.Realm.getRealmById(itemN.realmId).connected
 				+ "</td><td>"
 				+ itemN.itemName
 				+ "</td><td>"
-				+ (itemN.bonusList == null || itemN.bonusList == "" ? "" : Bnade.getBonusDesc(itemN.bonusList))
+				+ desc
 				+ "</td><td class='emailN'>"
 				+ (itemN.emailNotification === 0 ? "关闭" : "启用")
 				+ "</td><td>"
@@ -220,6 +230,7 @@
 			if (itemNotifications.code === -1) {
 				alert("加载数据出错：" + itemNotifications.message);
 			} else {
+				count = 0;
 				var tableRows = "";
 				for ( var i in itemNotifications) {
 					var itemN = itemNotifications[i];
@@ -260,10 +271,14 @@
 				for ( var i in items) {
 					var item = items[i];
 					html += "<option value='" + item.id + "'>" + item.name + "</option>";
-					var bonusHtml = "<select class='itemBonusSlt form-control'>";
+					var bonusHtml = "<select class='itemBonusSlt form-control' data-petspeciesid='"+item.petSpeciesId+"'>";
 					for (var j in item.bonusList) {
 						var bonus = item.bonusList[j];
 						bonusHtml += "<option value='" + bonus + "'>" + Bnade.getBonusDesc(bonus) + "</option>";
+					}
+					for (var j in item.petStatsList) {
+						var petStats = item.petStatsList[j];
+						bonusHtml += "<option value='" + petStats.breedId + "'>类型"+petStats.breedId+" 生命值"+petStats.health+" 攻击"+petStats.power+" 速度"+petStats.speed+"</option>";
 					}
 					bonusHtml += "</select>";
 					$("#itemSelectDiv").append(bonusHtml);
@@ -288,11 +303,22 @@
 			var itemId = $("#itemSlt").val();
 			var itemName = $("#itemSlt").find("option:selected").text();
 			var realmId = $("#realmSlt").val();
-			var bonusList = $(".itemBonusSlt").eq($("#itemSlt").get(0).selectedIndex).val();
+			var $itemBonusSlt = $(".itemBonusSlt").eq($("#itemSlt").get(0).selectedIndex);
+			if (itemId == 82800) {
+				var petSpeciesId = $itemBonusSlt.attr("data-petspeciesid");
+				var petBreedId = $itemBonusSlt.val();
+				var bonusList = "";
+			} else {
+				var petSpeciesId = 0;
+				var petBreedId = 0;
+				var bonusList = $itemBonusSlt.val();
+			}
 			var realmName = BN.Realm.getRealmById(realmId).connected;
 			var isInverted = $("#isInvertedSlt").val();
 			var itemN = {
 				itemId : itemId,
+				petSpeciesId : petSpeciesId,
+				petBreedId : petBreedId,
 				itemName: itemName,
 				bonusList : bonusList,
 				realmId : realmId,
@@ -302,7 +328,7 @@
 			};
 			var result = BN.Resource.addUserItemNotification(itemN);
 			if (result.code === 0) {
-				$("#msg").html("添加成功");
+				$("#msg").html(itemN.itemName + "添加成功");
 				$("#itemNotificationBody").append(generateRow(itemN));
 				bindUpdate();
 				bindDelete();

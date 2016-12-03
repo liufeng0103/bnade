@@ -1,6 +1,7 @@
 package com.bnade.wow.dao.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
@@ -16,6 +17,8 @@ import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
 import com.bnade.wow.po.ItemSubclass;
+import com.bnade.wow.po.Pet;
+import com.bnade.wow.po.PetStats;
 
 public class ItemDaoImpl implements ItemDao {
 
@@ -87,7 +90,7 @@ public class ItemDaoImpl implements ItemDao {
 	@Override
 	public List<AuctionItem> getItems(String name, Integer itemClass, Integer subclass, int offset, int limit)
 			throws SQLException {
-		String sql = "select id,name,icon,itemLevel from v_item where 1=1 ";
+		String sql = "select id,name,icon,itemLevel,petSpeciesId from v_item where 1=1 ";
 		if (itemClass != null) {
 			sql += " and itemClass=" + itemClass;
 		}
@@ -106,13 +109,24 @@ public class ItemDaoImpl implements ItemDao {
 		}
 		return items;
 	}
-
+	
+	@Override
+	public List<PetStats> getPetStatsById(int id) throws SQLException {		
+		return run.query("select speciesId,breedId,petQualityId,level,health,power,speed from t_pet_stats where speciesId=?", new BeanListHandler<PetStats>(PetStats.class), id);
+	}
+	
 	@Override
 	public List<AuctionItem> getItemsWithBonuslist(String name, int offset,
 			int limit) throws SQLException {
 		List<AuctionItem> items = getItems(name, null, null, 0, limit);
 		for (AuctionItem item : items) {
-			item.setBonusList(getBonusList(item.getId()));
+			if (item.getId() == Pet.PET_ITEM_ID) {
+				item.setPetStatsList(getPetStatsById(item.getPetSpeciesId()));
+				item.setBonusList(new ArrayList<>());
+			} else {
+				item.setPetStatsList(new ArrayList<>());
+				item.setBonusList(getBonusList(item.getId()));
+			}
 		}
 		return items;
 	}

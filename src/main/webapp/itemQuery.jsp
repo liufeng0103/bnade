@@ -168,7 +168,8 @@
 					</div>
 					<p>说明:</p>
 					<ul>
-						<li class="text-danger">装笼宠物价格查询请点击<a href="/petQuery.jsp">宠物价格</a>页面</li>
+						<li class="text-danger">大家可以在IOS应用商店搜索并下载app 地精酒馆， 感谢网友Lincwee的帮助和制作</li>
+						<li>装笼宠物价格查询请点击<a href="/petQuery.jsp">宠物价格</a>页面</li>
 						<li>BNADE交流QQ群:518160038</li>
 					</ul>
 				</div>
@@ -202,6 +203,6 @@
 	<%@ include file="includes/script.jsp"%>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/modules/heatmap.js"></script>
-	<script src="/js/itemQuery.js?v=1"></script>
+	<script src="/js/itemQuery.js?v=2"></script>
 </body>
 </html>

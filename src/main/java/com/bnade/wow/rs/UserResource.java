@@ -142,8 +142,7 @@ public class UserResource {
 	public Response getItemNotifications() {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
-			return Response.ok(userDao.getItemNotifications(user.getId()))
-					.build();
+			return Response.ok(userDao.getItemNotifications(user.getId())).build();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.ok(Result.ERROR("出错")).build();
@@ -159,11 +158,11 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItemNotification(@FormParam("realmId") int realmId,
 			@FormParam("itemId") int itemId, @FormParam("bonusList") String bonusList, @FormParam("price") long price,
-			@FormParam("isInverted") int isInverted) {
+			@FormParam("isInverted") int isInverted, @FormParam("petSpeciesId") int petSpeciesId, @FormParam("petBreedId") int petBreedId) {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
 			
-			if ((user.getExpire() - System.currentTimeMillis()) < 0 && userDao.getItemNotifications(user.getId()).size() >= 5) {
+			if (!user.getIsVip()) {
 				return Response.ok(Result.ERROR("超过限制")).build();
 			}
 			UserItemNotification itemN = new UserItemNotification();
@@ -173,18 +172,19 @@ public class UserResource {
 			itemN.setBonusList(bonusList == null ? "" : bonusList);
 			itemN.setPrice(price);
 			itemN.setIsInverted(isInverted);
+			itemN.setPetSpeciesId(petSpeciesId);
+			itemN.setPetBreedId(petBreedId);
 
 			if (!checkInput(itemN)) {
 				throw new Exception("出错");
 			}
-			// TODO 验证用户和服务器id
 			userDao.addItemNotification(itemN);
 			return Response.ok(Result.OK("success")).build();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			if (e.getMessage().contains("Duplicate entry")) {
 				return Response.ok(Result.ERROR("物品提醒之前已添加")).build();
 			}
+			e.printStackTrace();
 			return Response.ok(Result.ERROR("出错")).build();
 		} catch (Exception e) {
 			e.printStackTrace();

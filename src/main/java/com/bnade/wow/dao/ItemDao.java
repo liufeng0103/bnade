@@ -8,6 +8,7 @@ import com.bnade.wow.po.Item;
 import com.bnade.wow.po.ItemClass;
 import com.bnade.wow.po.ItemCreatedBy;
 import com.bnade.wow.po.ItemReagent;
+import com.bnade.wow.po.PetStats;
 
 public interface ItemDao {
 
@@ -35,4 +36,5 @@ public interface ItemDao {
 	
 	List<AuctionItem> getItemsWithBonuslist(String name, int offset, int limit) throws SQLException;
 	
+	List<PetStats> getPetStatsById(int id) throws SQLException;
 }
