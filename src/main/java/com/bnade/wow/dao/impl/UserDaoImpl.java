@@ -163,14 +163,14 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void addMailValidation(UserMailValidation userM) throws SQLException {
 		run.update(
-				"insert into t_user_mail_validation (userId,acode,expired) values (?,?,?)",
-				userM.getUserId(), userM.getAcode(), userM.getExpired());
+				"insert into t_user_mail_validation (userId,email,acode,expired) values (?,?,?,?)",
+				userM.getUserId(), userM.getEmail(), userM.getAcode(), userM.getExpired());
 	}
 
 	@Override
 	public UserMailValidation getMailValidationById(int id) throws SQLException {
 		return run
-				.query("select userId,acode,expired from t_user_mail_validation where userId=?",
+				.query("select userId,email,acode,expired from t_user_mail_validation where userId=?",
 						new BeanHandler<UserMailValidation>(
 								UserMailValidation.class), id);
 	}
@@ -184,8 +184,8 @@ public class UserDaoImpl implements UserDao {
 	public void updateMailValidationById(UserMailValidation userM)
 			throws SQLException {
 		run.update(
-				"update t_user_mail_validation set acode=?,expired=? where userId=?",
-				userM.getAcode(), userM.getExpired(), userM.getUserId());
+				"update t_user_mail_validation set email=?,acode=?,expired=? where userId=?",
+				userM.getEmail(), userM.getAcode(), userM.getExpired(), userM.getUserId());
 	}
 
 	@Override

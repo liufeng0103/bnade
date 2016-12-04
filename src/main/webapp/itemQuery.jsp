@@ -168,7 +168,8 @@
 					</div>
 					<p>说明:</p>
 					<ul>
-						<li class="text-danger">大家可以在IOS应用商店搜索并下载app 地精酒馆， 感谢网友Lincwee的帮助和制作</li>
+						<li class="text-danger">原来的历史记录查询，现已作为<a href="/premium.jsp">高级版</a>功能开放</li>
+						<li>大家可以在IOS应用商店搜索并下载app 地精酒馆， 感谢网友Lincwee的帮助和制作</li>
 						<li>装笼宠物价格查询请点击<a href="/petQuery.jsp">宠物价格</a>页面</li>
 						<li>BNADE交流QQ群:518160038</li>
 					</ul>

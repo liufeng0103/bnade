@@ -456,9 +456,11 @@ ALTER TABLE t_user_item_notification ADD UNIQUE INDEX(userId,realmId,itemId,petS
 CREATE TABLE IF NOT EXISTS t_user_mail_validation (
 	userId INT UNSIGNED NOT NULL,
 	acode VARCHAR(128) NOT NULL,
+	email VARCHAR(20) NOT NULL default '',
 	expired BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY(userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ALTER TABLE t_user_mail_validation ADD email VARCHAR(20) NOT NULL default '';
 
 -- 激活码
 CREATE TABLE IF NOT EXISTS t_user_activation (

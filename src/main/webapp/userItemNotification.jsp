@@ -21,7 +21,7 @@
 				<h1 class="page-header">物品提醒管理</h1>
 				<h3>添加</h3>
 				<p>
-					服务器请在<a href="userRealm.html">管理服务器页面</a>设置
+					服务器请在<a href="/page/user/realm">我的服务器</a>页面设置
 				</p>
 				<form onsubmit="return false;" class="form-inline">
 					<input id="itemInput" type="text" placeholder="物品名"

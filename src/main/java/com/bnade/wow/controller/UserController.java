@@ -273,7 +273,7 @@ public class UserController extends BaseController {
 			} else {
 				if (userM.getExpired() - System.currentTimeMillis() > 0 && userM.getAcode().equals(acode)) {
 					User user = userDao.getUserByID(id);
-					if (user == null) {
+					if (user == null || !user.getEmail().equals(userM.getEmail())) {
 						req.setAttribute("message", "验证失败");
 					} else {
 						user.setValidated(1);

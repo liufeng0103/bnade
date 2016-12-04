@@ -2,6 +2,7 @@ package com.bnade.wow.po;
 
 public class UserMailValidation {
 	private int userId;
+	private String email;
 	private String acode;
 	private long expired;
 
@@ -11,6 +12,14 @@ public class UserMailValidation {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getAcode() {

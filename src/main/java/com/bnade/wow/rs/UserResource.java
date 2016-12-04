@@ -286,12 +286,12 @@ public class UserResource {
 		String host = BnadeProperties.getValue("email_validation_host");
 		try {
 			User user = (User) req.getSession().getAttribute("user");
-			UserMailValidation userM = userDao.getMailValidationById(user
-					.getId());
+			UserMailValidation userM = userDao.getMailValidationById(user.getId());
 			String acode;
 			if (userM == null) {
 				userM = new UserMailValidation();
 				userM.setUserId(user.getId());
+				userM.setEmail(user.getEmail());
 				acode = generateAcode(user);
 				userM.setAcode(acode);
 				userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY); // 24
@@ -302,8 +302,10 @@ public class UserResource {
 					acode = generateAcode(user);
 					userM.setAcode(acode);
 					userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY);
+					userM.setEmail(user.getEmail());
 				} else {
 					acode = userM.getAcode();
+					userM.setEmail(user.getEmail());
 				}
 				userDao.updateMailValidationById(userM);
 			}

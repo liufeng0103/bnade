@@ -14,7 +14,7 @@
 		<div class="container">
 			<div class="row">
 				<h1 class="page-header">管理我的角色</h1>
-				<h2>添加角色</h2>
+				<h3>添加角色</h3>
 				<c:if test="${fn:length(realms) == 0}">
 				<label class="text-danger">您还没有添加自己的服务器，请到<a href="/page/user/realm">我的服务器</a>页面设置自己的服务器</label>
 				</c:if>
@@ -32,7 +32,7 @@
 				</form>
 			</div>
 			<div class="row">
-				<h2>所有角色</h2>
+				<h3>所有角色</h3>
 				<table class="table table-hover table-condensed">
 					<thead>
 						<tr>
