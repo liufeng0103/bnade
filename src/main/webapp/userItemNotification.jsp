@@ -98,7 +98,7 @@
 		if (itemN.itemId == 82800 && itemN.petStats != null) {
 			desc = "类型"+itemN.petBreedId+" 生命值"+itemN.petStats.health+" 攻击"+itemN.petStats.power+" 速度"+itemN.petStats.speed;
 		} else {
-			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : Bnade.getBonusDesc(itemN.bonusList)
+			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : itemN.itemLevel + Bnade.getBonusDesc(itemN.bonusList)
 		}
 		var row = "<tr realmId='"+itemN.realmId+"' itemId='"+itemN.itemId+"' isInverted='"+itemN.isInverted+"'><td>"
 				+ (++count)
@@ -270,11 +270,11 @@
 				var html = "<select id='itemSlt' class='form-control'>";
 				for ( var i in items) {
 					var item = items[i];
-					html += "<option value='" + item.id + "'>" + item.name + "</option>";
+					html += "<option value='" + item.id + "' data-itemlevel='"+item.itemLevel+"'>" + item.name + "</option>";
 					var bonusHtml = "<select class='itemBonusSlt form-control' data-petspeciesid='"+item.petSpeciesId+"'>";
 					for (var j in item.bonusList) {
 						var bonus = item.bonusList[j];
-						bonusHtml += "<option value='" + bonus + "'>" + Bnade.getBonusDesc(bonus) + "</option>";
+						bonusHtml += "<option value='" + bonus + "'>" + item.itemLevel + Bnade.getBonusDesc(bonus) + "</option>";
 					}
 					for (var j in item.petStatsList) {
 						var petStats = item.petStatsList[j];
@@ -302,6 +302,7 @@
 		} else {
 			var itemId = $("#itemSlt").val();
 			var itemName = $("#itemSlt").find("option:selected").text();
+			var itemLevel = $("#itemSlt").find("option:selected").attr("data-itemlevel");
 			var realmId = $("#realmSlt").val();
 			var $itemBonusSlt = $(".itemBonusSlt").eq($("#itemSlt").get(0).selectedIndex);
 			if (itemId == 82800) {
@@ -320,6 +321,7 @@
 				petSpeciesId : petSpeciesId,
 				petBreedId : petBreedId,
 				itemName: itemName,
+				itemLevel : itemLevel,
 				bonusList : bonusList,
 				realmId : realmId,
 				emailNotification: 1,

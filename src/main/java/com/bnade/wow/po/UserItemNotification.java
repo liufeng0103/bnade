@@ -8,6 +8,7 @@ public class UserItemNotification {
 	private int petBreedId;
 	private String bonusList;
 	private String itemName;
+	private int itemLevel;
 	private int isInverted;
 	private long price;
 	private int emailNotification;
@@ -71,6 +72,14 @@ public class UserItemNotification {
 		this.itemName = itemName;
 	}
 
+	public int getItemLevel() {
+		return itemLevel;
+	}
+
+	public void setItemLevel(int itemLevel) {
+		this.itemLevel = itemLevel;
+	}
+
 	public int getEmailNotification() {
 		return emailNotification;
 	}
@@ -124,10 +133,11 @@ public class UserItemNotification {
 		return "UserItemNotification [userId=" + userId + ", realmId="
 				+ realmId + ", itemId=" + itemId + ", petSpeciesId="
 				+ petSpeciesId + ", petBreedId=" + petBreedId + ", bonusList="
-				+ bonusList + ", itemName=" + itemName + ", isInverted="
-				+ isInverted + ", price=" + price + ", emailNotification="
-				+ emailNotification + ", email=" + email + ", minBuyout="
-				+ minBuyout + ", petStats=" + petStats + "]";
+				+ bonusList + ", itemName=" + itemName + ", itemLevel="
+				+ itemLevel + ", isInverted=" + isInverted + ", price=" + price
+				+ ", emailNotification=" + emailNotification + ", email="
+				+ email + ", minBuyout=" + minBuyout + ", petStats=" + petStats
+				+ "]";
 	}
 
 }

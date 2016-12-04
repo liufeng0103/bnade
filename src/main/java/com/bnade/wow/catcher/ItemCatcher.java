@@ -223,16 +223,49 @@ public class ItemCatcher {
 		}
 	}
 	
+	/**
+	 * 指定item id看bonus
+	 */
 	public void getNewBonus2() {
-		List<Integer> ids;
+		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
+		WowClient client = new WowClient();
 		try {
-			ids = run.query("select bonusId from t_item_bonus_desc", new ColumnListHandler<Integer>());
-			System.out.println(ids);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
+			for (JAuction auc : aucs) {
+				if (auc.getItem() == 121244) {
+					if (auc.getAllBonus() != null) {
+						for (Bonus bonus : auc.getAllBonus()) {
+							System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
+						}
+					} else {
+						System.out.println(auc.getItem());
+					}
+				}
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+	}
+	/**
+	 * 指定bonusid看item
+	 */
+	public void getNewBonus3() {
+		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
+		WowClient client = new WowClient();
+		try {
+			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
+			for (JAuction auc : aucs) {			
+				if (auc.getAllBonus() != null) {
+					for (Bonus bonus : auc.getAllBonus()) {
+						if (bonus.getBonusListId() == 1812) {
+							System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
+						}
+					}
+				}			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -245,7 +278,7 @@ public class ItemCatcher {
 //		itemCatcher.processItemCreatedBy();
 //		itemCatcher.getNewBonus();
 //		itemCatcher.getNewBonus2();
-		System.out.println(new UserDaoImpl().getItemNotificationsByRealmId(67));
+		itemCatcher.getNewBonus3();
 	}	
 
 }

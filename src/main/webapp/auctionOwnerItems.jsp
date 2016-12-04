@@ -27,13 +27,13 @@
 					<thead>
 						<tr>
 							<th>物品</th>
+							<th>是否被压</th>
+							<th>压价玩家</th>
 							<th>说明</th>
 							<th>单价</th>
 							<th>数量</th>
 							<th>一口价</th>
 							<th>竞价</th>
-							<th>是否被压</th>
-							<th>压价玩家</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -44,11 +44,6 @@
 									<img src="http://content.battlenet.com.cn/wow/icons/18/${auction.icon}.jpg" alt="${auction.name}"/> ${auction.name}
 								</a>
 							</td>
-							<td>${auction.bonus}</td>
-							<td class="price">${auction.unitBuyoutGold}</td>
-							<td>${auction.quantity}</td>
-							<td class="price">${auction.buyoutGold}</td>
-							<td class="price">${auction.bidGold}</td>
 							<c:if test="${auction.owner == auction.owner2}">
 							<td class="text-success">未被压</td>
 							<td></td>
@@ -57,6 +52,11 @@
 							<td  class="text-danger">被压</td>
 							<td><a href="/page/auction/owner/${auction.owner2}/${realmId}">${auction.owner2}</a></td>
 							</c:if>
+							<td>${auction.bonus}</td>
+							<td class="price">${auction.unitBuyoutGold}</td>
+							<td>${auction.quantity}</td>
+							<td class="price">${auction.buyoutGold}</td>
+							<td class="price">${auction.bidGold}</td>
 						</tr>
 						</c:forEach>
 					</tbody>

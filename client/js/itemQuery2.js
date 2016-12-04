@@ -631,7 +631,7 @@ function itemQueryByName(realm, itemName) {
 					var tableHtml = "<table class='table table-striped'><thead><tr><th>ID</th><th>物品名</th><th>物品说明</th></tr></thead><tbody>";
 					for (var i in item.bonusList) {
 						var itemBonus = item.bonusList[i];
-						tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
+						tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+item.itemLevel+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
 					}
 					tableHtml += '</tbody></table>';
 					tableHtml += "<div><a class='bonus btn btn-default' href='javascript:void(0)' bl='all'>全部</a></div>";
