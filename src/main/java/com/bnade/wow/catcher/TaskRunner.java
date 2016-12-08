@@ -34,7 +34,7 @@ public class TaskRunner {
 	// 是否所有线程运行完毕的检查间隔时间
 	private static final long CHECK_WAIT_TIME = 10000;
 	// 2次运行直接的等待时间
-	private static final long WAIT_TIME = 1000 * 60;
+	private static final long WAIT_TIME = 0;
 	
 	private static final int MAX_API_FAIL_COUNT = 3;
 	private int failCount = 0;

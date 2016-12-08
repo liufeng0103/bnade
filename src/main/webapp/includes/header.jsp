@@ -18,7 +18,6 @@
 					<li><a href="/wowtoken.jsp">时光徽章</a></li>
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
-					<li><a href="/premium.jsp">高级版</a></li>
 					<c:if test="${empty sessionScope.user}">
 						<li><a href="/page/user/login">登录</a></li>
 					</c:if>
@@ -26,7 +25,6 @@
 						<li class="dropdown">
 							<a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">欢迎,${sessionScope.user.nickname}<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="/page/user/activation">激活高级版</a></li>
 								<li class="divider"></li>
 								<li><a href="/page/user/signOut">退出</a></li>
 							</ul>

@@ -270,15 +270,15 @@ public class ItemCatcher {
 	
 	public static void main(String[] args) throws Exception {
 		ItemCatcher itemCatcher = new ItemCatcher();
-//		itemCatcher.process();
-//		itemCatcher.refreshItems();
-//		itemCatcher.updateItemBounus();
+		itemCatcher.process();
+		itemCatcher.refreshItems();
+		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();
 //		itemCatcher.processItemCreatedBy();
 //		itemCatcher.getNewBonus();
 //		itemCatcher.getNewBonus2();
-		itemCatcher.getNewBonus3();
+//		itemCatcher.getNewBonus3();
 	}	
 
 }
