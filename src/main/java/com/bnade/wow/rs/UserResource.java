@@ -222,7 +222,8 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateItemNotification(@FormParam("realmId") int realmId,
 			@FormParam("itemId") int itemId, @FormParam("price") long price,
-			@FormParam("isInverted") int isInverted) {
+			@FormParam("isInverted") int isInverted, @FormParam("petSpeciesId") int petSpeciesId,
+			@FormParam("petBreedId") int petBreedId, @FormParam("bonusList") String bonusList) {
 		try {
 			User user = (User) req.getSession().getAttribute("user");
 			UserItemNotification itemN = new UserItemNotification();
@@ -231,6 +232,9 @@ public class UserResource {
 			itemN.setItemId(itemId);
 			itemN.setPrice(price);
 			itemN.setIsInverted(isInverted);
+			itemN.setPetSpeciesId(petSpeciesId);
+			itemN.setPetBreedId(petBreedId);
+			itemN.setBonusList(bonusList);
 
 			if (!checkInput(itemN)) {
 				throw new Exception("出错");

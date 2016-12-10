@@ -121,16 +121,19 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void deleteItemNotifications(List<UserItemNotification> itemNs)
 			throws SQLException {
-		Object[][] params = new Object[itemNs.size()][4];
+		Object[][] params = new Object[itemNs.size()][7];
 		for (int i = 0; i < itemNs.size(); i++) {
 			UserItemNotification itemN = itemNs.get(i);
 			params[i][0] = itemN.getUserId();
 			params[i][1] = itemN.getRealmId();
 			params[i][2] = itemN.getItemId();
 			params[i][3] = itemN.getIsInverted();
+			params[i][4] = itemN.getPetSpeciesId();
+			params[i][5] = itemN.getPetBreedId();
+			params[i][6] = itemN.getBonusList();
 		}
 		run.batch(
-				"delete from t_user_item_notification where userId=? and realmId=? and itemId=? and isInverted=?",
+				"delete from t_user_item_notification where userId=? and realmId=? and itemId=? and isInverted=? and petSpeciesId=? and petBreedId=? and bonusList=?",
 				params);
 	}
 
@@ -138,15 +141,15 @@ public class UserDaoImpl implements UserDao {
 	public void updateItemNotification(UserItemNotification itemN)
 			throws SQLException {
 		run.update(
-				"update t_user_item_notification set price=? where userId=? and realmId=? and itemId=? and isInverted=?",
+				"update t_user_item_notification set price=? where userId=? and realmId=? and itemId=? and isInverted=? and petSpeciesId=? and petBreedId=? and bonusList=?",
 				itemN.getPrice(), itemN.getUserId(), itemN.getRealmId(),
-				itemN.getItemId(), itemN.getIsInverted());
+				itemN.getItemId(), itemN.getIsInverted(), itemN.getPetSpeciesId(), itemN.getPetBreedId(), itemN.getBonusList());
 	}
 
 	@Override
 	public void updateEmailNotifications(List<UserItemNotification> itemNs)
 			throws SQLException {
-		Object[][] params = new Object[itemNs.size()][5];
+		Object[][] params = new Object[itemNs.size()][8];
 		for (int i = 0; i < itemNs.size(); i++) {
 			UserItemNotification itemN = itemNs.get(i);
 			params[i][0] = itemN.getEmailNotification();
@@ -154,9 +157,12 @@ public class UserDaoImpl implements UserDao {
 			params[i][2] = itemN.getRealmId();
 			params[i][3] = itemN.getItemId();
 			params[i][4] = itemN.getIsInverted();
+			params[i][5] = itemN.getPetSpeciesId();
+			params[i][6] = itemN.getPetBreedId();
+			params[i][7] = itemN.getBonusList();
 		}
 		run.batch(
-				"update t_user_item_notification set emailNotification=? where userId=? and realmId=? and itemId=? and isInverted=?",
+				"update t_user_item_notification set emailNotification=? where userId=? and realmId=? and itemId=? and isInverted=? and petSpeciesId=? and petBreedId=? and bonusList=?",
 				params);
 	}
 

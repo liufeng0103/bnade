@@ -95,12 +95,13 @@
 
 	function generateRow(itemN) {
 		var desc = "";
+		var bonusList = itemN.bonusList == null ? "" : itemN.bonusList;
 		if (itemN.itemId == 82800 && itemN.petStats != null) {
 			desc = "类型"+itemN.petBreedId+" 生命值"+itemN.petStats.health+" 攻击"+itemN.petStats.power+" 速度"+itemN.petStats.speed;
 		} else {
 			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : itemN.itemLevel + Bnade.getBonusDesc(itemN.bonusList)
 		}
-		var row = "<tr realmId='"+itemN.realmId+"' itemId='"+itemN.itemId+"' isInverted='"+itemN.isInverted+"'><td>"
+		var row = "<tr realmId='"+itemN.realmId+"' itemId='"+itemN.itemId+"' isInverted='"+itemN.isInverted+"' data-petSpeciesId='"+itemN.petSpeciesId+"' data-petBreedId='"+itemN.petBreedId+"' data-bonusList='"+itemN.bonusList+"'><td>"
 				+ (++count)
 				+ "</td><td>"
 				+ BN.Realm.getRealmById(itemN.realmId).connected
@@ -124,6 +125,9 @@
 		$(".updateBtn").click(function(){
 			var $tr = $(this).parent().parent();
 			var itemN = {itemId : $tr.attr("itemId"),
+					petSpeciesId : $tr.attr("data-petSpeciesId"),
+					petBreedId : $tr.attr("data-petBreedId"),
+					bonusList : $tr.attr("data-bonusList"),
 					realmId : $tr.attr("realmId"),
 					isInverted : $tr.attr("isInverted"),
 					price : 10000 * $tr.find(".priceInput").val()};
@@ -146,7 +150,10 @@
 					var $tr = trs[i];
 					var itemN = {itemId : $tr.attr("itemId"),
 							realmId : $tr.attr("realmId"),
-							isInverted : $tr.attr("isInverted")};
+							isInverted : $tr.attr("isInverted"),
+							petSpeciesId : $tr.attr("data-petSpeciesId"),
+							petBreedId : $tr.attr("data-petBreedId"),
+							bonusList : $tr.attr("data-bonusList"),};
 					rows.push(itemN);
 				}
 				BN.Resource.deleteUserItemNotifications(JSON.stringify(rows),function(result){
