@@ -23,6 +23,8 @@ public class Mail {
 			.getValue("email_password");// 邮箱密码
 	private final static String EMAIL_NAME = BnadeProperties
 			.getValue("email_name");// 发件人名称（昵称）
+	private final static String EMAIL_FROM = BnadeProperties
+			.getValue("email_from");
 	private final static boolean EMAIL_IS_SSL = "true"
 			.equalsIgnoreCase(BnadeProperties.getValue("email_is_ssl"));// 是否支持SSL链接
 	private static ExecutorService pool = Executors.newFixedThreadPool(10);
@@ -36,7 +38,7 @@ public class Mail {
 			email.setAuthenticator(new DefaultAuthenticator(EMAIL_USERNAME,
 					EMAIL_PASSWORD));
 			email.setSSLOnConnect(EMAIL_IS_SSL);
-			email.setFrom(EMAIL_USERNAME, EMAIL_NAME);
+			email.setFrom(EMAIL_FROM, EMAIL_NAME);
 			email.setSubject(subject);
 			email.setHtmlMsg(msg);
 			email.setCharset("utf-8");
@@ -54,10 +56,10 @@ public class Mail {
 		try {
 			Email email = new SimpleEmail();
 			email.setHostName(EMAIL_HOSTNAME);
-			email.setSmtpPort(465);
+//			email.setSmtpPort(25);
 			email.setAuthenticator(new DefaultAuthenticator(EMAIL_USERNAME, EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(EMAIL_USERNAME, EMAIL_NAME);
+			email.setSSLOnConnect(EMAIL_IS_SSL);
+			email.setFrom(EMAIL_FROM, EMAIL_NAME);
 			email.setSubject(subject);
 			email.setMsg(msg);
 			email.addTo(to);
@@ -97,6 +99,7 @@ public class Mail {
 
 	public static void main(String[] args) {
 		Mail.sendSimpleEmail("test", "test", "liufeng0103@163.com");
+		Mail.sendHtmlEmail("test", "<a href='http://www.bnade.com'>test1</a>", "liufeng0103@163.com");
 //		Mail.asynSendHtmlEmail2("test", "test", "liufeng0103@163.com");
 //		Mail.asynSendHtmlEmail2("test1",
 //				"<a href='http://www.bnade.com'>test1</a>",
