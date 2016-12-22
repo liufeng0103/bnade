@@ -189,6 +189,9 @@
 			var itemN = {itemId : $tr.attr("itemId"),
 					realmId : $tr.attr("realmId"),
 					isInverted : $tr.attr("isInverted"),
+					petSpeciesId : $tr.attr("data-petSpeciesId"),
+					petBreedId : $tr.attr("data-petBreedId"),
+					bonusList : $tr.attr("data-bonusList"),
 					emailNotification: enabled};
 			rows.push(itemN);
 		}
