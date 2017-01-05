@@ -1,8 +1,5 @@
 package com.bnade.util;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -27,8 +24,6 @@ public class Mail {
 			.getValue("email_from");
 	private final static boolean EMAIL_IS_SSL = "true"
 			.equalsIgnoreCase(BnadeProperties.getValue("email_is_ssl"));// 是否支持SSL链接
-	private static ExecutorService pool = Executors.newFixedThreadPool(10);
-	private static ExecutorService pool2 = Executors.newFixedThreadPool(10);
 
 	public static void sendHtmlEmail(String subject, String msg, String to) {
 		try {
@@ -70,40 +65,9 @@ public class Mail {
 		}
 	}
 
-	public static void asynSendSimpleEmail(String subject, String msg, String to) {
-		pool.execute(new Runnable() {
-			@Override
-			public void run() {
-				sendSimpleEmail(subject, msg, to);
-			}
-		});
-	}
-	
-	public static void asynSendHtmlEmail(String subject, String msg, String to) {
-		pool.execute(new Runnable() {
-			@Override
-			public void run() {
-				sendHtmlEmail(subject, msg, to);
-			}
-		});
-	}
-
-	public static void asynSendHtmlEmail2(String subject, String msg, String to) {
-		pool2.execute(new Runnable() {
-			@Override
-			public void run() {
-				sendHtmlEmail(subject, msg, to);
-			}
-		});
-	}
-
 	public static void main(String[] args) {
 		Mail.sendSimpleEmail("test", "test", "liufeng0103@163.com");
 		Mail.sendHtmlEmail("test", "<a href='http://www.bnade.com'>test1</a>", "liufeng0103@163.com");
-//		Mail.asynSendHtmlEmail2("test", "test", "liufeng0103@163.com");
-//		Mail.asynSendHtmlEmail2("test1",
-//				"<a href='http://www.bnade.com'>test1</a>",
-//				"liufeng0103@163.com");
 	}
 
 }

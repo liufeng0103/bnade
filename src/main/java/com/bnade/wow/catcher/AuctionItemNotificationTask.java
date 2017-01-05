@@ -21,7 +21,7 @@ import com.bnade.wow.po.UserItemNotification;
 public class AuctionItemNotificationTask {	
 	
 	private static Logger logger = LoggerFactory.getLogger(AuctionItemNotificationTask.class);
-	private static ExecutorService pool = Executors.newFixedThreadPool(10);
+	private static ExecutorService pool = Executors.newFixedThreadPool(5);
 	private UserDao userDao;
 	
 	public AuctionItemNotificationTask() {
@@ -93,7 +93,7 @@ public class AuctionItemNotificationTask {
 					}
 					mailContent += "\r\n";
 				}
-				Mail.asynSendSimpleEmail(TimeUtil.getDate2(System.currentTimeMillis()) + " [BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
+				Mail.sendSimpleEmail(TimeUtil.getDate2(System.currentTimeMillis()) + " [BNADE] " + items.size() + "条物品满足在[" + BnadeUtil.getRealmNameById(realmId) + "]", mailContent, mail);
 			}
 			
 		}		
