@@ -52,6 +52,9 @@
 					<button id="disableMailBtn" class="btn btn-sm btn-warning">
 						<span class='glyphicon glyphicon-minus'></span> 关闭邮件通知
 					</button>
+					<a id="exportBtn" class="btn btn-sm btn-primary">
+						<span class='glyphicon glyphicon-export'></span> 导出配置
+					</a>
 				</div>
 				<table class="table table-condensed table-hover">
 					<thead>
@@ -240,6 +243,8 @@
 			if (itemNotifications.code === -1) {
 				alert("加载数据出错：" + itemNotifications.message);
 			} else {
+				$("#exportBtn").attr("download", "items.js")
+					.attr("href", "data:text/js;charset=UTF-8," + JSON.stringify(itemNotifications));
 				count = 0;
 				var tableRows = "";
 				for ( var i in itemNotifications) {
