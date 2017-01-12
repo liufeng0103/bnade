@@ -69,6 +69,7 @@ public class AfterLoginRedirectServlet extends HttpServlet {
 				String newToken = MD5Util.MD5("" + dbUser.getId() + System.currentTimeMillis());
 				userDao.updateUserToken(dbUser.getId(), newToken);
 				Cookie item = new Cookie("token", newToken);
+				item.setHttpOnly(true);
 				item.setMaxAge(60 * 60 * 24 * 10);
 				item.setPath("/");
 				resp.addCookie(item);

@@ -63,6 +63,7 @@ public class UserController extends BaseController {
 					String newToken = MD5Util.MD5("" + user.getId() + System.currentTimeMillis());
 					userDao.updateUserToken(user.getId(), newToken);
 					Cookie item = getCookieByName("token");
+					item.setHttpOnly(true);
 					item.setValue(newToken);
 					item.setMaxAge(60 * 60 * 24 * 10 - item.getMaxAge());
 					System.out.println(item.getMaxAge());
