@@ -18,6 +18,8 @@
 					<li><a href="/wowtoken.jsp">时光徽章</a></li>
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
+					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
+					<li><a href="/topOwner.jsp">玩家排行</a></li>
 					<c:if test="${empty sessionScope.user}">
 						<li><a href="/page/user/login">登录</a></li>
 					</c:if>

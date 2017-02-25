@@ -1214,8 +1214,9 @@ function getItemByAllRealms(itemId,itemName){
 			var chartLabels=[];
 			var chartBuyoutData=[];
 			var chartQuantityData=[];
-
+			var fuckOwner = ["贼面贼霸","冲进女澡堂","漏屁屁火星人"];
 			var calData=[];
+			var calDataCount = 0;
 			var quantitySum=0;
 			for(var i in data){
 				var realm=Realm.getConnectedById(data[i][0]);					
@@ -1223,7 +1224,9 @@ function getItemByAllRealms(itemId,itemName){
 				var buyoutOwner=data[i][2];
 				var quantity=data[i][3];
 				var updated=data[i][4];
-				calData[i]=buyout;
+				if (fuckOwner.indexOf(buyoutOwner) == -1) {
+					calData[calDataCount++]=buyout;
+				}
 				chartLabels[i]=realm;
 				chartBuyoutData[i]=Bnade.getGold(buyout);
 				chartQuantityData[i]=quantity;

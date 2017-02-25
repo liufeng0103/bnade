@@ -54,7 +54,7 @@ public class ItemMarketPriceAnalysis {
 		Map<Integer, MarketItem> itemMap = getItemMap(items);
 		logger.info("数据库中已有物品参考价格{}条", itemMap.size());
 		// 获取所有的物品id
-		List<Long> ids1 = run.query("select id from mt_item where id<>"+Pet.PET_ITEM_ID, new ColumnListHandler<Long>());
+		List<Long> ids1 = run.query("select id from t_item where id<>"+Pet.PET_ITEM_ID, new ColumnListHandler<Long>());
 		logger.info("物品总数量{}条", ids1.size());
 //		// 获取已处理过的所有物品id
 //		List<Long> ids2 = run.query("select itemId from t_item_analysis", new ColumnListHandler<Long>());

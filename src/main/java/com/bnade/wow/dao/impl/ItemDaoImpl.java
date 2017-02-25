@@ -56,7 +56,7 @@ public class ItemDaoImpl implements ItemDao {
 
 	@Override
 	public Item getItemById(int id) throws SQLException {		
-		return run.query("select id,name,icon,itemLevel from mt_item where id=?", new BeanHandler<Item>(Item.class), id);
+		return run.query("select id,name,icon,itemLevel from t_item where id=?", new BeanHandler<Item>(Item.class), id);
 	}
 
 	@Override

@@ -123,7 +123,7 @@ public class TimeUtil {
 		System.out.println(TimeUtil.getYearMonth(-1));
 		System.out.println(TimeUtil.parse(TimeUtil.getDate(0)).getTime());
 		System.out.println(TimeUtil.getDate(TimeUtil.parse("20160610"), -1));
-		System.out.println(System.currentTimeMillis() + DAY * 365);
+		System.out.println(System.currentTimeMillis() + DAY * 31);
 		System.out.println(System.currentTimeMillis());
 	}
 }

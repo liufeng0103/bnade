@@ -26,7 +26,7 @@ public class AuctionDaoImpl implements AuctionDao {
 	public List<Auction> getAuctionsByRealmOwner(int realmId, String owner,
 			String order) throws SQLException {
 		String sql = "select auc,item,owner,ownerRealm,bid,buyout,quantity,timeLeft,petSpeciesId,petLevel,petBreedId,context,bonusLists,lastModifed,i.name as itemName from t_ah_data_"
-				+ realmId + " a left join mt_item i on a.item=i.id where owner=? ";
+				+ realmId + " a left join t_item i on a.item=i.id where owner=? ";
 		if (order != null) {
 			sql += " order by " + order;
 		}
@@ -38,7 +38,7 @@ public class AuctionDaoImpl implements AuctionDao {
 			throws SQLException {
 		String sql = "select a.item,i.name,i.icon,a.owner,a.bid,a.buyout,a.quantity,a.timeLeft,a.petSpeciesId,a.petBreedId,a.bonusLists,m.owner as owner2,m.bid as bid2,m.buyout as buyout2,m.quantity as quantity2 from t_ah_data_"
 				+ realmId
-				+ " a join mt_item i on a.item=i.id join t_ah_min_buyout_data m on a.item=m.item and m.realmId="
+				+ " a join t_item i on a.item=i.id join t_ah_min_buyout_data m on a.item=m.item and m.realmId="
 				+ realmId
 				+ " and a.bonusLists=m.bonusLists where a.owner=? and a.item <> 82800 union all select a.item,p.name,p.icon,a.owner,a.bid,a.buyout,a.quantity,a.timeLeft,a.petSpeciesId,a.petBreedId,a.bonusLists,m.owner as owner2,m.bid as bid2,m.buyout as buyout2,m.quantity as quantity2 from t_ah_data_"
 				+ realmId

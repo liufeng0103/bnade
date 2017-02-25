@@ -97,7 +97,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<UserItemNotification> getItemNotifications(int userId)
 			throws SQLException {
-		List<UserItemNotification> items = run.query("select userId,realmId,itemId,i.name as itemName,petSpeciesId,petBreedId,bonusList,i.itemLevel, isInverted,price,emailNotification from t_user_item_notification n join mt_item i on n.itemId = i.id where n.userId=? and n.itemId != 82800 " 
+		List<UserItemNotification> items = run.query("select userId,realmId,itemId,i.name as itemName,petSpeciesId,petBreedId,bonusList,i.itemLevel, isInverted,price,emailNotification from t_user_item_notification n join t_item i on n.itemId = i.id where n.userId=? and n.itemId != 82800 " 
 				+ " union all select userId,realmId,82800,p.name as itemName,petSpeciesId,petBreedId,bonusList,0 as itemLevel, isInverted,price,emailNotification from t_user_item_notification n join t_pet p on n.petSpeciesId=p.id where n.userId=? and n.itemId = 82800 ",
 						new BeanListHandler<UserItemNotification>(UserItemNotification.class), userId, userId);
 		for (UserItemNotification item : items) {
@@ -112,7 +112,7 @@ public class UserDaoImpl implements UserDao {
 	public List<UserItemNotification> getItemNotificationsByRealmId(int realmId)
 			throws SQLException {
 		return run
-				.query("select userId,realmId,itemId,petSpeciesId,petBreedId,bonusList,i.name as itemName,i.itemLevel,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join mt_item i on i.id=n.itemId where (n.realmId=? or n.realmId=0) and n.itemId!=82800 and n.emailNotification=1 and u.validated=1"
+				.query("select userId,realmId,itemId,petSpeciesId,petBreedId,bonusList,i.name as itemName,i.itemLevel,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join t_item i on i.id=n.itemId where (n.realmId=? or n.realmId=0) and n.itemId!=82800 and n.emailNotification=1 and u.validated=1"
 						+ " union all select userId,realmId,82800,petSpeciesId,petBreedId,bonusList,p.name as itemName,0 as itemLevel,email,isInverted,price from t_user_item_notification n join t_user u on n.userId=u.id join t_pet p on p.id=n.petSpeciesId where (n.realmId=? or n.realmId=0) and n.itemId=82800 and n.emailNotification=1 and u.validated=1",
 						new BeanListHandler<UserItemNotification>(
 								UserItemNotification.class), realmId, realmId);
