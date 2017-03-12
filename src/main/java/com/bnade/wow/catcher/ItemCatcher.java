@@ -84,18 +84,18 @@ public class ItemCatcher {
 		logger.info("物品信息更新完毕");
 	}
 	
-	public void refreshItems() {		
-		try {
-			run.update("truncate mt_item");
-			run.update("insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot) select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot from t_item");			
-		} catch (SQLException e) {
-			logger.error("刷新mt_item表出错:{}", e.getMessage());
-			// 用于邮件标题
-			System.out.println("严重异常");
-			e.printStackTrace();
-		}	
-		logger.info("刷新mt_item表完毕");
-	}
+//	public void refreshItems() {		
+//		try {
+//			run.update("truncate mt_item");
+//			run.update("insert into mt_item (id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot) select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,hot from t_item");			
+//		} catch (SQLException e) {
+//			logger.error("刷新mt_item表出错:{}", e.getMessage());
+//			// 用于邮件标题
+//			System.out.println("严重异常");
+//			e.printStackTrace();
+//		}	
+//		logger.info("刷新mt_item表完毕");
+//	}
 	
 	/*
 	 * 更新item bonus信息
@@ -163,7 +163,7 @@ public class ItemCatcher {
 	public void processItemCreatedBy() {		
 		WowHeadClient client = new WowHeadClient();
 		try {			
-			List<Long> ids1 = run.query("select distinct id from mt_item", new ColumnListHandler<Long>());
+			List<Long> ids1 = run.query("select distinct id from t_item", new ColumnListHandler<Long>());
 			logger.info("现有物品数		: {}", ids1.size());
 			List<Long> ids2 = run.query("select distinct itemId from t_item_processed where type = 1 union all select distinct itemId from t_item_processed where type = 2", new ColumnListHandler<Long>());
 			logger.info("已处理物品数	: {}", ids2.size());
@@ -271,7 +271,7 @@ public class ItemCatcher {
 	public static void main(String[] args) throws Exception {
 		ItemCatcher itemCatcher = new ItemCatcher();
 		itemCatcher.process();
-		itemCatcher.refreshItems();
+//		itemCatcher.refreshItems();
 		itemCatcher.updateItemBounus();
 //		itemCatcher.addNewPets();
 //		itemCatcher.addPetStats();

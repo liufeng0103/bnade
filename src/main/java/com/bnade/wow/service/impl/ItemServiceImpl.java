@@ -1,6 +1,7 @@
 package com.bnade.wow.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.bnade.wow.dao.ItemDao;
@@ -23,8 +24,12 @@ public class ItemServiceImpl implements ItemService {
 	public List<Item> getItemsByName(String name) throws SQLException {
 		List<Item> items = itemDao.getItemsByName(name); 
 		for (Item item : items) {
-			item.setBonusList(itemDao.getBonusList(item.getId()));			
-			item.setCreatedBy(getItemCreatedBy(item.getId()));			
+			if (item.getItemClass() == 2 || item.getItemClass() == 4) {
+				item.setBonusList(itemDao.getBonusList(item.getId()));
+			} else {
+				item.setBonusList(new ArrayList<String>());
+			}
+			item.setCreatedBy(getItemCreatedBy(item.getId()));
 		}
 		return items;
 	}

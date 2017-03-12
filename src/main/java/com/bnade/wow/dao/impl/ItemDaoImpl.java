@@ -43,9 +43,9 @@ public class ItemDaoImpl implements ItemDao {
 		condition += " order by hot desc ";
 		if (limit > 0) {
 			condition += " limit ?,?";
-			return run.query("select id,name,icon,itemLevel from mt_item where name " + condition, new BeanListHandler<Item>(Item.class), name, offset, limit);
+			return run.query("select id,name,icon,itemLevel,itemClass from t_item where name " + condition, new BeanListHandler<Item>(Item.class), name, offset, limit);
 		} else {
-			return run.query("select id,name,icon,itemLevel from mt_item where name " + condition, new BeanListHandler<Item>(Item.class), name);
+			return run.query("select id,name,icon,itemLevel,itemClass from t_item where name " + condition, new BeanListHandler<Item>(Item.class), name);
 		}		
 	}
 
