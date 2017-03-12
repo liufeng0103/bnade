@@ -125,7 +125,7 @@ ALTER TABLE t_item_processed ADD INDEX(type,itemId);
 
 -- 物品和宠物信息表
 CREATE VIEW v_item as 
-select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,0 as petSpeciesId,hot from mt_item
+select id,name,icon,itemClass,itemSubClass,inventoryType,itemLevel,0 as petSpeciesId,hot from t_item
 union all 
 select 82800,name,icon,10,0,0,0,id,hot from t_pet
 
