@@ -104,7 +104,7 @@ public class ItemCatcher {
 		try {
 			List<ItemBonus> ibs = run.query("select itemId,bonusList from t_item_bonus", new BeanListHandler<ItemBonus>(ItemBonus.class));
 			logger.info("当前数据库Item Bonus数量" + ibs.size());
-			List<ItemBonus> aibs = run.query("select item as itemId,context,bonusLists as bonusList from t_ah_min_buyout_data where bonusLists <> '' group by item,bonusLists", new BeanListHandler<ItemBonus>(ItemBonus.class));
+			List<ItemBonus> aibs = run.query("select item as itemId,bonusLists as bonusList from t_ah_min_buyout_data where bonusLists <> '' group by item,bonusLists", new BeanListHandler<ItemBonus>(ItemBonus.class));
 			logger.info("当前最新排卖行数据中的Item Bonus数量" + aibs.size());
 			aibs.removeAll(ibs);
 			logger.info("最新的Item Bonus数量" + aibs.size());
