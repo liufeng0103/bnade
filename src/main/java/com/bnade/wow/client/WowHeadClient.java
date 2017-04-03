@@ -18,7 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.bnade.util.HttpClient;
+import com.bnade.utils.HttpClient;
 import com.bnade.wow.client.model.Item;
 import com.bnade.wow.client.model.XItem;
 import com.bnade.wow.client.model.XWowHead;

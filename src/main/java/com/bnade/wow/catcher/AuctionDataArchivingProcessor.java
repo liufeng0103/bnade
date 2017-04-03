@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.TimeUtils;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.HistoryAuction;
 import com.bnade.wow.po.Pet;
@@ -17,15 +17,15 @@ public class AuctionDataArchivingProcessor {
 	private static final int PERIOD = 4; 
 
 	public List<HistoryAuction> process(List<Auction> aucs, String date) throws ParseException, CatcherException {
-		long startTime = TimeUtil.parse(date).getTime();
-		long period = TimeUtil.DAY / PERIOD;
+		long startTime = TimeUtils.parse(date).getTime();
+		long period = TimeUtils.DAY / PERIOD;
 		// map用来保存每个时段物品信息
 		Map<Long, Map<String, HistoryAuction>> periodMap = new HashMap<>();
 		// 初始化map
 		for (int i = 1; i <= PERIOD; i++) {
 			Map<String, HistoryAuction> result = new HashMap<>();
 			if (i == PERIOD) {
-				periodMap.put(startTime + TimeUtil.DAY, result);				
+				periodMap.put(startTime + TimeUtils.DAY, result);				
 			} else {
 				periodMap.put(startTime + period * i, result);				
 			}				
@@ -45,7 +45,7 @@ public class AuctionDataArchivingProcessor {
 					aucPeriod = tmpTime;
 				} else if (i == PERIOD) {	
 					if (lastModified >= (tmpTime - period)) {
-						aucPeriod = startTime + TimeUtil.DAY;
+						aucPeriod = startTime + TimeUtils.DAY;
 					}					
 				} else {
 					if (lastModified >= (tmpTime - period)) {

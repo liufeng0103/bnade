@@ -2,7 +2,7 @@ package com.bnade.wow.po;
 
 import java.util.Date;
 
-import com.bnade.util.BnadeUtil;
+import com.bnade.utils.BnadeUtils;
 
 public class Auction {
 	private int auc;
@@ -25,23 +25,23 @@ public class Auction {
 	private Item itemObj;
 
 	public String getUrlOwner() {
-		return BnadeUtil.encodeURIComponent(owner);
+		return BnadeUtils.encodeURIComponent(owner);
 	}
 	
 	public String getRealmName() {
-		return BnadeUtil.getRealmNameById(realmId);
+		return BnadeUtils.getRealmNameById(realmId);
 	}
 	
 	public String getBidGold() {
-		return BnadeUtil.getGold(bid);
+		return BnadeUtils.getGold(bid);
 	}
 	
 	public String getUnitPrice() {
-		return BnadeUtil.getGold(buyout/quantity);
+		return BnadeUtils.getGold(buyout/quantity);
 	}
 	
 	public String getPrice() {
-		return BnadeUtil.getGold(buyout);
+		return BnadeUtils.getGold(buyout);
 	}
 	
 	public Date getUpdated() {
@@ -49,11 +49,11 @@ public class Auction {
 	}
 	
 	public String getTimeLeftCN() {
-		return BnadeUtil.getTimeLeft(timeLeft);
+		return BnadeUtils.getTimeLeft(timeLeft);
 	}
 	
 	public int getRealmHot() {
-		return BnadeUtil.getRealmHot(realmId);
+		return BnadeUtils.getRealmHot(realmId);
 	}
 	
 	public int getAuc() {

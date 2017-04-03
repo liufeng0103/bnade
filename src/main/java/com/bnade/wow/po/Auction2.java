@@ -1,6 +1,6 @@
 package com.bnade.wow.po;
 
-import com.bnade.util.BnadeUtil;
+import com.bnade.utils.BnadeUtils;
 
 /**
  * 用户玩家压价功能
@@ -17,19 +17,19 @@ public class Auction2 extends Auction {
 	private int quantity2;
 
 	public String getBidGold() {
-		return BnadeUtil.getGold(getBid());
+		return BnadeUtils.getGold(getBid());
 	}
 
 	public String getBuyoutGold() {
-		return BnadeUtil.getGold(getBuyout());
+		return BnadeUtils.getGold(getBuyout());
 	}
 
 	public String getUnitBuyoutGold() {
-		return BnadeUtil.getGold(getBuyout() / getQuantity());
+		return BnadeUtils.getGold(getBuyout() / getQuantity());
 	}
 
 	public String getBonus() {
-		return BnadeUtil.getBonus(getBonusLists());
+		return BnadeUtils.getBonus(getBonusLists());
 	}
 
 	public String getName() {

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.MD5Util;
+import com.bnade.utils.MD5Utils;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
@@ -66,7 +66,7 @@ public class AfterLoginRedirectServlet extends HttpServlet {
 				} else {
 					nickname = dbUser.getNickname();
 				}
-				String newToken = MD5Util.MD5("" + dbUser.getId() + System.currentTimeMillis());
+				String newToken = MD5Utils.MD5("" + dbUser.getId() + System.currentTimeMillis());
 				userDao.updateUserToken(dbUser.getId(), newToken);
 				Cookie item = new Cookie("token", newToken);
 				item.setHttpOnly(true);

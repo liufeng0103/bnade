@@ -1,6 +1,6 @@
 package com.bnade.wow.po;
 
-import com.bnade.util.BnadeUtil;
+import com.bnade.utils.BnadeUtils;
 
 public class UserCharacter {
 	private int userId;
@@ -17,7 +17,7 @@ public class UserCharacter {
 	}
 
 	public String getRealmName() {
-		return BnadeUtil.getRealmNameById(realmId);
+		return BnadeUtils.getRealmNameById(realmId);
 	}
 	
 	public int getUserId() {

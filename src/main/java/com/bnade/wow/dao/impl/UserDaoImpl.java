@@ -7,7 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.po.Pet;
 import com.bnade.wow.po.PetStats;
@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
 	private QueryRunner run;
 
 	public UserDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 
 	@Override

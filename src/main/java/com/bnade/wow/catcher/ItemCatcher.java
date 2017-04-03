@@ -10,19 +10,16 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.DBUtil;
-import com.bnade.util.HttpClient;
+import com.bnade.utils.DBUtils;
+import com.bnade.utils.HttpClient;
 import com.bnade.wow.client.WowAPI;
 import com.bnade.wow.client.WowClient;
 import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.WowHeadClient;
-import com.bnade.wow.client.model.Bonus;
 import com.bnade.wow.client.model.Item;
-import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.XItem;
 import com.bnade.wow.client.model.XItemCreatedBy;
 import com.bnade.wow.client.model.XItemReagent;
-import com.bnade.wow.dao.impl.UserDaoImpl;
 
 
 /**
@@ -39,7 +36,7 @@ public class ItemCatcher {
 	private WowAPI wowAPI;
 	
 	public ItemCatcher() {
-		run = new QueryRunner(DBUtil.getDataSource());		
+		run = new QueryRunner(DBUtils.getDataSource());		
 		wowAPI = new WowHeadClient(); // 国服不好用切换wowhead api获取物品信息
 	}
 	
@@ -122,7 +119,6 @@ public class ItemCatcher {
 	 */
 	public void addNewPets() {
 		HttpClient client = new HttpClient();
-		client.setGzipSupported(true);
 		try {
 			List<Long> ids = run.query("select distinct petSpeciesId from t_ah_min_buyout_data where item = 82800 and petSpeciesId not in (select id from t_pet)", new ColumnListHandler<Long>());
 			for (Long tmpId : ids) {
@@ -146,7 +142,7 @@ public class ItemCatcher {
 			List<PetStats> pets2 = run.query("select speciesId,breedId from t_pet_stats", new BeanListHandler<PetStats>(PetStats.class));
 			pets.removeAll(pets2);
 			WowClient client = new WowClient();
-			client.setRegion(WowClient.REGION_TW);
+			client.setRegion(WowClient.REGION_US);
 			for (PetStats pet : pets) {
 				com.bnade.wow.client.model.PetStats petStats = client.getPetStats(pet.getSpeciesId(), pet.getBreedId(), 25, 3);
 				System.out.println(petStats);
@@ -197,88 +193,14 @@ public class ItemCatcher {
 			e.printStackTrace();
 		}
 	}
-
-	public void getNewBonus() {
-		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
-		WowClient client = new WowClient();
-		try {
-			List<Integer> ids = run.query("select bonusId from t_item_bonus_desc", new ColumnListHandler<Integer>());
-			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
-			for (JAuction auc : aucs) {
-//				if (auc.getAllBonus() != null) {
-//					for (Bonus bonus : auc.getAllBonus()) {
-//						if (bonus.getBonusListId() > 1000) {
-//							if (!ids.contains(Integer.valueOf(bonus.getBonusListId()))) {
-//								System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
-//							}
-//						}
-//					}
-//				}
-				if (auc.getItem() == 142541) {
-					System.out.println(auc);
-				}
-			}
-		} catch (IOException | SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 指定item id看bonus
-	 */
-	public void getNewBonus2() {
-		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
-		WowClient client = new WowClient();
-		try {
-			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
-			for (JAuction auc : aucs) {
-				if (auc.getItem() == 121244) {
-					if (auc.getAllBonus() != null) {
-						for (Bonus bonus : auc.getAllBonus()) {
-							System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
-						}
-					} else {
-						System.out.println(auc.getItem());
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	/**
-	 * 指定bonusid看item
-	 */
-	public void getNewBonus3() {
-		String url = "https://www.battlenet.com.cn/wow/zh/item/"; // 124311/tooltip?bl=3441
-		WowClient client = new WowClient();
-		try {
-			List<JAuction> aucs = client.getAuctionData("http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json");
-			for (JAuction auc : aucs) {			
-				if (auc.getAllBonus() != null) {
-					for (Bonus bonus : auc.getAllBonus()) {
-						if (bonus.getBonusListId() == 1812) {
-							System.out.println(auc.getItem() + "	" + bonus.getBonusListId() + "	" + auc.getAllBonus() + "	" + url + auc.getItem() + "/tooltip	" + url + auc.getItem() + "/tooltip?bl=" + bonus.getBonusListId());
-						}
-					}
-				}			
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public static void main(String[] args) throws Exception {
 		ItemCatcher itemCatcher = new ItemCatcher();
-		itemCatcher.process();
+//		itemCatcher.process();
 //		itemCatcher.refreshItems();
-		itemCatcher.updateItemBounus();
-//		itemCatcher.addNewPets();
-//		itemCatcher.addPetStats();
-//		itemCatcher.processItemCreatedBy();
-//		itemCatcher.getNewBonus();
-//		itemCatcher.getNewBonus2();
-//		itemCatcher.getNewBonus3();
+//		itemCatcher.updateItemBounus();
+		itemCatcher.addNewPets();
+		itemCatcher.addPetStats();
 	}	
 
 }

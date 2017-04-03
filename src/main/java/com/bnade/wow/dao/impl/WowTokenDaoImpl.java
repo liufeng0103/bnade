@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.WowTokenDao;
 import com.bnade.wow.po.WowToken;
 
@@ -24,7 +24,7 @@ public class WowTokenDaoImpl implements WowTokenDao {
 	private QueryRunner run;
 	
 	public WowTokenDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class WowTokenDaoImpl implements WowTokenDao {
 
 	@Override
 	public void save(List<WowToken> wowTokens) throws SQLException {		
-		Connection con = DBUtil.getDataSource().getConnection();
+		Connection con = DBUtils.getDataSource().getConnection();
 		try {
 			boolean autoCommit = con.getAutoCommit();
 			con.setAutoCommit(false);			

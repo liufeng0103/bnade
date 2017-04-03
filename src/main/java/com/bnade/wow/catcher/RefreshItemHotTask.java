@@ -6,8 +6,8 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.DBUtil;
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.DBUtils;
+import com.bnade.utils.TimeUtils;
 import com.bnade.wow.po.HotItem;
 import com.bnade.wow.service.HotItemService;
 import com.bnade.wow.service.impl.HotItemServiceImpl;
@@ -28,8 +28,8 @@ public class RefreshItemHotTask {
 		logger.info("开始刷新物品热度数据");		
 //		Connection con = DBUtil.getDataSource().getConnection();
 		try {
-			QueryRunner run = new QueryRunner(DBUtil.getDataSource());
-			long weekStart = TimeUtil.parse(TimeUtil.getDate(-7)).getTime();
+			QueryRunner run = new QueryRunner(DBUtils.getDataSource());
+			long weekStart = TimeUtils.parse(TimeUtils.getDate(-7)).getTime();
 			HotItemService hotItemService = new HotItemServiceImpl();
 			List<HotItem> hotItems = hotItemService.getGroupItemIdAfterDatetime(weekStart, 20000);
 			logger.info("获取一周内被搜索的物品数{}", hotItems.size());

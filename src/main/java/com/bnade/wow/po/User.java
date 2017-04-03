@@ -1,6 +1,6 @@
 package com.bnade.wow.po;
 
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.TimeUtils;
 
 public class User {
 	
@@ -19,7 +19,7 @@ public class User {
 	
 	public String getExpireDate() {
 		if (getIsVip()) {
-			return TimeUtil.getDate2(expire) + "到期";
+			return TimeUtils.getDate2(expire) + "到期";
 		}
 		return "未激活";
 	}

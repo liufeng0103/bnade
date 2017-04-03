@@ -16,10 +16,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.bnade.util.BnadeProperties;
-import com.bnade.util.MD5Util;
-import com.bnade.util.Mail;
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.BnadeProperties;
+import com.bnade.utils.MD5Utils;
+import com.bnade.utils.Mail;
+import com.bnade.utils.TimeUtils;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
@@ -298,14 +298,14 @@ public class UserResource {
 				userM.setEmail(user.getEmail());
 				acode = generateAcode(user);
 				userM.setAcode(acode);
-				userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY); // 24
+				userM.setExpired(System.currentTimeMillis() + TimeUtils.DAY); // 24
 																				// 小时内有效
 				userDao.addMailValidation(userM);
 			} else {
-				if (userM.getExpired() - System.currentTimeMillis() < TimeUtil.HOUR) { // 有效期小于1小时时重置
+				if (userM.getExpired() - System.currentTimeMillis() < TimeUtils.HOUR) { // 有效期小于1小时时重置
 					acode = generateAcode(user);
 					userM.setAcode(acode);
-					userM.setExpired(System.currentTimeMillis() + TimeUtil.DAY);
+					userM.setExpired(System.currentTimeMillis() + TimeUtils.DAY);
 					userM.setEmail(user.getEmail());
 				} else {
 					acode = userM.getAcode();
@@ -336,8 +336,8 @@ public class UserResource {
 	}
 
 	private String generateAcode(User user) {
-		return MD5Util.MD5("" + user.getId())
-				+ MD5Util.MD5(user.getEmail() + System.currentTimeMillis())
-				+ MD5Util.MD5(user.getOpenID());
+		return MD5Utils.MD5("" + user.getId())
+				+ MD5Utils.MD5(user.getEmail() + System.currentTimeMillis())
+				+ MD5Utils.MD5(user.getOpenID());
 	}
 }

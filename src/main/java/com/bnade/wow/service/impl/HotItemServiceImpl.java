@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.TimeUtils;
 import com.bnade.wow.dao.HotItemDao;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.dao.impl.HotItemDaoImpl;
@@ -46,7 +46,7 @@ public class HotItemServiceImpl implements HotItemService {
 			throws SQLException {
 		List<HotItem> items = null;
 		try {
-			items = hotItemDao.getGroupItemIdAfterDatetime(TimeUtil.parse(TimeUtil.getDate(0)).getTime(), offset, limit);
+			items = hotItemDao.getGroupItemIdAfterDatetime(TimeUtils.parse(TimeUtils.getDate(0)).getTime(), offset, limit);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		};

@@ -10,7 +10,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.AuctionHouseOwnerItemDao;
 import com.bnade.wow.po.OwnerItem;
 import com.bnade.wow.po.OwnerItemStatistics;
@@ -24,14 +24,14 @@ public class AuctionHouseOwnerItemDaoImpl implements AuctionHouseOwnerItemDao {
 	private QueryRunner run;
 	
 	public AuctionHouseOwnerItemDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 	
 	@Override
 	public void save(List<OwnerItem> items, int realmId) throws SQLException {	
 		String tableName = TABLE_NAME_PREFIX + realmId;
 		checkAndCreateTable(tableName);
-		Connection con = DBUtil.getDataSource().getConnection();
+		Connection con = DBUtils.getDataSource().getConnection();
 		try {
 			boolean autoCommit = con.getAutoCommit();
 			con.setAutoCommit(false);
@@ -54,7 +54,7 @@ public class AuctionHouseOwnerItemDaoImpl implements AuctionHouseOwnerItemDao {
 	
 	private void checkAndCreateTable(String tableName) throws SQLException {
 		logger.debug("检查表{}是否存在", tableName);
-		if (!DBUtil.isTableExist(tableName)) {
+		if (!DBUtils.isTableExist(tableName)) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("CREATE TABLE IF NOT EXISTS " + tableName + " (");
 			sb.append("id INT UNSIGNED NOT NULL AUTO_INCREMENT,");
@@ -71,7 +71,7 @@ public class AuctionHouseOwnerItemDaoImpl implements AuctionHouseOwnerItemDao {
 	@Override
 	public void deleteAll(int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + realmId;
-		if (DBUtil.isTableExist(tableName)) {
+		if (DBUtils.isTableExist(tableName)) {
 			run.update("truncate " + tableName);	
 		}				
 	}

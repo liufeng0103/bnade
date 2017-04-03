@@ -2,10 +2,37 @@ package com.bnade.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.bnade.wow.client.model.BonusList;
+
 public class BnadeUtils {
+	
+	/**
+	 * 把BonusLists转化成String，且只显示自己关心的bonus
+	 * @param bonusLists
+	 * @return
+	 */
+	public static String convertBonusListsToString(List<BonusList> bonusLists) {
+		String result = null;
+		if (bonusLists != null && bonusLists.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			Collections.sort(bonusLists);
+			for (BonusList b : bonusLists) {
+				if (BonusList.bonusIds.contains(b.getBonusListId())) {
+					if (sb.length() > 0) {
+						sb.append(",");
+					}
+					sb.append(b.getBonusListId());
+				}
+			}
+			result = sb.toString();
+		}	
+		return result;
+	}
 	
 	public static String getRealmNameById(int id) {
 		return realmMap.get(id);

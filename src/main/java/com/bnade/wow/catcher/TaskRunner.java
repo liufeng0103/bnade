@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.BnadeProperties;
-import com.bnade.util.FileUtil;
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.BnadeProperties;
+import com.bnade.utils.IOUtils;
+import com.bnade.utils.TimeUtils;
 
 /** 
  * TaskRunner用于运行AuctionDataExtractingTask来获取，分析和保存拍卖行数据
@@ -62,7 +62,7 @@ public class TaskRunner {
 			while(true) {
 				long startTime = System.currentTimeMillis();
 				int threadCount = BnadeProperties.getTask1ThreadCount();
-				List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
+				List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
 				if (threadCount > realmNames.size()) {
 					threadCount = realmNames.size();
 				}
@@ -119,19 +119,19 @@ public class TaskRunner {
 				pool.shutdown();
 				while(true) {
 					if (!pool.isTerminated()) {
-						logger.info("有任务线程没有结束，等待{}", TimeUtil.format(CHECK_WAIT_TIME ));
+						logger.info("有任务线程没有结束，等待{}", TimeUtils.format(CHECK_WAIT_TIME ));
 						try {
 							Thread.sleep(CHECK_WAIT_TIME);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					} else {
-						logger.info("所有服务器运行完毕，用时{}", TimeUtil.format(System.currentTimeMillis() - startTime));
+						logger.info("所有服务器运行完毕，用时{}", TimeUtils.format(System.currentTimeMillis() - startTime));
 						if (isShutdown()) {
 							exit();
 						} else {
 							try {
-								logger.info("等待{}，准备重启", TimeUtil.format(WAIT_TIME));
+								logger.info("等待{}，准备重启", TimeUtils.format(WAIT_TIME));
 								Thread.sleep(WAIT_TIME);
 							} catch (InterruptedException e) {
 								e.printStackTrace();

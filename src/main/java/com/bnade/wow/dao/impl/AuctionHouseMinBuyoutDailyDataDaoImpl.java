@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.AuctionHouseMinBuyoutDailyDataDao;
 import com.bnade.wow.po.Auction;
 
@@ -22,7 +22,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	private QueryRunner run;
 	
 	public AuctionHouseMinBuyoutDailyDataDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	
 	private void checkAndCreateTable(String tableName) throws SQLException {
 		logger.debug("检查表{}是否存在", tableName);
-		if (!DBUtil.isTableExist(tableName)) {
+		if (!DBUtils.isTableExist(tableName)) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("CREATE TABLE IF NOT EXISTS " + tableName + " (");
 			sb.append("id INT UNSIGNED NOT NULL AUTO_INCREMENT,");
@@ -62,7 +62,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	public List<Auction> get(int itemId, String bounsList, String date, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + date + "_" + realmId;
 		String url = "select item,owner,ownerRealm,bid,buyout,quantity,petSpeciesId,petBreedId,bonusLists,lastModifed from " + tableName + " where item=?";
-		if (DBUtil.isTableExist(tableName)) {
+		if (DBUtils.isTableExist(tableName)) {
 			if (bounsList != null) {
 				url += " and bonusLists=?";
 				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
@@ -78,7 +78,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	@Override
 	public List<Auction> get(String date, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + date + "_" + realmId;
-		if (DBUtil.isTableExist(tableName)) {
+		if (DBUtils.isTableExist(tableName)) {
 			return run.query("select item,owner,ownerRealm,bid,buyout,quantity,petSpeciesId,petBreedId,bonusLists,lastModifed from " + tableName, new BeanListHandler<Auction>(Auction.class));
 		} else {
 			logger.debug("表{}不存在,返回空数组", tableName);
@@ -89,7 +89,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	@Override
 	public void drop(String date, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + date + "_" + realmId;
-		if (DBUtil.isTableExist(tableName)) {
+		if (DBUtils.isTableExist(tableName)) {
 			run.update("DROP TABLE " + tableName);
 		} else {
 			logger.debug("drop表{}不存在", tableName);

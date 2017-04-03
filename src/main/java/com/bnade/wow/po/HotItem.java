@@ -2,7 +2,7 @@ package com.bnade.wow.po;
 
 import java.util.Date;
 
-import com.bnade.util.BnadeUtil;
+import com.bnade.utils.BnadeUtils;
 
 public class HotItem {
 	
@@ -22,7 +22,7 @@ public class HotItem {
 	}
 
 	public String getPrice() {
-		return BnadeUtil.getGold(buy);
+		return BnadeUtils.getGold(buy);
 	}
 	
 	public int getItemId() {

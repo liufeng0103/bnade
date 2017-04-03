@@ -11,7 +11,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.AuctionHouseMinBuyoutMonthlyDataDao;
 import com.bnade.wow.po.HistoryAuction;
 
@@ -24,14 +24,14 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 	private QueryRunner run;
 	
 	public AuctionHouseMinBuyoutMonthlyDataDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 
 	@Override
 	public void save(List<HistoryAuction> aucs, String month, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + month + "_" + realmId;
 		checkAndCreateTable(tableName);
-		Connection con = DBUtil.getDataSource().getConnection();
+		Connection con = DBUtils.getDataSource().getConnection();
 		try {
 			boolean autoCommit = con.getAutoCommit();
 			con.setAutoCommit(false);			
@@ -59,7 +59,7 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 	
 	private void checkAndCreateTable(String tableName) throws SQLException {
 		logger.debug("检查表{}是否存在", tableName);
-		if (!DBUtil.isTableExist(tableName)) {
+		if (!DBUtils.isTableExist(tableName)) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("CREATE TABLE IF NOT EXISTS " + tableName + " (");
 			sb.append("id INT UNSIGNED NOT NULL AUTO_INCREMENT,");
@@ -81,7 +81,7 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 	@Override
 	public List<HistoryAuction> get(int itemId, String bounsList, String month, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + month + "_" + realmId;
-		if (DBUtil.isTableExist(tableName)) {
+		if (DBUtils.isTableExist(tableName)) {
 			String url = "select item,buyout,quantity,petSpeciesId,petBreedId,bonusLists,lastModifed from "
 					+ tableName 
 					+ " where item=?";

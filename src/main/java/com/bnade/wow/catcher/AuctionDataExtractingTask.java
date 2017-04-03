@@ -9,12 +9,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.util.BnadeProperties;
-import com.bnade.util.TimeUtil;
+import com.bnade.utils.BnadeProperties;
+import com.bnade.utils.BnadeUtils;
+import com.bnade.utils.TimeUtils;
 import com.bnade.wow.client.WowClient;
 import com.bnade.wow.client.WowClientException;
 import com.bnade.wow.client.model.AuctionDataFile;
-import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.OwnerItem;
 import com.bnade.wow.po.Realm;
@@ -96,18 +96,18 @@ public class AuctionDataExtractingTask implements Runnable {
 		if (realm != null) {
 			long interval = BnadeProperties.getTask1Interval();
 			if (System.currentTimeMillis() - realm.getLastModified() > interval) {
-				List<JAuction> auctions = null;	
+				List<com.bnade.wow.client.model.Auction> auctions = null;	
 				if (useAPIGetData) {
 					try {
 						addInfo("通过api获取拍卖行数据文件信息");
 						AuctionDataFile auctionDataFile = wowClient.getAuctionDataFile(realmName);
 						addInfo("拍卖行数据文件信息获取完毕");
 						if (auctionDataFile.getLastModified() != realm.getLastModified()) {
-							addInfo("2次更新间隔{}", TimeUtil.format(auctionDataFile.getLastModified() - realm.getLastModified()));
+							addInfo("2次更新间隔{}", TimeUtils.format(auctionDataFile.getLastModified() - realm.getLastModified()));
 							addInfo("开始下载拍卖行数据");
 							long start = System.currentTimeMillis();
 							auctions = wowClient.getAuctionData(auctionDataFile.getUrl());
-							addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtil.format(System.currentTimeMillis() - start));
+							addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtils.format(System.currentTimeMillis() - start));
 							// 更新realm状态信息
 							realm.setUrl(auctionDataFile.getUrl());
 							realm.setLastModified(auctionDataFile.getLastModified());
@@ -119,20 +119,20 @@ public class AuctionDataExtractingTask implements Runnable {
 						isApiAvailable = false;
 						addInfo("获取拍卖行数据文件信息api不好用，使用数据库中的url下载数据文件");
 						long start = System.currentTimeMillis();
-						addInfo("2次更新间隔{}", TimeUtil.format(start - realm.getLastModified()));
+						addInfo("2次更新间隔{}", TimeUtils.format(start - realm.getLastModified()));
 						addInfo("开始下载拍卖行数据");					
 						auctions = wowClient.getAuctionData(realm.getUrl());
-						addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtil.format(System.currentTimeMillis() - start));
+						addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtils.format(System.currentTimeMillis() - start));
 						// 更新realm状态信息
 						realm.setLastModified(System.currentTimeMillis());
 					} 	
 				} else {
 					addInfo("直接使用url下载数据");
 					long start = System.currentTimeMillis();
-					addInfo("2次更新间隔{}", TimeUtil.format(start - realm.getLastModified()));
+					addInfo("2次更新间隔{}", TimeUtils.format(start - realm.getLastModified()));
 					addInfo("开始下载拍卖行数据");					
 					auctions = wowClient.getAuctionData(realm.getUrl());
-					addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtil.format(System.currentTimeMillis() - start));
+					addInfo("拍卖行数据下载完毕,共{}条数据用时{}", auctions.size(), TimeUtils.format(System.currentTimeMillis() - start));
 					// 更新realm状态信息
 					realm.setLastModified(System.currentTimeMillis());
 				}
@@ -148,7 +148,7 @@ public class AuctionDataExtractingTask implements Runnable {
 					addInfo("开始保存{}条拍卖行数据", tmpAucs.size());
 					long start = System.currentTimeMillis();
 					auctionDataService.save(tmpAucs, realm.getId());
-					addInfo("保存{}条拍卖行数据完毕, 用时{}", auctions.size(), TimeUtil.format(System.currentTimeMillis() - start));
+					addInfo("保存{}条拍卖行数据完毕, 用时{}", auctions.size(), TimeUtils.format(System.currentTimeMillis() - start));
 					addInfo("删除上一次玩家物品数数据");
 					auctionHouseOwnerItemService.deleteAll(realm.getId());
 					List<OwnerItem> ownerItems = auctionDataProcessor.getOwnerItems();
@@ -156,7 +156,7 @@ public class AuctionDataExtractingTask implements Runnable {
 					auctionHouseOwnerItemService.save(ownerItems, realm.getId());
 					addInfo("保存{}条玩家拍卖物品数完毕", ownerItems.size());					
 					// 2. 保存所有最低一口价数据
-					List<JAuction> minBuyoutAuctions = auctionDataProcessor.getMinBuyoutAuctions();
+					List<com.bnade.wow.client.model.Auction> minBuyoutAuctions = auctionDataProcessor.getMinBuyoutAuctions();
 					// 更新服务器拍卖状态信息到t_realm
 					realm.setMaxAucId(auctionDataProcessor.getMaxAucId());
 					realm.setAuctionQuantity(auctions.size());
@@ -172,13 +172,13 @@ public class AuctionDataExtractingTask implements Runnable {
 					addInfo("保存{}条拍卖行最低一口价数据完毕", tmpAucs.size());
 					// 3. 保存所有最低一口价数据到历史表
 					addInfo("开始保存{}条拍卖行最低一口价数据到历史表", tmpAucs.size());
-					auctionMinBuyoutDailyDataService.save(tmpAucs, TimeUtil.getDate(realm.getLastModified()), realm.getId());
+					auctionMinBuyoutDailyDataService.save(tmpAucs, TimeUtils.getDate(realm.getLastModified()), realm.getId());
 					addInfo("保存{}条拍卖行最低一口价数据到历史表完毕", tmpAucs.size());
 				} else {
 					addInfo("最大的拍卖id{}跟数据库的一样，不更新", realm.getMaxAucId());
 				}				
 			} else {
-				addInfo("上次更新时间{}，未超过设定的更新间隔时间{}，不更新", new Date(realm.getLastModified()), TimeUtil.format(interval));
+				addInfo("上次更新时间{}，未超过设定的更新间隔时间{}，不更新", new Date(realm.getLastModified()), TimeUtils.format(interval));
 			}
 		}
 	}
@@ -194,7 +194,7 @@ public class AuctionDataExtractingTask implements Runnable {
 			e.printStackTrace();
 		} finally {
 			isComplete = true;
-			addInfo("完成，用时：" + TimeUtil.format(System.currentTimeMillis() - start));
+			addInfo("完成，用时：" + TimeUtils.format(System.currentTimeMillis() - start));
 		}
 	}
 
@@ -210,8 +210,8 @@ public class AuctionDataExtractingTask implements Runnable {
 //		logger.debug(logHeader + msg, arguments);;
 //	}
 	
-	private void copy(List<JAuction> jAucs, List<Auction> aucs, int realmId, long lastModified) {
-		for (JAuction jAuc : jAucs) {
+	private void copy(List<com.bnade.wow.client.model.Auction> jAucs, List<Auction> aucs, int realmId, long lastModified) {
+		for (com.bnade.wow.client.model.Auction jAuc : jAucs) {
 			Auction auc = new Auction();
 			auc.setAuc(jAuc.getAuc());
 			auc.setItem(jAuc.getItem());
@@ -227,7 +227,7 @@ public class AuctionDataExtractingTask implements Runnable {
 			auc.setPetLevel(jAuc.getPetLevel());
 			auc.setPetBreedId(jAuc.getPetBreedId());
 			auc.setContext(jAuc.getContext());
-			auc.setBonusLists(jAuc.getBonusLists());
+			auc.setBonusLists(BnadeUtils.convertBonusListsToString(jAuc.getBonusLists()));
 			auc.setRealmId(realmId);
 			auc.setLastModifed(lastModified);
 			aucs.add(auc);

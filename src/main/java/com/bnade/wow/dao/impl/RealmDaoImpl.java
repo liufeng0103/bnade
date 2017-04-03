@@ -7,7 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.util.DBUtil;
+import com.bnade.utils.DBUtils;
 import com.bnade.wow.dao.RealmDao;
 import com.bnade.wow.po.Realm;
 
@@ -16,7 +16,7 @@ public class RealmDaoImpl implements RealmDao {
 	private QueryRunner run;
 	
 	public RealmDaoImpl() {
-		run = new QueryRunner(DBUtil.getDataSource());
+		run = new QueryRunner(DBUtils.getDataSource());
 	}
 
 	@Override
