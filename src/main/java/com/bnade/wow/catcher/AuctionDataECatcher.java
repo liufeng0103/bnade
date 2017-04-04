@@ -51,9 +51,9 @@ import com.bnade.wow.service.impl.RealmServiceImpl;
  * @author liufeng0103
  *
  */
-public class AuctionDataExtractingTask implements Runnable {
+public class AuctionDataECatcher implements Runnable {
 
-	private static Logger logger = LoggerFactory.getLogger(AuctionDataExtractingTask.class);
+	private static Logger logger = LoggerFactory.getLogger(AuctionDataECatcher.class);
 	
 	private boolean useAPIGetData;
 	private String realmName;
@@ -69,11 +69,11 @@ public class AuctionDataExtractingTask implements Runnable {
 	private AuctionItemNotificationTask auctionItemNotificationTask;
 	private boolean isApiAvailable = true;
 
-	public AuctionDataExtractingTask(String realmName) {
+	public AuctionDataECatcher(String realmName) {
 		this(realmName, true);
 	}
 	
-	public AuctionDataExtractingTask(String realmName, boolean useAPIGetData) {
+	public AuctionDataECatcher(String realmName, boolean useAPIGetData) {
 		this.useAPIGetData = useAPIGetData;
 		this.realmName = realmName;
 		logHeader = "服务器[" + realmName + "]";
@@ -96,7 +96,7 @@ public class AuctionDataExtractingTask implements Runnable {
 		if (realm != null) {
 			long interval = BnadeProperties.getTask1Interval();
 			if (System.currentTimeMillis() - realm.getLastModified() > interval) {
-				List<com.bnade.wow.client.model.Auction> auctions = null;	
+				List<com.bnade.wow.client.model.AuctionData> auctions = null;	
 				if (useAPIGetData) {
 					try {
 						addInfo("通过api获取拍卖行数据文件信息");
@@ -156,7 +156,7 @@ public class AuctionDataExtractingTask implements Runnable {
 					auctionHouseOwnerItemService.save(ownerItems, realm.getId());
 					addInfo("保存{}条玩家拍卖物品数完毕", ownerItems.size());					
 					// 2. 保存所有最低一口价数据
-					List<com.bnade.wow.client.model.Auction> minBuyoutAuctions = auctionDataProcessor.getMinBuyoutAuctions();
+					List<com.bnade.wow.client.model.AuctionData> minBuyoutAuctions = auctionDataProcessor.getMinBuyoutAuctions();
 					// 更新服务器拍卖状态信息到t_realm
 					realm.setMaxAucId(auctionDataProcessor.getMaxAucId());
 					realm.setAuctionQuantity(auctions.size());
@@ -190,7 +190,11 @@ public class AuctionDataExtractingTask implements Runnable {
 			addInfo("开始");
 			process();
 		} catch (CatcherException | IOException | SQLException e) {
-			addError("运行出错：" + e.getMessage());
+			String msg = e.getMessage();
+			if (msg.length() > 255) {
+				msg = msg.substring(0, 255);
+			}
+			addError("运行出错：" + msg);
 			e.printStackTrace();
 		} finally {
 			isComplete = true;
@@ -210,8 +214,8 @@ public class AuctionDataExtractingTask implements Runnable {
 //		logger.debug(logHeader + msg, arguments);;
 //	}
 	
-	private void copy(List<com.bnade.wow.client.model.Auction> jAucs, List<Auction> aucs, int realmId, long lastModified) {
-		for (com.bnade.wow.client.model.Auction jAuc : jAucs) {
+	private void copy(List<com.bnade.wow.client.model.AuctionData> jAucs, List<Auction> aucs, int realmId, long lastModified) {
+		for (com.bnade.wow.client.model.AuctionData jAuc : jAucs) {
 			Auction auc = new Auction();
 			auc.setAuc(jAuc.getAuc());
 			auc.setItem(jAuc.getItem());
@@ -247,7 +251,7 @@ public class AuctionDataExtractingTask implements Runnable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new AuctionDataExtractingTask("古尔丹", false).process();
+		new AuctionDataECatcher("古尔丹", false).process();
 		System.out.println("结束");
 	}
 }

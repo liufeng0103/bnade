@@ -70,22 +70,22 @@ public class TaskRunner {
 				logger.debug("通过api下载失败次数清0");
 				ExecutorService pool = Executors.newFixedThreadPool(threadCount);
 				logger.info("启动{}个线程来处理{}个服务器", threadCount, realmNames.size());
-				List<AuctionDataExtractingTask> tasks = new ArrayList<AuctionDataExtractingTask>();
+				List<AuctionDataECatcher> tasks = new ArrayList<AuctionDataECatcher>();
 				for (int i = 0; i < realmNames.size(); i++) {
 					if (isShutdown()) {
 						logger.info("TaskRunner准备关闭,等待未完成的Task运行完毕,停止剩下的服务器运行,总共运行{}个,当前服务器[{}]", i + 1, realmNames.get(i));
 						break;
 					}
-					AuctionDataExtractingTask readyTask = null;
+					AuctionDataECatcher readyTask = null;
 					if (failCount >= MAX_API_FAIL_COUNT || useUrlGetData()) {
-						readyTask = new AuctionDataExtractingTask(realmNames.get(i), false);
+						readyTask = new AuctionDataECatcher(realmNames.get(i), false);
 					} else {
-						readyTask = new AuctionDataExtractingTask(realmNames.get(i));
+						readyTask = new AuctionDataECatcher(realmNames.get(i));
 					}
 					while(true) {
 						boolean isTaskAdded = false;
 						if (i >= threadCount) {
-							for (AuctionDataExtractingTask task : tasks) {
+							for (AuctionDataECatcher task : tasks) {
 								if (task.isComplete()) {
 									if (!task.isApiAvailable()) {
 										failCount++;

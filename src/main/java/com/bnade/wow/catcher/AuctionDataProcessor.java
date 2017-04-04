@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bnade.wow.client.model.Auction;
+import com.bnade.wow.client.model.AuctionData;
 import com.bnade.wow.po.OwnerItem;
 
 /**
@@ -20,7 +20,7 @@ import com.bnade.wow.po.OwnerItem;
 public class AuctionDataProcessor {
 	private int maxAucId = 0;
 
-	private Map<String, Auction> minByoutAuctions;
+	private Map<String, AuctionData> minByoutAuctions;
 	private Map<String, Map<Integer, Integer>> owners = new HashMap<>();
 	private List<OwnerItem> items = new ArrayList<>();
 
@@ -28,8 +28,8 @@ public class AuctionDataProcessor {
 		minByoutAuctions = new HashMap<>();
 	}
 	
-	public void process(List<Auction> auctions) {
-		for (Auction auction : auctions) {
+	public void process(List<AuctionData> auctions) {
+		for (AuctionData auction : auctions) {
 			addOwnerItem(auction);
 			if (auction.getAuc() > maxAucId) {
 				maxAucId = auction.getAuc();
@@ -40,7 +40,7 @@ public class AuctionDataProcessor {
 				long buyout = auction.getBuyout();
 				int quantity = auction.getQuantity();
 				auction.setBuyout(buyout/quantity);
-				Auction minBuyoutAuction = minByoutAuctions.get(key);
+				AuctionData minBuyoutAuction = minByoutAuctions.get(key);
 				if (minBuyoutAuction == null) {
 					minByoutAuctions.put(key, auction);
 				} else if (minBuyoutAuction.getBuyout() > auction.getBuyout()) {
@@ -55,7 +55,7 @@ public class AuctionDataProcessor {
 		}		
 	}
 	
-	private void addOwnerItem(Auction auc) {		
+	private void addOwnerItem(AuctionData auc) {		
 		String owner = auc.getOwner();
 		int itemId = auc.getItem();
 		int quantity = auc.getQuantity();
@@ -98,11 +98,11 @@ public class AuctionDataProcessor {
 		return items;
 	}
 	
-	public List<Auction> getMinBuyoutAuctions() {
+	public List<AuctionData> getMinBuyoutAuctions() {
 		return new ArrayList<>(minByoutAuctions.values());
 	}
 	
-	public  Map<String, Auction> getMinBuyoutAuctionMap() {
+	public  Map<String, AuctionData> getMinBuyoutAuctionMap() {
 		return minByoutAuctions;
 	}
 }

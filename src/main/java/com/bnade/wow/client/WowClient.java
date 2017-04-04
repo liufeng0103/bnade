@@ -10,8 +10,8 @@ import com.bnade.utils.BnadeProperties;
 import com.bnade.utils.HttpClient;
 import com.bnade.wow.client.model.AuctionDataFile;
 import com.bnade.wow.client.model.AuctionDataFiles;
-import com.bnade.wow.client.model.Auction;
 import com.bnade.wow.client.model.AuctionData;
+import com.bnade.wow.client.model.AuctionDatas;
 import com.bnade.wow.client.model.JItem;
 import com.bnade.wow.client.model.PetStats;
 import com.google.gson.Gson;
@@ -84,10 +84,10 @@ public class WowClient {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Auction> getAuctionData(String url) throws IOException {
+	public List<AuctionData> getAuctionData(String url) throws IOException {
 		httpClient.resetTryCount();
 		String json = httpClient.reliableGet(url);		
-		return gson.fromJson(json, AuctionData.class).getAuctions();
+		return gson.fromJson(json, AuctionDatas.class).getAuctions();
 	}
 	
 	/**

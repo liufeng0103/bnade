@@ -143,7 +143,7 @@
 				<configuration>
 					<webResources>
 						<resource>
-							<directory>dist</directory>
+							<directory>client/dist</directory>
 							<targetPath>/</targetPath>
 						</resource>
 					</webResources>

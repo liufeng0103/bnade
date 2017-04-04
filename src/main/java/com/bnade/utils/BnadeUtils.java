@@ -17,7 +17,7 @@ public class BnadeUtils {
 	 * @return
 	 */
 	public static String convertBonusListsToString(List<BonusList> bonusLists) {
-		String result = null;
+		String result = "";
 		if (bonusLists != null && bonusLists.size() > 0) {
 			StringBuffer sb = new StringBuffer();
 			Collections.sort(bonusLists);

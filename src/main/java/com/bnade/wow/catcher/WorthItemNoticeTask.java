@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bnade.utils.DBUtils;
-import com.bnade.wow.client.model.Auction;
+import com.bnade.wow.client.model.AuctionData;
 import com.bnade.wow.po.ItemRule;
 
 public class WorthItemNoticeTask {
@@ -23,7 +23,7 @@ public class WorthItemNoticeTask {
 		run = new QueryRunner(DBUtils.getDataSource());
 	}
 	
-	public void a(Map<String, Auction> minByoutAuctions, int realmId, long lastModified) {
+	public void a(Map<String, AuctionData> minByoutAuctions, int realmId, long lastModified) {
 		// 获取所有设置的规则
 		List<ItemRule> rules = null;
 		try {
@@ -34,7 +34,7 @@ public class WorthItemNoticeTask {
 		}
 		for (ItemRule rule : rules) {
 			String key = "" + rule.getItemId() + 0 + 0 + "";
-			Auction auc = minByoutAuctions.get(key);
+			AuctionData auc = minByoutAuctions.get(key);
 			if (auc != null) {
 				long buyout = auc.getBuyout();
 				boolean matched = false;

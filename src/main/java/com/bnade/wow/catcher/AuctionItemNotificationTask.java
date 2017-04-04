@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.bnade.utils.BnadeUtils;
 import com.bnade.utils.Mail;
 import com.bnade.utils.TimeUtils;
-import com.bnade.wow.client.model.Auction;
+import com.bnade.wow.client.model.AuctionData;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.UserItemNotification;
@@ -28,7 +28,7 @@ public class AuctionItemNotificationTask {
 		userDao = new UserDaoImpl();
 	}
 
-	public void process(Map<String, Auction> minByoutAuctions, int realmId, long lastModified) {
+	public void process(Map<String, AuctionData> minByoutAuctions, int realmId, long lastModified) {
 		pool.execute(() -> {
 			try {
 				List<UserItemNotification> itemNs = userDao.getItemNotificationsByRealmId(realmId);
@@ -36,7 +36,7 @@ public class AuctionItemNotificationTask {
 				logger.info("找到{}条服务器{}的物品通知", itemNs.size(), realmId);
 				for (UserItemNotification itemN : itemNs) {
 					String key = "" + itemN.getItemId() + itemN.getPetSpeciesId() + itemN.getPetBreedId() + itemN.getBonusList();
-					Auction auc = minByoutAuctions.get(key);
+					AuctionData auc = minByoutAuctions.get(key);
 					if (auc != null) {
 						if (itemN.getIsInverted() == 0) { // 低于
 							if (auc.getBuyout() <= itemN.getPrice()) {

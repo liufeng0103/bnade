@@ -209,7 +209,7 @@ public class Auction {
 				+ petSpeciesId + ", petLevel=" + petLevel + ", petBreedId="
 				+ petBreedId + ", context=" + context + ", bonusLists="
 				+ bonusLists + ", lastModifed=" + lastModifed + ", realmId="
-				+ realmId + ", itemObj=" + itemObj + "]";
+				+ realmId + ", itemObj=" + itemObj + "]\n";
 	}
 
 }
