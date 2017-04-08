@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.AuctionDao;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.Auction2;
@@ -16,7 +16,7 @@ public class AuctionDaoImpl implements AuctionDao {
 	private QueryRunner run;
 	
 	public AuctionDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 
 	/**

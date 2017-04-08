@@ -8,8 +8,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.IOUtils;
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.FileUtil;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.TaskDao;
 import com.bnade.wow.dao.impl.TaskDaoImpl;
 import com.bnade.wow.po.Task;
@@ -79,7 +79,7 @@ public class AuctionDataArchivingTask {
 				try {
 					List<HistoryAuction> result = auctionDataArchivingProcessor.process(aucs, handleDate);
 					addInfo("数据分析完毕共{}条", result.size());					
-					String month = TimeUtils.getYearMonth(TimeUtils.parse(handleDate).getTime());
+					String month = TimeUtil.getYearMonth(TimeUtil.parse(handleDate).getTime());
 					addInfo("把数据归档到{}年的集合", month);	
 					auctionMinBuyoutHistoryDataService.save(result, month, realm.getId());
 					taskStatusDao.addArchivedTask(taskStatus);
@@ -94,7 +94,7 @@ public class AuctionDataArchivingTask {
 		} else {
 			addInfo("已处理过");
 		}
-		addInfo("完毕,用时{}", TimeUtils.format(System.currentTimeMillis() - start));
+		addInfo("完毕,用时{}", TimeUtil.format(System.currentTimeMillis() - start));
 	}
 	
 	public void clean(String realmName, String handleDate) throws SQLException {
@@ -132,9 +132,9 @@ public class AuctionDataArchivingTask {
 		long start = System.currentTimeMillis();
 		if (args != null && args.length == 1) {
 			AuctionDataArchivingTask task = new AuctionDataArchivingTask();
-			List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
+			List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
 			String handleDate = args[0];
-			String cleanDate = TimeUtils.getDate(TimeUtils.parse(handleDate), -1);
+			String cleanDate = TimeUtil.getDate(TimeUtil.parse(handleDate), -1);
 			for (String realmName : realmNames) {
 				task.process(realmName, handleDate);
 				task.clean(realmName, cleanDate);
@@ -152,9 +152,9 @@ public class AuctionDataArchivingTask {
 			task.finished();
 		} else {
 			AuctionDataArchivingTask task = new AuctionDataArchivingTask();
-			List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
-			String handleDate = TimeUtils.getDate(-1);
-			String cleanDate = TimeUtils.getDate(-2);
+			List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
+			String handleDate = TimeUtil.getDate(-1);
+			String cleanDate = TimeUtil.getDate(-2);
 			for (String realmName : realmNames) {
 				task.process(realmName, handleDate);
 				task.clean(realmName, cleanDate);
@@ -165,7 +165,7 @@ public class AuctionDataArchivingTask {
 			}	
 			task.finished();
 		}	
-		logger.info("运行结束，用时{}", TimeUtils.format(System.currentTimeMillis() - start));
+		logger.info("运行结束，用时{}", TimeUtil.format(System.currentTimeMillis() - start));
 		
 	}
 }

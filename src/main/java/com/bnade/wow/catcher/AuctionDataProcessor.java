@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bnade.wow.client.model.AuctionData;
+import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.po.OwnerItem;
 
 /**
@@ -20,16 +20,16 @@ import com.bnade.wow.po.OwnerItem;
 public class AuctionDataProcessor {
 	private int maxAucId = 0;
 
-	private Map<String, AuctionData> minByoutAuctions;
+	private Map<String, JAuction> minByoutAuctions;
 	private Map<String, Map<Integer, Integer>> owners = new HashMap<>();
-	private List<OwnerItem> items = new ArrayList<>();
+//	private List<OwnerItem> items = new ArrayList<>();
 
 	public AuctionDataProcessor() {
 		minByoutAuctions = new HashMap<>();
 	}
 	
-	public void process(List<AuctionData> auctions) {
-		for (AuctionData auction : auctions) {
+	public void process(List<JAuction> auctions) {
+		for (JAuction auction : auctions) {
 			addOwnerItem(auction);
 			if (auction.getAuc() > maxAucId) {
 				maxAucId = auction.getAuc();
@@ -40,7 +40,7 @@ public class AuctionDataProcessor {
 				long buyout = auction.getBuyout();
 				int quantity = auction.getQuantity();
 				auction.setBuyout(buyout/quantity);
-				AuctionData minBuyoutAuction = minByoutAuctions.get(key);
+				JAuction minBuyoutAuction = minByoutAuctions.get(key);
 				if (minBuyoutAuction == null) {
 					minByoutAuctions.put(key, auction);
 				} else if (minBuyoutAuction.getBuyout() > auction.getBuyout()) {
@@ -55,7 +55,7 @@ public class AuctionDataProcessor {
 		}		
 	}
 	
-	private void addOwnerItem(AuctionData auc) {		
+	private void addOwnerItem(JAuction auc) {		
 		String owner = auc.getOwner();
 		int itemId = auc.getItem();
 		int quantity = auc.getQuantity();
@@ -82,27 +82,27 @@ public class AuctionDataProcessor {
 		return owners.size();
 	}
 	
-	public List<OwnerItem> getOwnerItems() {
-		if (items.size() == 0) {
-			for (Map.Entry<String, Map<Integer, Integer>> entry : owners.entrySet()) {
-				Map<Integer, Integer> itemQ = entry.getValue();
-				for (Map.Entry<Integer, Integer> entry2 : itemQ.entrySet()) {
-					OwnerItem item = new OwnerItem();
-					item.setOwner(entry.getKey());
-					item.setItem(entry2.getKey());
-					item.setQuantity(entry2.getValue());
-					items.add(item);
-				}
-			}
-		}		
-		return items;
-	}
+//	public List<OwnerItem> getOwnerItems() {
+//		if (items.size() == 0) {
+//			for (Map.Entry<String, Map<Integer, Integer>> entry : owners.entrySet()) {
+//				Map<Integer, Integer> itemQ = entry.getValue();
+//				for (Map.Entry<Integer, Integer> entry2 : itemQ.entrySet()) {
+//					OwnerItem item = new OwnerItem();
+//					item.setOwner(entry.getKey());
+//					item.setItem(entry2.getKey());
+//					item.setQuantity(entry2.getValue());
+//					items.add(item);
+//				}
+//			}
+//		}		
+//		return items;
+//	}
 	
-	public List<AuctionData> getMinBuyoutAuctions() {
+	public List<JAuction> getMinBuyoutAuctions() {
 		return new ArrayList<>(minByoutAuctions.values());
 	}
 	
-	public  Map<String, AuctionData> getMinBuyoutAuctionMap() {
+	public  Map<String, JAuction> getMinBuyoutAuctionMap() {
 		return minByoutAuctions;
 	}
 }

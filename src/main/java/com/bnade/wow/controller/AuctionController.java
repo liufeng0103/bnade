@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
-import com.bnade.utils.BnadeUtils;
+import com.bnade.util.BnadeUtil;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.Auction2;
 import com.bnade.wow.po.Item;
@@ -48,12 +48,12 @@ public class AuctionController {
 				int max80 = aucs.size() * 8 / 10;
 				int count = 0;
 				for (Auction auc : aucs) {
-					float buyout = Float.valueOf(BnadeUtils.getGold(auc.getBuyout()));
+					float buyout = Float.valueOf(BnadeUtil.getGold(auc.getBuyout()));
 					price.add(buyout);
 					req.setAttribute("price", gson.toJson(price));
 					quantities.add(auc.getQuantity());
 					req.setAttribute("quantities", gson.toJson(quantities));
-					labels.add(BnadeUtils.getRealmNameById(auc.getRealmId()));
+					labels.add(BnadeUtil.getRealmNameById(auc.getRealmId()));
 					req.setAttribute("labels", gson.toJson(labels));
 					if (count == max80) {
 //						System.out.println(buyout);
@@ -88,7 +88,7 @@ public class AuctionController {
 			try {
 				List<Auction> aucs = auctionService.getAuctionsByRealmOwner(realmId, name);
 				req.setAttribute("owner", name);
-				req.setAttribute("realmName", BnadeUtils.getRealmNameById(realmId));
+				req.setAttribute("realmName", BnadeUtil.getRealmNameById(realmId));
 				req.setAttribute("auctions", aucs);
 				return new Viewable("/auctionOwner.jsp");
 			} catch (Exception e) {
@@ -112,7 +112,7 @@ public class AuctionController {
 				List<Auction2> aucs = auctionService.getAuctionsByRealmOwner2(realmId, name);
 				req.setAttribute("owner", name);
 				req.setAttribute("realmId", realmId);
-				req.setAttribute("realmName", BnadeUtils.getRealmNameById(realmId));
+				req.setAttribute("realmName", BnadeUtil.getRealmNameById(realmId));
 				req.setAttribute("auctions", aucs);
 				return new Viewable("/auctionOwnerItems.jsp");
 			} catch (Exception e) {

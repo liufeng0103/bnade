@@ -8,7 +8,7 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.AuctionHouseMinBuyoutDataDao;
 import com.bnade.wow.po.Auction;
 
@@ -17,12 +17,12 @@ public class AuctionHouseMinBuyoutDataDaoImpl implements AuctionHouseMinBuyoutDa
 	private QueryRunner run;
 	
 	public AuctionHouseMinBuyoutDataDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 	
 	@Override
 	public void save(List<Auction> aucs) throws SQLException {
-		Connection con = DBUtils.getDataSource().getConnection();
+		Connection con = DBUtil.getDataSource().getConnection();
 		try {
 			boolean autoCommit = con.getAutoCommit();
 			con.setAutoCommit(false);			

@@ -14,7 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.HistoryAuction;
 import com.bnade.wow.po.Item;
@@ -144,7 +144,7 @@ public class AuctionDataResource {
 		try {
 			List<Auction> aucs = new ArrayList<>();
 			for (int i = 0; i < PAST_DAYS; i++) {
-				aucs.addAll(auctionMinBuyoutDailyDataService.get(itemId, bl, TimeUtils.getDate(-i),realmId));
+				aucs.addAll(auctionMinBuyoutDailyDataService.get(itemId, bl, TimeUtil.getDate(-i),realmId));
 			}			
 			Object[] result = new Object[aucs.size()];
 			for (int i = 0; i < aucs.size(); i++) {
@@ -176,7 +176,7 @@ public class AuctionDataResource {
 		try {
 			List<HistoryAuction> aucs = new ArrayList<>(); 
 			for (int i = 0; i < PAST_MONTHS; i++) {
-				aucs.addAll(auctionMinBuyoutHistoryDataService.get(itemId, bl, TimeUtils.getYearMonth(-i), realmId));
+				aucs.addAll(auctionMinBuyoutHistoryDataService.get(itemId, bl, TimeUtil.getYearMonth(-i), realmId));
 			}
 			Object[] result = new Object[aucs.size()];
 			for (int i = 0; i < aucs.size(); i++) {

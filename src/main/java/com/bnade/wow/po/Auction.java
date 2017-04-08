@@ -2,7 +2,7 @@ package com.bnade.wow.po;
 
 import java.util.Date;
 
-import com.bnade.utils.BnadeUtils;
+import com.bnade.util.BnadeUtil;
 
 public class Auction {
 	private int auc;
@@ -25,23 +25,23 @@ public class Auction {
 	private Item itemObj;
 
 	public String getUrlOwner() {
-		return BnadeUtils.encodeURIComponent(owner);
+		return BnadeUtil.encodeURIComponent(owner);
 	}
 	
 	public String getRealmName() {
-		return BnadeUtils.getRealmNameById(realmId);
+		return BnadeUtil.getRealmNameById(realmId);
 	}
 	
 	public String getBidGold() {
-		return BnadeUtils.getGold(bid);
+		return BnadeUtil.getGold(bid);
 	}
 	
 	public String getUnitPrice() {
-		return BnadeUtils.getGold(buyout/quantity);
+		return BnadeUtil.getGold(buyout/quantity);
 	}
 	
 	public String getPrice() {
-		return BnadeUtils.getGold(buyout);
+		return BnadeUtil.getGold(buyout);
 	}
 	
 	public Date getUpdated() {
@@ -49,11 +49,11 @@ public class Auction {
 	}
 	
 	public String getTimeLeftCN() {
-		return BnadeUtils.getTimeLeft(timeLeft);
+		return BnadeUtil.getTimeLeft(timeLeft);
 	}
 	
 	public int getRealmHot() {
-		return BnadeUtils.getRealmHot(realmId);
+		return BnadeUtil.getRealmHot(realmId);
 	}
 	
 	public int getAuc() {
@@ -209,7 +209,7 @@ public class Auction {
 				+ petSpeciesId + ", petLevel=" + petLevel + ", petBreedId="
 				+ petBreedId + ", context=" + context + ", bonusLists="
 				+ bonusLists + ", lastModifed=" + lastModifed + ", realmId="
-				+ realmId + ", itemObj=" + itemObj + "]\n";
+				+ realmId + ", itemObj=" + itemObj + "]";
 	}
 
 }

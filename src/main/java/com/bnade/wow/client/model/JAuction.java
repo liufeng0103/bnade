@@ -1,8 +1,9 @@
 package com.bnade.wow.client.model;
 
+import java.util.Collections;
 import java.util.List;
 
-public class AuctionData {
+public class JAuction {
 	private int auc;
 	private int item;
 	private String owner;
@@ -13,13 +14,12 @@ public class AuctionData {
 	private String timeLeft;
 	private int rand;
 	private long seed;
-	private int context;
-	private List<Modifier> modifiers;
 	private int petSpeciesId;
-	private int petBreedId;
 	private int petLevel;
-	private int petQualityId;
-	private List<BonusList> bonusLists;
+	private int petBreedId;
+	private int context;
+	private List<Bonus> bonusLists;
+	private String bonusList;
 
 	public int getAuc() {
 		return auc;
@@ -109,28 +109,12 @@ public class AuctionData {
 		this.context = context;
 	}
 
-	public List<Modifier> getModifiers() {
-		return modifiers;
-	}
-
-	public void setModifiers(List<Modifier> modifiers) {
-		this.modifiers = modifiers;
-	}
-
 	public int getPetSpeciesId() {
 		return petSpeciesId;
 	}
 
 	public void setPetSpeciesId(int petSpeciesId) {
 		this.petSpeciesId = petSpeciesId;
-	}
-
-	public int getPetBreedId() {
-		return petBreedId;
-	}
-
-	public void setPetBreedId(int petBreedId) {
-		this.petBreedId = petBreedId;
 	}
 
 	public int getPetLevel() {
@@ -141,32 +125,44 @@ public class AuctionData {
 		this.petLevel = petLevel;
 	}
 
-	public int getPetQualityId() {
-		return petQualityId;
+	public int getPetBreedId() {
+		return petBreedId;
 	}
 
-	public void setPetQualityId(int petQualityId) {
-		this.petQualityId = petQualityId;
+	public void setPetBreedId(int petBreedId) {
+		this.petBreedId = petBreedId;
 	}
 
-	public List<BonusList> getBonusLists() {
+	public List<Bonus> getAllBonus() {
 		return bonusLists;
 	}
+	
+	public String getBonusLists() {
+		if (bonusList == null) {
+			StringBuffer sb = new StringBuffer();
+			if (bonusLists != null) {
+				Collections.sort(bonusLists);
+				for (Bonus b : bonusLists) {
+					if (Bonus.bonusIds.contains(b.getBonusListId())) {
+						if (sb.length() > 0) {
+							sb.append(",");
+						}
+						sb.append(b.getBonusListId());
+					}
+				}
+			}
+			bonusList = sb.toString();
+		}		
+		return bonusList;
+	}
 
-	public void setBonusLists(List<BonusList> bonusLists) {
+	public void setBonusLists(List<Bonus> bonusLists) {
 		this.bonusLists = bonusLists;
 	}
 
 	@Override
 	public String toString() {
-		return "AuctionData [auc=" + auc + ", item=" + item + ", owner="
-				+ owner + ", ownerRealm=" + ownerRealm + ", bid=" + bid
-				+ ", buyout=" + buyout + ", quantity=" + quantity
-				+ ", timeLeft=" + timeLeft + ", rand=" + rand + ", seed="
-				+ seed + ", context=" + context + ", modifiers=" + modifiers
-				+ ", petSpeciesId=" + petSpeciesId + ", petBreedId="
-				+ petBreedId + ", petLevel=" + petLevel + ", petQualityId="
-				+ petQualityId + ", bonusLists=" + bonusLists + "]\n";
+		return String.format("%d %d context:%d bonusLists:%s", auc, item,
+				context, getBonusLists());
 	}
-
 }
