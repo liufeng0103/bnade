@@ -9,8 +9,8 @@ target
 test-output
 *.orig
 log/
-client/node_modules
-client/dist
+node_modules
+dist
 sh
 .idea/
 /Bnade.zip

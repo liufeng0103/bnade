@@ -8,25 +8,25 @@ var minify = require('gulp-minify');
 var rev = require('gulp-rev-append');
 var minifyCss = require('gulp-minify-css');
 
-var jsDir = "js";
+var jsDir = "client/js";
 var GulpConfig = {
-	jsSrc: ["js/*.js"],
-    mainJsSrc: [jsDir+"/lib/jquery-ui.min.js","js/main/*.js"],
+	jsSrc: ["client/js/*.js"],
+    mainJsSrc: [jsDir+"/lib/jquery-ui.min.js","client/js/main/*.js"],
     jsDist: "dist/js",
-    jadeSrc: ["templates/*.jade", "!templates/layout.jade"],
+    jadeSrc: ["client/templates/*.jade", "!client/templates/layout.jade"],
     jadeDist: "dist/",
     htmlSrc: ['dist/*.html'],
     htmlDist: "dist/",
-    cssSrc: ["css/*.css"],
+    cssSrc: ["client/css/*.css"],
     cssDist: "dist/css",
-    imgSrc: ["images/**"],
+    imgSrc: ["client/images/**"],
     imgDist: "dist/images",
 }
 
 // css
 gulp.task('css', function () {
 	// 复制字体文件
-	gulp.src(["fonts/**"]).pipe(gulp.dest("dist/fonts"));
+	gulp.src(["client/fonts/**"]).pipe(gulp.dest("dist/fonts"));
     return gulp.src(GulpConfig.cssSrc)
 		.pipe(concat("main.css"))
 		.pipe(minifyCss())

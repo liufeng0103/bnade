@@ -19,7 +19,6 @@
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
 					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
-					<li><a href="/topOwner.jsp">玩家排行</a></li>
 					<c:if test="${empty sessionScope.user}">
 						<li><a href="/page/user/login">登录</a></li>
 					</c:if>
@@ -45,7 +44,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/page/item/hotSearch">搜索排行</a></li>
 							<li><a href="/page/item/search">物品搜索</a></li>
-							<li><a href="/topOwner.jsp">玩家排行</a></li>
+							<!-- <li><a href="/topOwner.jsp">玩家排行</a></li> -->
 							<li><a href="/petQuery.jsp">宠物价格</a></li>
 							<li><a href="/ownerQuery.jsp">玩家物品</a></li>
 						</ul>

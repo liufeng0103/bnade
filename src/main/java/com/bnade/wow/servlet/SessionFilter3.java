@@ -20,10 +20,10 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.BnadeProperties;
-import com.bnade.utils.DBUtils;
+import com.bnade.util.BnadeProperties;
+import com.bnade.util.DBUtil;
 
-@WebFilter(urlPatterns = "/wow/auction/*")
+//@WebFilter(urlPatterns = "/wow/auction/*")
 public class SessionFilter3 implements Filter {
 
 	private static Logger logger = LoggerFactory.getLogger(SessionFilter3.class);
@@ -33,7 +33,7 @@ public class SessionFilter3 implements Filter {
 	private List<String> blockIPs;
 
 	public SessionFilter3() {
-		QueryRunner run = new QueryRunner(DBUtils.getDataSource());
+		QueryRunner run = new QueryRunner(DBUtil.getDataSource());
 		try {
 			blockIPs = run.query("select ip from t_user_block_ip", new ColumnListHandler<String>());
 			logger.info("limit {} apikey {} ips {}", limit, apikey, blockIPs);

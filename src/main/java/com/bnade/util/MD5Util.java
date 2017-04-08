@@ -1,9 +1,9 @@
-package com.bnade.utils;
+package com.bnade.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Utils {
+public class MD5Util {
 
 	public static String MD5(String plainText) {
 		try {
@@ -29,6 +29,6 @@ public class MD5Utils {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(MD5Utils.MD5(String.valueOf(System.currentTimeMillis())));
+		System.out.println(MD5Util.MD5(String.valueOf(System.currentTimeMillis())));
 	}
 }

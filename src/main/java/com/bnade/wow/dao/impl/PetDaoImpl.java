@@ -7,7 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.PetDao;
 import com.bnade.wow.po.Pet;
 import com.bnade.wow.po.PetStats;
@@ -17,7 +17,7 @@ public class PetDaoImpl implements PetDao {
 	private QueryRunner run;
 	
 	public PetDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 	
 	@Override

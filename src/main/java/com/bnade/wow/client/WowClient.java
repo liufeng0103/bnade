@@ -6,12 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.BnadeProperties;
-import com.bnade.utils.HttpClient;
+import com.bnade.util.BnadeProperties;
+import com.bnade.util.HttpClient;
 import com.bnade.wow.client.model.AuctionDataFile;
 import com.bnade.wow.client.model.AuctionDataFiles;
-import com.bnade.wow.client.model.AuctionData;
-import com.bnade.wow.client.model.AuctionDatas;
+import com.bnade.wow.client.model.JAuction;
+import com.bnade.wow.client.model.JAuctions;
 import com.bnade.wow.client.model.JItem;
 import com.bnade.wow.client.model.PetStats;
 import com.google.gson.Gson;
@@ -48,6 +48,7 @@ public class WowClient {
 	
 	public WowClient() {
 		httpClient = new HttpClient();
+		httpClient.setGzipSupported(true);
 		gson = new Gson();
 	}
 	
@@ -84,10 +85,10 @@ public class WowClient {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<AuctionData> getAuctionData(String url) throws IOException {
+	public List<JAuction> getAuctionData(String url) throws IOException {
 		httpClient.resetTryCount();
 		String json = httpClient.reliableGet(url);		
-		return gson.fromJson(json, AuctionDatas.class).getAuctions();
+		return gson.fromJson(json, JAuctions.class).getAuctions();
 	}
 	
 	/**

@@ -9,7 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.HttpClient;
+import com.bnade.util.HttpClient;
 import com.bnade.wow.po.WowToken;
 import com.bnade.wow.service.WowTokenService;
 import com.bnade.wow.service.impl.WowTokenServiceImpl;

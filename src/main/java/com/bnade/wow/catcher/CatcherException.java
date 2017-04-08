@@ -7,9 +7,4 @@ public class CatcherException extends Exception {
 	public CatcherException(String message) {
 		super(message);
 	}
-	
-	 public CatcherException(Throwable cause) {
-        super(cause);
-    }
-	
 }

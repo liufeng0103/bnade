@@ -4,28 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BonusList implements Comparable<BonusList> {
-
-	private int bonusListId;
-
-	public int getBonusListId() {
-		return bonusListId;
-	}
-
-	public void setBonusListId(int bonusListId) {
-		this.bonusListId = bonusListId;
-	}
-
-	@Override
-	public String toString() {
-		return "BonusList [bonusListId=" + bonusListId + "]";
-	}
-
-	@Override
-	public int compareTo(BonusList bonus) {
-		return this.getBonusListId() - bonus.getBonusListId();
-	}
-	
+public class Bonus implements Comparable<Bonus> {
 	/*
 	 * FB出品 567 725 史诗 566 710 英雄级别 565 带插槽 史诗 564 带插槽 英雄级别 563 带插槽 普通 562 战火 史诗
 	 * 561 战火 英雄级别 560 战火 普通
@@ -379,5 +358,25 @@ public class BonusList implements Comparable<BonusList> {
 		bonusIds.add(3376);
 		bonusIds.add(3377);
 		bonusIds.add(3378);
+	}
+
+	private int bonusListId;
+
+	public int getBonusListId() {
+		return bonusListId;
+	}
+
+	public void setBonusListId(int bonusListId) {
+		this.bonusListId = bonusListId;
+	}
+
+	@Override
+	public String toString() {
+		return "" + bonusListId;
+	}
+
+	@Override
+	public int compareTo(Bonus bonus) {
+		return this.getBonusListId() - bonus.getBonusListId();
 	}
 }

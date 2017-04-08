@@ -7,7 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.HotItemDao;
 import com.bnade.wow.po.HotItem;
 import com.bnade.wow.po.QueryItem;
@@ -16,7 +16,7 @@ public class HotItemDaoImpl implements HotItemDao {
 	private QueryRunner run;
 
 	public HotItemDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 
 	@Override

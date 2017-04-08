@@ -1,9 +1,10 @@
-package com.bnade.utils;
+package com.bnade.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -37,78 +38,52 @@ public class HttpClient {
 	// http读取超时时间，单位是毫秒
 	private int readTimeout = 5000;
 	private int try_count = 0;
-
-	public static String test(String url) throws Exception {
-		HttpURLConnection conn = null;
-		InputStream is = null;
-		String result = null;
-		try {
-			conn = (HttpURLConnection) new URL(url).openConnection();
-			// 设置超时，防止网络不好时阻塞线程
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			// Request Headers
-			conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-			conn.setRequestProperty("Accept-Encoding", "gzip, deflate, sdch, br");
-			conn.setRequestProperty("Accept-Language", "en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4");
-			conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-			conn.setRequestMethod("HEAD");
-			result = conn.getHeaderField("Last-Modified");
-			// 查看Response Headers是否通过gzip压缩
-//			if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
-//				is = new GZIPInputStream(conn.getInputStream());
-//			} else {
-//				is = conn.getInputStream();
-//			}
-//			result = IOUtils.toString(is, "utf-8");
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-		return result;
-	}
+	private boolean isGzipSupported = false;	
 	
+	public void setGzipSupported(boolean isGzipSupported) {
+		this.isGzipSupported = isGzipSupported;
+	}
+
 	/**
-	 * 获取url的内容
+	 * 根据url参数，通过http的get方法获取url的内容
 	 * @param url
 	 * @return
 	 * @throws IOException
 	 */
-	public static String get(String url) throws IOException {
-		HttpURLConnection conn = null;
+	public String get(String url) throws IOException {
+		StringBuffer sb = new StringBuffer();
+		HttpURLConnection con = null;
 		InputStream is = null;
-		String result = null;
+		BufferedReader reader = null;
 		try {
-			conn = (HttpURLConnection) new URL(url).openConnection();
-			// 设置超时，防止网络不好时阻塞线程
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			// Request Headers
-			conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-			conn.setRequestProperty("Accept-Encoding", "gzip, deflate, sdch, br");
-			conn.setRequestProperty("Accept-Language", "en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4");
-			conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-			// 查看Response Headers是否通过gzip压缩
-			System.out.print(conn.getHeaderField("Last-Modified"));
-			if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
-				is = new GZIPInputStream(conn.getInputStream());
+			con = (HttpURLConnection) new URL(url).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+			con.setConnectTimeout(connectionTimeout);
+			con.setReadTimeout(readTimeout);
+			if (isGzipSupported) {
+				con.setRequestProperty("Accept-Encoding", "gzip,deflate");
+//				logger.debug("接受{}文件", con.getContentEncoding());				
+				is = new GZIPInputStream(con.getInputStream());
 			} else {
-				is = conn.getInputStream();
+				is = con.getInputStream();
 			}
-			result = IOUtils.toString(is, "utf-8");
+			reader = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
 		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 			if (is != null) {
 				is.close();
 			}
-			if (conn != null) {
-				conn.disconnect();
+			if (con != null) {
+				con.disconnect();
 			}
 		}
-		return result;
+		return sb.toString();
 	}
 
 	/**
@@ -221,7 +196,23 @@ public class HttpClient {
         }  
     }  
     
-    public static void main(String[] args) throws Exception {
-    	System.out.println(HttpClient.test("http://auction-api-cn.worldofwarcraft.com/auction-data/330beb217242022e18398ae252e513c0/auctions.json"));
+    public static void main(String[] args) throws IOException {
+		HttpClient client = new HttpClient();		
+		String url = "http://auction-api-cn.worldofwarcraft.com/auction-data/aaaff45cf244c3cdfecc06db745dcc30/auctions.json";
+		long start = 0;
+		String s = null;
+		start = System.currentTimeMillis();
+		s = client.get(url);
+		System.out.println(System.currentTimeMillis() - start);
+		System.out.println(s.length());
+		client.setGzipSupported(true);
+		start = System.currentTimeMillis();
+		s = client.get(url);
+		System.out.println(System.currentTimeMillis() - start);
+		System.out.println(s.length());
+		start = System.currentTimeMillis();
+		s = client.reliableGet(url);
+		System.out.println(System.currentTimeMillis() - start);
+		System.out.println(s.length());
 	}
 }

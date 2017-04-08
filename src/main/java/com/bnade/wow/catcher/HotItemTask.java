@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.HotItemDao;
 import com.bnade.wow.dao.TaskDao;
 import com.bnade.wow.dao.impl.HotItemDaoImpl;
@@ -44,7 +44,7 @@ public class HotItemTask {
 		List<HotItem> hotItems = hotItemDao.getItemQuiredCountAfterCreatedAt(lastUpdated);
 		logger.info("上次更新时间{}之后有新数据{}条", new Date(lastUpdated), hotItems.size());
 		// 当天0点的时间，long表示
-		long todayTime = TimeUtils.parse(TimeUtils.getDate()).getTime();
+		long todayTime = TimeUtil.parse(TimeUtil.getDate()).getTime();
 		for (HotItem hotItem : hotItems) {
 			HotItem dbHot = hotItemDao.getByDatetimeAndItemId(todayTime, hotItem.getItemId());
 			if (dbHot != null) {

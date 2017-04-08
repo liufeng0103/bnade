@@ -1,11 +1,11 @@
-package com.bnade.utils;
+package com.bnade.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TimeUtils {
+public class TimeUtil {
 	
 	private static SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
 	private static SimpleDateFormat sf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -116,17 +116,14 @@ public class TimeUtils {
 	}
 	
 	public static void main(String[] args) throws ParseException {
-		System.out.println(TimeUtils.getDate());
-		System.out.println(TimeUtils.getDate(-1));
-		System.out.println(TimeUtils.parse("20160512"));	
-		System.out.println(TimeUtils.getYear(new Date()));
-		System.out.println(TimeUtils.getYearMonth(-1));
-		System.out.println(TimeUtils.parse(TimeUtils.getDate(0)).getTime());
-		System.out.println(TimeUtils.getDate(TimeUtils.parse("20160610"), -1));
-		System.out.println(System.currentTimeMillis() + DAY * 31);
+		System.out.println(TimeUtil.getDate());
+		System.out.println(TimeUtil.getDate(-1));
+		System.out.println(TimeUtil.parse("20160512"));	
+		System.out.println(TimeUtil.getYear(new Date()));
+		System.out.println(TimeUtil.getYearMonth(-1));
+		System.out.println(TimeUtil.parse(TimeUtil.getDate(0)).getTime());
+		System.out.println(TimeUtil.getDate(TimeUtil.parse("20160610"), -1));
+		System.out.println(System.currentTimeMillis() - DAY * 31 - DAY*28 - DAY *14);
 		System.out.println(System.currentTimeMillis());
-		System.out.println(new SimpleDateFormat("hh:mm:ss").format(1491148977541l));
-//		11:17:26
-//		Sun, 02 Apr 2017 16:16:44 GMT - Mon Apr 03 00:16:46 CST 2017
 	}
 }

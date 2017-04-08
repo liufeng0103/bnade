@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.TaskDao;
 import com.bnade.wow.po.Task;
 
@@ -14,7 +14,7 @@ public class TaskDaoImpl implements TaskDao {
 	private QueryRunner run;
 	
 	public TaskDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 	
 	@Override

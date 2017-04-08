@@ -2,7 +2,7 @@ package com.bnade.wow.client;
 
 import java.io.IOException;
 
-import com.bnade.utils.HttpClient;
+import com.bnade.util.HttpClient;
 import com.bnade.wow.client.model.QQUser;
 import com.google.gson.Gson;
 

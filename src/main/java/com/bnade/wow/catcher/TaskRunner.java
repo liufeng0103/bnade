@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.BnadeProperties;
-import com.bnade.utils.IOUtils;
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.BnadeProperties;
+import com.bnade.util.FileUtil;
+import com.bnade.util.TimeUtil;
 
 /** 
  * TaskRunner用于运行AuctionDataExtractingTask来获取，分析和保存拍卖行数据
@@ -62,7 +62,7 @@ public class TaskRunner {
 			while(true) {
 				long startTime = System.currentTimeMillis();
 				int threadCount = BnadeProperties.getTask1ThreadCount();
-				List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
+				List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
 				if (threadCount > realmNames.size()) {
 					threadCount = realmNames.size();
 				}
@@ -70,22 +70,22 @@ public class TaskRunner {
 				logger.debug("通过api下载失败次数清0");
 				ExecutorService pool = Executors.newFixedThreadPool(threadCount);
 				logger.info("启动{}个线程来处理{}个服务器", threadCount, realmNames.size());
-				List<AuctionDataECatcher> tasks = new ArrayList<AuctionDataECatcher>();
+				List<AuctionDataExtractingTask> tasks = new ArrayList<AuctionDataExtractingTask>();
 				for (int i = 0; i < realmNames.size(); i++) {
 					if (isShutdown()) {
 						logger.info("TaskRunner准备关闭,等待未完成的Task运行完毕,停止剩下的服务器运行,总共运行{}个,当前服务器[{}]", i + 1, realmNames.get(i));
 						break;
 					}
-					AuctionDataECatcher readyTask = null;
+					AuctionDataExtractingTask readyTask = null;
 					if (failCount >= MAX_API_FAIL_COUNT || useUrlGetData()) {
-						readyTask = new AuctionDataECatcher(realmNames.get(i), false);
+						readyTask = new AuctionDataExtractingTask(realmNames.get(i), false);
 					} else {
-						readyTask = new AuctionDataECatcher(realmNames.get(i));
+						readyTask = new AuctionDataExtractingTask(realmNames.get(i));
 					}
 					while(true) {
 						boolean isTaskAdded = false;
 						if (i >= threadCount) {
-							for (AuctionDataECatcher task : tasks) {
+							for (AuctionDataExtractingTask task : tasks) {
 								if (task.isComplete()) {
 									if (!task.isApiAvailable()) {
 										failCount++;
@@ -119,19 +119,19 @@ public class TaskRunner {
 				pool.shutdown();
 				while(true) {
 					if (!pool.isTerminated()) {
-						logger.info("有任务线程没有结束，等待{}", TimeUtils.format(CHECK_WAIT_TIME ));
+						logger.info("有任务线程没有结束，等待{}", TimeUtil.format(CHECK_WAIT_TIME ));
 						try {
 							Thread.sleep(CHECK_WAIT_TIME);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					} else {
-						logger.info("所有服务器运行完毕，用时{}", TimeUtils.format(System.currentTimeMillis() - startTime));
+						logger.info("所有服务器运行完毕，用时{}", TimeUtil.format(System.currentTimeMillis() - startTime));
 						if (isShutdown()) {
 							exit();
 						} else {
 							try {
-								logger.info("等待{}，准备重启", TimeUtils.format(WAIT_TIME));
+								logger.info("等待{}，准备重启", TimeUtil.format(WAIT_TIME));
 								Thread.sleep(WAIT_TIME);
 							} catch (InterruptedException e) {
 								e.printStackTrace();

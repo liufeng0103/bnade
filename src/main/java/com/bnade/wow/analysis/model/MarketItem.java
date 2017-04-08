@@ -1,4 +1,4 @@
-package com.bnade.wow.catcher;
+package com.bnade.wow.analysis.model;
 
 public class MarketItem {
 	private int itemId;

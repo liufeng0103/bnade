@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.po.AuctionItem;
 import com.bnade.wow.po.Item;
@@ -25,7 +25,7 @@ public class ItemDaoImpl implements ItemDao {
 	private QueryRunner run;
 	
 	public ItemDaoImpl() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	}
 	
 	@Override

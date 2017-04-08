@@ -2,6 +2,11 @@
 <div class="container">
   <hr>
   <footer class="text-center">
+	<ul class="list-inline">
+      <li><strong>友情链接</strong></li>
+      <li><a href="http://wowdata.top">魔兽大数据</a></li>
+      <li><a href="http://wowprice.info/">魔兽物价计算器</a></li>
+    </ul>
     <ul class="list-inline">
       <li><a href="/contactUs.jsp">联系我们</a></li>
       <li><a href="/about.jsp">关于我们</a></li>

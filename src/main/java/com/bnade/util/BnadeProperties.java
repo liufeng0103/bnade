@@ -1,4 +1,4 @@
-package com.bnade.utils;
+package com.bnade.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;

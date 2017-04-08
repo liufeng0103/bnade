@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
-import com.bnade.utils.DBUtils;
+import com.bnade.util.DBUtil;
 
 /**
  * 插件相关
@@ -24,7 +24,7 @@ public class AddonResource {
     private QueryRunner run;
 
     public AddonResource() {
-        run = new QueryRunner(DBUtils.getDataSource());
+        run = new QueryRunner(DBUtil.getDataSource());
     }
 
     @GET

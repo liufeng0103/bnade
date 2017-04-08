@@ -19,8 +19,8 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.HttpClient;
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.HttpClient;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.dao.impl.ItemDaoImpl;
 import com.bnade.wow.po.AuctionItem;
@@ -153,6 +153,7 @@ public class ItemResource {
 					url+="?u=529&bl=" + bl;
 				}
 				HttpClient client = new HttpClient();
+				client.setGzipSupported(true);
 				String itemHtml = client.get(url);				
 				return Response.status(200).entity(itemHtml.replaceAll("href=\"[^\"]*\"", "href=\"\"")).type(MediaType.TEXT_PLAIN).build();
 			} else {				
@@ -174,13 +175,13 @@ public class ItemResource {
 		int hotCount = 10;
 		try {
 			List<HotItemVo> items = new ArrayList<>();
-			long monthStart = TimeUtils.parse(TimeUtils.getDate(-30)).getTime();
+			long monthStart = TimeUtil.parse(TimeUtil.getDate(-30)).getTime();
 			List<HotItem> hotItems = hotItemService.getGroupItemIdAfterDatetime(monthStart, hotCount);
 			copy(hotItems, items, HotItem.HOT_MONTH);
-			long weekStart = TimeUtils.parse(TimeUtils.getDate(-7)).getTime();
+			long weekStart = TimeUtil.parse(TimeUtil.getDate(-7)).getTime();
 			hotItems = hotItemService.getGroupItemIdAfterDatetime(weekStart, hotCount);
 			copy(hotItems, items, HotItem.HOT_WEEK);
-			long dayStart = TimeUtils.parse(TimeUtils.getDate(0)).getTime();
+			long dayStart = TimeUtil.parse(TimeUtil.getDate(0)).getTime();
 			hotItems = hotItemService.getGroupItemIdAfterDatetime(dayStart, hotCount);
 			copy(hotItems, items, HotItem.HOT_DAY);		
 			resp.setHeader("Access-Control-Allow-Origin", "*");

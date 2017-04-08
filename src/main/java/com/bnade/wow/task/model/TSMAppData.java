@@ -1,4 +1,4 @@
-package com.bnade.wow.catcher;
+package com.bnade.wow.task.model;
 
 public class TSMAppData {
 	private int realmId;

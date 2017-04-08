@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
 
-import com.bnade.utils.DBUtils;
-import com.bnade.utils.IOUtils;
+import com.bnade.util.DBUtil;
+import com.bnade.util.FileUtil;
 import com.bnade.wow.po.Realm;
 import com.bnade.wow.service.RealmService;
 import com.bnade.wow.service.impl.RealmServiceImpl;
@@ -23,7 +23,7 @@ public class TableInitializtion {
 
 	public void initRealmTable() throws SQLException {
 		RealmService realmService = new RealmServiceImpl();
-		List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
+		List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
 		if (realmNames.size() != 170) {
 			System.err.println("国服一共170个服务器， 请确认使用了正确的文件");
 			return;
@@ -40,8 +40,8 @@ public class TableInitializtion {
 	
 	public void initAuctionHouseDataTable() throws SQLException {
 		RealmService realmService = new RealmServiceImpl();
-		QueryRunner run = new QueryRunner(DBUtils.getDataSource());
-		List<String> realmNames = IOUtils.fileLineToList("realmlist.txt");
+		QueryRunner run = new QueryRunner(DBUtil.getDataSource());
+		List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
 		if (realmNames.size() != 170) {
 			System.err.println("国服一共170个服务器， 请确认使用了正确的文件");
 			return;

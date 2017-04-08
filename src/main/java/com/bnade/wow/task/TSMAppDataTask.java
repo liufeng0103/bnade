@@ -1,4 +1,4 @@
-package com.bnade.wow.catcher;
+package com.bnade.wow.task;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -14,14 +14,15 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.DBUtils;
-import com.bnade.utils.IOUtils;
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.DBUtil;
+import com.bnade.util.FileUtil;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.po.Auction;
 import com.bnade.wow.po.Realm;
 import com.bnade.wow.po.Task;
 import com.bnade.wow.service.RealmService;
 import com.bnade.wow.service.impl.RealmServiceImpl;
+import com.bnade.wow.task.model.TSMAppData;
 
 /**
  * 用于生成插件TradeSkillMaster_AppHelper的AppData.lua数据
@@ -36,12 +37,12 @@ public class TSMAppDataTask {
 	private QueryRunner run;
 	
 	public TSMAppDataTask() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 	} 
 	
 	public void process() {
 		logger.info("开始");
-		String processDate = TimeUtils.getDate();		
+		String processDate = TimeUtil.getDate();		
 		RealmService realmService = new RealmServiceImpl();		
 		try {
 			// 1. 获取所有服务器信息
@@ -52,7 +53,7 @@ public class TSMAppDataTask {
 				// 2. 判断服务器是否已处理过
 				Task task = run.query("select type,realmId,date,lastUpdated from t_task where type=? and realmId=? and date=?", new BeanHandler<Task>(Task.class), Task.TSM_APP_DATA_TASK, realmId, processDate);
 				if (task == null) {
-					List<TSMAppData> appDatas = run.query("select a.itemId,a.buy,b.minBuyout,b.historical,b.quantity from t_item_market a join (select item,min(buyout) as minBuyout,sum(buyout)/count(item) as historical,avg(quantity) as quantity from t_ah_min_buyout_data_"+TimeUtils.getDate(-1)+"_"+realmId+" group by item ) b on a.itemId=b.item", new BeanListHandler<TSMAppData>(TSMAppData.class));
+					List<TSMAppData> appDatas = run.query("select a.itemId,a.buy,b.minBuyout,b.historical,b.quantity from t_item_market a join (select item,min(buyout) as minBuyout,sum(buyout)/count(item) as historical,avg(quantity) as quantity from t_ah_min_buyout_data_"+TimeUtil.getDate(-1)+"_"+realmId+" group by item ) b on a.itemId=b.item", new BeanListHandler<TSMAppData>(TSMAppData.class));
 					long updateTime = new Date().getTime() / 1000;
 					saveFile(realmId, updateTime, appDatas);
 					logger.info("文件已保存");
@@ -128,13 +129,13 @@ public class TSMAppDataTask {
 		}
 		String result = "select(2, ...).LoadData(\"AUCTIONDB_MARKET_DATA\",\"{xxrealmxx}\",[[return {downloadTime=" + updateTime + ",fields={\"itemString\",\"marketValue\",\"minBuyout\",\"historical\",\"numAuctions\"},data={" + sb.toString() + "}}]])";
 		new File("./appData").mkdirs();
-		IOUtils.stringToFile(result, "./appData/" + realmId + ".lua");
+		FileUtil.stringToFile(result, "./appData/" + realmId + ".lua");
 	}
 	
 	public static void main(String[] args) throws SQLException {
 		long start = System.currentTimeMillis();
 		new TSMAppDataTask().process();	
-		logger.info("完毕用时{}" , TimeUtils.format(System.currentTimeMillis() - start));
+		logger.info("完毕用时{}" , TimeUtil.format(System.currentTimeMillis() - start));
 	}
 
 }

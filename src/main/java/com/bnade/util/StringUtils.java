@@ -1,4 +1,4 @@
-package com.bnade.utils;
+package com.bnade.util;
 
 public class StringUtils {
 

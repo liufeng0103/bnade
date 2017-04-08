@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.HotItemDao;
 import com.bnade.wow.dao.ItemDao;
 import com.bnade.wow.dao.impl.HotItemDaoImpl;
@@ -36,7 +36,7 @@ public class ItemController {
 	public Viewable hotSearch(@DefaultValue("0") @QueryParam("offset") int offset, @Context HttpServletRequest req) {
 		int limit = 10;
 		try {
-			List<HotItem> items = hotItemDao.getHotItems(TimeUtils.parse(TimeUtils.getDate(0)).getTime(), offset, limit);
+			List<HotItem> items = hotItemDao.getHotItems(TimeUtil.parse(TimeUtil.getDate(0)).getTime(), offset, limit);
 			if (items.size() < limit) {
 				req.setAttribute("isLast", 1);
 			}

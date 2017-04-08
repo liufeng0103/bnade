@@ -23,10 +23,10 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.DBUtils;
-import com.bnade.utils.MD5Utils;
-import com.bnade.utils.StringUtils;
-import com.bnade.utils.TimeUtils;
+import com.bnade.util.DBUtil;
+import com.bnade.util.MD5Util;
+import com.bnade.util.StringUtils;
+import com.bnade.util.TimeUtil;
 import com.bnade.wow.dao.UserDao;
 import com.bnade.wow.dao.impl.UserDaoImpl;
 import com.bnade.wow.po.User;
@@ -60,7 +60,7 @@ public class UserController extends BaseController {
 				User user = userDao.getUserByToken(token);
 				if (user != null) {
 					// 刷新token
-					String newToken = MD5Utils.MD5("" + user.getId() + System.currentTimeMillis());
+					String newToken = MD5Util.MD5("" + user.getId() + System.currentTimeMillis());
 					userDao.updateUserToken(user.getId(), newToken);
 					Cookie item = getCookieByName("token");
 					item.setHttpOnly(true);
@@ -179,17 +179,17 @@ public class UserController extends BaseController {
 			req.setAttribute("message", "出错");
 			return new Viewable("/message.jsp");
 		} else {
-			QueryRunner run = new QueryRunner(DBUtils.getDataSource());
-			try(Connection conn = DBUtils.getDataSource().getConnection()) {
+			QueryRunner run = new QueryRunner(DBUtil.getDataSource());
+			try(Connection conn = DBUtil.getDataSource().getConnection()) {
 				boolean autoCommit = conn.getAutoCommit();
 				String dbCode = run.query("select activationCode from t_user_activation where activationCode=?", new ScalarHandler<String>(1), code);
 				try {
 					if (dbCode != null) {
 						conn.setAutoCommit(false);
 						if (System.currentTimeMillis() > user.getExpire()) {
-							user.setExpire(System.currentTimeMillis() + 31 * TimeUtils.DAY);
+							user.setExpire(System.currentTimeMillis() + 31 * TimeUtil.DAY);
 						} else {
-							user.setExpire(user.getExpire() + 31 * TimeUtils.DAY);
+							user.setExpire(user.getExpire() + 31 * TimeUtil.DAY);
 						}
 						run.update(conn, "update t_user set expire=? where id=?", user.getExpire(), user.getId());
 						run.update(conn, "delete from t_user_activation where activationCode=?", code);

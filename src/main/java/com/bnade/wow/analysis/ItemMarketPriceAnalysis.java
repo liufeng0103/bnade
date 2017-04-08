@@ -1,4 +1,4 @@
-package com.bnade.wow.catcher;
+package com.bnade.wow.analysis;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -17,8 +17,9 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bnade.utils.DBUtils;
-import com.bnade.utils.IOUtils;
+import com.bnade.util.DBUtil;
+import com.bnade.util.FileUtil;
+import com.bnade.wow.analysis.model.MarketItem;
 import com.bnade.wow.dao.AuctionHouseMinBuyoutDataDao;
 import com.bnade.wow.dao.impl.AuctionHouseMinBuyoutDataDaoImpl;
 import com.bnade.wow.po.Auction;
@@ -42,7 +43,7 @@ public class ItemMarketPriceAnalysis {
 	private AuctionHouseMinBuyoutDataDao auctionHouseMinBuyoutDataDao;
 	
 	public ItemMarketPriceAnalysis() {
-		run = new QueryRunner(DBUtils.getDataSource());
+		run = new QueryRunner(DBUtil.getDataSource());
 		auctionHouseMinBuyoutDataDao = new AuctionHouseMinBuyoutDataDaoImpl();
 	}
 
@@ -136,7 +137,7 @@ public class ItemMarketPriceAnalysis {
         String text = "Bnade_data={[\"updated\"]=\"" + addonUpdateTime + "\"," + sb.toString() + "}";
         String fileName = "Data.lua";
 		new File(fileName).delete();
-		IOUtils.stringToFile(text, fileName);
+		FileUtil.stringToFile(text, fileName);
 		logger.info("保存到文件");
         updateAddonTime(addonUpdateTime);
         logger.info("插件时间更新");

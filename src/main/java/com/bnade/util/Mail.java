@@ -1,4 +1,4 @@
-package com.bnade.utils;
+package com.bnade.util;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
