@@ -11,4 +11,6 @@ public interface AuctionService {
 	List<Auction> getAuctionsByRealmOwner(int realmId, String owner) throws SQLException;
 	
 	List<Auction2> getAuctionsByRealmOwner2(int realmId, String owner) throws SQLException;
+	
+	List<Auction> get810101Auctions() throws SQLException;
 }

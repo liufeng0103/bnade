@@ -17,4 +17,6 @@ public interface AuctionDao {
 	List<Auction> getAuctionsByRealmOwner(int realmId, String owner, String order) throws SQLException;
 	
 	List<Auction2> getAuctionsByRealmOwner(int realmId, String owner) throws SQLException;
+
+	List<Auction> get810101Auctions() throws SQLException;
 }

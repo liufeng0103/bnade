@@ -103,5 +103,14 @@ public class AuctionServiceImpl implements AuctionService {
 		List<Auction2> aucs = auctionDao.getAuctionsByRealmOwner(realmId, name);
 		return foldAuctionsByOwnerBuyout2(aucs);
 	}
+
+	@Override
+	public List<Auction> get810101Auctions() throws SQLException {
+		List<Auction> aucs = auctionDao.get810101Auctions();
+		for (Auction auc : aucs) {
+			auc.setItemObj(itemDao.getItemById(auc.getItem()));
+		}
+		return aucs;
+	}
 	
 }

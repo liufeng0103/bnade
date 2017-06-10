@@ -1,5 +1,6 @@
 package com.bnade.wow.controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +123,13 @@ public class AuctionController {
 				return new Viewable("/message.jsp");
 			}
 		}
+	}
+	
+	@GET
+	@Path("/s810101")
+	public Viewable auction810101(@Context HttpServletRequest req) throws SQLException {
+		req.setAttribute("auctions", auctionService.get810101Auctions());
+		return new Viewable("/auction810101.jsp");
 	}
 	
 }
