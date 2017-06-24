@@ -8,6 +8,7 @@
       <li><a href="http://wowprice.info/">魔兽物价计算器</a></li>
     </ul>
     <ul class="list-inline">
+    <li><a href="/recommend.jsp">我的推荐</a></li>
       <li><a href="/contactUs.jsp">联系我们</a></li>
       <li><a href="/about.jsp">关于我们</a></li>
       <li><a href="/disclaimer.jsp">免责声明</a></li>
