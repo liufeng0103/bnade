@@ -124,12 +124,11 @@ public class ItemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getItemNamesByTerm(@QueryParam("term") String term, @Context HttpServletResponse resp) {
 		int max_length = 10;
-		try {			
-			ItemDao itemDao = new ItemDaoImpl();
-			List<AuctionItem> items = itemDao.getItems(term, null, null, 0, max_length);
-//			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
+		try {
+//			List<AuctionItem> items = itemDao.getItems(term, null, null, 0, max_length);
+			List<Item> items = itemService.getItemsByName(term, true, 0, max_length);
 			List<String> result = new ArrayList<>();
-			for (AuctionItem item : items) {
+			for (Item item : items) {
 				result.add(item.getName());
 			}
 			resp.setHeader("Access-Control-Allow-Origin", "*");

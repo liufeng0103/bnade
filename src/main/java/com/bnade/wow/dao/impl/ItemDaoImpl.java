@@ -37,7 +37,7 @@ public class ItemDaoImpl implements ItemDao {
 	public List<Item> getItemsByName(String name, boolean isFuzzy, int offset, int limit) throws SQLException {
 		String condition = " name=? ";
 		if (isFuzzy) {
-			condition = " MATCH (name) AGAINST ('?' IN BOOLEAN MODE) ";
+			condition = " MATCH (name) AGAINST (? IN BOOLEAN MODE) ";
 		}
 		condition += " order by hot desc ";
 		if (limit > 0) {
