@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS t_item (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 数据导入使用items.sql
 -- ALTER TABLE t_item ADD hot INT NOT NULL; -- 20160813,列已添加到建表语句里，单独添加用
+-- 使用ngram插件做中文的全文检索
+alter table t_item add fulltext index ngram_idx(name) with parser ngram;
 
 -- 物品信息内存表， 由于经常使用数据保存到内存中
 CREATE TABLE mt_item (
