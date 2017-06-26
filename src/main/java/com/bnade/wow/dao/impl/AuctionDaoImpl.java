@@ -51,7 +51,7 @@ public class AuctionDaoImpl implements AuctionDao {
 
 	@Override
 	public List<Auction> get810101Auctions() throws SQLException {
-		return run.query("select * from t_ah_min_buyout_data where item in(141284,141285,141286,141287,141288,141289,141290,141291,141292,141293) and context=3", 
+		return run.query("select * from t_ah_min_buyout_data where item in(141284,141285,141286,141287,141288,141289,141290,141291,141292,141293) and (context=3 or context=5)", 
 				new BeanListHandler<Auction>(Auction.class));
 	}	
 }
