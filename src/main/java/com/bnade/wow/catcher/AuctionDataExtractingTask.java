@@ -30,6 +30,7 @@ import com.bnade.wow.service.impl.AuctionMinBuyoutDataServiceImpl;
 import com.bnade.wow.service.impl.RealmServiceImpl;
 
 /**
+ * catcher已重构，新的catcher地址https://github.com/liufeng0103/bnade-catcher
  * 1. 读取数据库该服务器上一次运行的状态
  * 2. 读取配置文件，服务器的更新时间间隔
  * 3. 如果上一次的更新时间没有超过设置的时间间隔，则退出task
@@ -51,6 +52,7 @@ import com.bnade.wow.service.impl.RealmServiceImpl;
  * @author liufeng0103
  *
  */
+@Deprecated
 public class AuctionDataExtractingTask implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(AuctionDataExtractingTask.class);

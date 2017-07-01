@@ -14,6 +14,7 @@ import com.bnade.util.FileUtil;
 import com.bnade.util.TimeUtil;
 
 /** 
+ * 已重构，新的catcher地址https://github.com/liufeng0103/bnade-catcher
  * TaskRunner用于运行AuctionDataExtractingTask来获取，分析和保存拍卖行数据
  * 
  * 1. 判断TaskRunner是否处于关闭状态(通过shutdown文件判断)，如果关闭则退出TaskRunner 
@@ -28,6 +29,7 @@ import com.bnade.util.TimeUtil;
  * @author liufeng0103
  *
  */
+@Deprecated
 public class TaskRunner {
 	
 	private static Logger logger = LoggerFactory.getLogger(TaskRunner.class);	
