@@ -1382,9 +1382,21 @@ $(document).ready(function() {
 		itemQuery();
 	});
     
-   $( "#itemName" ).autocomplete({
-     source: '/wow/item/names'
-   });
+	$("#itemName").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "https://api.bnade.com/items/names",
+				data : {
+					search : request.term
+				},
+				dataType : "json",
+				success : response,
+				error : function() {
+					response([]);
+				}
+			});
+		}
+	});
 	
    $("#itemFuzzyQueryBtn").click(function(){
 		var itemName=$("#itemName").val();
