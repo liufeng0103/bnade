@@ -49,28 +49,7 @@ itemQuery.getItemAvgPrice = function(realmId, itemId){
 	return price;
 };
 
-itemQuery.getItemCreatedByPrice = function(realmId, itemCreatedBy) {
-	var price = 0;
-	for (var i in itemCreatedBy.reagent) {
-		var reagent = itemCreatedBy.reagent[i];
-		var reagentPrice = itemQuery.getItemAvgPrice(realmId, reagent.itemId);
-		price += reagentPrice * reagent.count;
-	}
-	return price;
-};
-
-itemQuery.getItemCreatedBy = function(itemId) {
-	var itemCreatedBy;
-	$.ajax({url:"/wow/item/createdBy/" + itemId,async:false,success:function(result){
-		if (result.length > 0) {
-			itemCreatedBy = result;			
-		}				
-	}});
-	return itemCreatedBy;
-};
-
 var gblItemId = 0;
-var currentItem;
 
 var BonusGroups1 = [ {
 	"id" : 1,
@@ -601,11 +580,6 @@ function itemQueryByName(realm, itemName) {
 		} else if(data.length === 1) {
 			var item = data[0];
 			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, itemName);
-			if (item.createdBy !=null && item.createdBy.length > 0) {
-				$('#itemCreatedByDiv').show();
-				$('#itemCreatedByDetailDiv').html("");	
-				currentItem = item;
-			}
 			if (item.bonusList.length === 0 || item.bonusList.length === 1) {							
 				accurateQuery(realm, item.id, itemName);
 			} else {
@@ -709,13 +683,10 @@ function clear(){
 	$("#allRealmMsg").html("");			
 	$('#msg').html("");
 	$('#itemDetail').html("");
-	$('#itemCreatedByDiv').hide();
 }
-var isShowAll=true;
+
 function accurateQuery(realm, itemId, itemName, bonusList) {
 	gblItemId =itemId;
-	sortColumn = "sort1";
-	orderByDesc = true;
 	getItemByAllRealms(itemId, itemName, bonusList);
 	if (bonusList != "" && bonusList != null) {
 		itemId += "?bl=" + bonusList;
@@ -1112,60 +1083,6 @@ function getPastWeek(realmId, realm, itemId, itemName){
 		$("#pastWeekMsg").html("历史数据查询出错");
     });
 }
-var Column = {
-	minBuyout : 1,
-	quantity : 2,
-}
-
-function sortData(column, data, orderByDesc) {
-	data.sort(function(a,b){
-		switch(column) {
-			case Column.minBuyout :
-				var result = a[1] - b[1];
-				return orderByDesc ? -result : result;
-				break;
-			case Column.quantity :			
-				var result = a[3] - b[3];
-				return orderByDesc ? -result : result;
-				break;			
-		}	
-	});	
-}
-
-function generateTableBody(itemId,data) {	
-	var tblHtml="";
-	var existedRealm = [];
-	var count = 0;
-	for (var i in data) {
-		var itemArr=data[i];
-		var realmId = itemArr[0];
-		existedRealm[realmId] = 1;
-		var realm=Realm.getConnectedById(realmId);
-		var realmColumnClass="";								
-		if ($("#realm").val() != "" && realm.indexOf($("#realm").val()) >= 0) {
-			realmColumnClass = "class='danger'";									
-		}
-		var buyout=Bnade.getGold(itemArr[1]);	
-		count++;
-		tblHtml += "<tr "+realmColumnClass+"><td>"+(parseInt(i)+1)+"</td><td><a href='javascript:void(0)' class='queryRealm'>"+realm+"</a></td><td>"+buyout+"</td><td><a href='/page/auction/owner/" + encodeURIComponent(itemArr[2]) + "/"+realmId+"' target='_blank'>"+itemArr[2]+"</a></td><td>"+leftTimeMap[itemArr[5]]+"</td><td><a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"+realmId+"' data-itemid='"+itemId+"'>"+itemArr[3]+"</a></td><td>"+HotRealm[realmId]+"</td><td>"+new Date(itemArr[4]).format("MM-dd hh:mm:ss")+"</td></tr>";
-	}
-	var tmpArr = [];
-	for (var i = 1; i <= 170; i++) {
-		if (existedRealm[i] != 1) {
-			tmpArr.push([i,HotRealm[i]]);
-		}
-	}
-	tmpArr.sort(function(a,b){
-		return -(a[1] - b[1]);
-	});
-	for (var i in tmpArr) {
-		var arr = tmpArr[i];
-		count++;
-		var realm=Realm.getConnectedById(arr[0]);
-		tblHtml += "<tr><td>"+count+"</td><td>"+realm+"</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>"+arr[1]+"</td><td>N/A</td></tr>";
-	}
-	return tblHtml;
-}
 
 function processRealmsData(data) {
 	var existedRealm = [];
@@ -1194,12 +1111,28 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 		
 		$('#allRealmCtlDiv').show();
 
-		// 构建DataTable的数据
+		// 构建table的数据
+		var columns = ["#", "服务器", "最低一口价", "数量", "总数量", "卖家", "服务器人气", "剩余时间"];
 		var dataSet = [];
+		// ，存在的服务器标记1，0表示服务器不存在
+		/**
+		 * 标记服务器
+		 * 数组从0开始，所以定义171长度
+		 * 遍历数据把数组值设为1
+		 * 遍历值为0的下标，表示该服务器没有该物品数据
+		 */
+		for(var realmMark  = [], n = 1; n <= 170; realmMark[n++] = 0);
+		// 找到用户搜索的服务器的行
+		var realmIndex = -1;
+		var num = 0;
 		for (var i in data) {
 			var auc = data[i];
-			var num =parseInt(i) + 1;
+			num =parseInt(i) + 1;
 			var realmName = Realm.getConnectedById(auc.realmId);
+			// 对查询服务器标红，直接获取realm值不太好，有机会重构考虑修改
+			if ($("#realm").val() != "" && realmName.indexOf($("#realm").val()) >= 0) {
+				realmIndex = i;
+			}
 			var realmColumn = "<a href='/itemQuery.jsp?itemName="
 					+ itemName
 					+ "&realm="
@@ -1216,42 +1149,56 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 					+ "' data-itemid='"
 					+ itemId
 					+ "'>" + auc.totalQuantity + "</a>";
-			dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, timeLeft]);
+			dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, auc.ownerQuantity,timeLeft]);
+			
+			realmMark[auc.realmId] = 1;
 		}
-		$("#showAllTbl").DataTable({
-			destroy: true,
-			"paging":   false, // 分页
-			"searching" : false, // 搜索
-	        //"ordering": true, // 排序
-	        "info":     false,
-	        //"order": [[ 3, "asc" ]], // 默认排序
-			responsive : true,
-			data: dataSet,
-	        columns: [
-	            { title: "#" },
-	            { title: "服务器" },
-	            { title: "最低一口价" },
-	            { title: "数量" },
-	            { title: "总数量" },
-	            { title: "卖家" },
-	            { title: "剩余时间" }	            
-	        ],
-			"language" : {
-				"lengthMenu" : "每页显示 _MENU_ 条记录",
-				"zeroRecords" : "数据未找到",
-				"info" : "第_PAGE_页, 共_PAGES_页",
-				"infoEmpty" : "找不到数据",
-				"infoFiltered" : "(总数 _MAX_条)",
-				"search" : "搜索:",
-				"paginate" : {
-					"first" : "首页",
-					"last" : "末页",
-					"next" : "下一页",
-					"previous" : "上一页"
-				},
+		for (var i = 1; i < realmMark.length; i++) {
+			if (realmMark[i] == 0) {
+				dataSet.push( [++num, Realm.getConnectedById(i), "N/A", "N/A", "N/A", "N/A", HotRealm[i],"N/A"]);
+			}
+		}
+		$('#tableContainer').html('<table id="cheapestAuctionTbl" class="table table-hover"></table>');
+		/**
+		 * 生成table的header和body
+		 */
+		var tableGenerator = {
+			/**
+			 * 生成table的header
+			 * @param columns 字符串数组
+			 * @returns {String}
+			 */
+			header : function(columns) {
+				var header = "<thead><tr>";
+				for (var i in columns) {
+					header += "<th>" + columns[i] + "</th>";
+				}
+				header += "</tr></thead>";
+				return header;
 			},
-		});
+			/**
+			 * 生成table的body
+			 * @param dataSet 二维数组
+			 * @returns {String}
+			 */
+			body : function(dataSet) {
+				var body = "<tbody>";
+				for (var i in dataSet) {
+					body += realmIndex == i ? "<tr class='danger'>" : "<tr>";
+					for (var j in dataSet[i]) {
+						body += "<td>" + dataSet[i][j] + "</td>";
+					}
+					body += "</tr>";
+				}
+				body += "</tbody>";
+				return body
+			}
+		}
+		$("#cheapestAuctionTbl").html(tableGenerator.header(columns) + tableGenerator.body(dataSet));
+		sortableTable();
+		$('th').css("cursor", "pointer");
 		
+		// 构建图表
 		var chartLabels = [];
 		var chartBuyoutData = [];
 		var chartQuantityData = [];
@@ -1454,72 +1401,13 @@ $(document).ready(function() {
 		} else {			
 			fuzzyQueryItems(itemName);			
 		}
-	});	
-   
-   $('#itemCreatedByBtn').click(function(){
-	   var realm = $("#realm").val();
-	   if (realm !== "") {
-			var realmId = Realm.getIdByName(realm);
-			if (realmId > 0) {
-				var itemReagents = {};
-				 var itemCreatedByHtml = "<div class='row'><div class='col-md-6'><table class='table table-bordered table-condensed table-hover'>";
-				   for (var i in currentItem.createdBy) {
-					   var itemCreatedBy = currentItem.createdBy[i];
-					   var avgCount = (itemCreatedBy.minCount + itemCreatedBy.maxCount)/2;
-					   var itemCreatedByTotalPrice = 0;
-					   itemCreatedByHtml += "<tr class='info'><td>配方"+(parseInt(i)+1)+"</td><td>单价</td><td>总价</td></tr>";
-					   if (itemCreatedBy.reagent != null && itemCreatedBy.reagent.length > 1) {
-						   for (var j in itemCreatedBy.reagent) {
-							   var itemReagent = itemCreatedBy.reagent[j];
-							   var itemReagentSinglePrice;
-							   var itemReagentTotalPrice;
-							   if (itemReagent.buyPrice > 0) {
-								   itemReagentSinglePrice = Bnade.getGold(itemReagent.buyPrice) + "(npc买)";
-								   itemReagentTotalPrice = Bnade.getGold(itemReagent.buyPrice) * itemReagent.count;								   
-							   } else {
-								   if (itemReagents[itemReagent.itemId] >=0 ) {
-									   itemReagentSinglePrice = itemReagents[itemReagent.itemId];
-									   itemReagentTotalPrice = itemReagentSinglePrice * itemReagent.count;									   
-								   } else {
-									   itemReagentSinglePrice = itemQuery.getItemAvgPrice(realmId,itemReagent.itemId);
-									   if (itemReagentSinglePrice == 0) {
-										   var itemCreatedBys = itemQuery.getItemCreatedBy(itemReagent.itemId);
-										   if (itemCreatedBys && itemCreatedBys.length > 0) {
-											   var itemCreatedBy2 = itemCreatedBys[0];
-											   itemReagentSinglePrice = itemQuery.getItemCreatedByPrice(realmId,itemCreatedBy2);
-											   itemReagentTotalPrice = itemReagentSinglePrice * itemReagent.count;
-										   } else {
-											   itemReagentSinglePrice = 0;
-											   itemReagentTotalPrice = 0;
-										   }
-									   } else {
-										   itemReagentTotalPrice = itemReagentSinglePrice * itemReagent.count;										   
-									   }
-									   itemReagents[itemReagent.itemId] = itemReagentSinglePrice;
-								   }								  
-							   }
-							   itemCreatedByTotalPrice +=itemReagentTotalPrice;
-							   itemCreatedByHtml += "<tr><td>"+itemReagent.name+" * " + itemReagent.count+"</td><td>"+itemReagentSinglePrice+"</td><td>"+itemReagentTotalPrice+"</td></tr>";
-						   }
-					   }
-					   itemCreatedByHtml += "<tr><td colspan='2'>成本 (平均可制造"+avgCount+"个)</td><td>"+toDecimal(itemCreatedByTotalPrice/avgCount)+"</td></tr>";
-				   }
-				   itemCreatedByHtml += "</table></div></div>";
-				   $('#itemCreatedByDetailDiv').html(itemCreatedByHtml);
-			} else {
-				$('#itemCreatedByDetailDiv').html("找不到服务器：" + realm);
-			}		
-		} else {
-			$('#itemCreatedByDetailDiv').html("请设置一个服务器");
-		}	  
-	});	
+	});		
    
 	!function() { // 页面加载运行
 		$('#past24CtlDiv').hide();
 		$('#pastWeekCtlDiv').hide();
 		$('#allRealmCtlDiv').hide();		
 		$("#fuzzyItemsList").hide();
-		$('#itemCreatedByDiv').hide();
 		queryByUrl();
 		loadTopItems();
 	}();

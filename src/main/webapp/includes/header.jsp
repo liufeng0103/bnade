@@ -36,7 +36,7 @@
 			</c:if>
 			<c:if test="${sessionScope.user.isVip}">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/page/user/itemQuery">物价查询</a></li>
+					<li><a href="/itemQuery.jsp">物价查询</a></li>
 					<li><a href="/wowtoken.jsp">时光徽章</a></li>
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>

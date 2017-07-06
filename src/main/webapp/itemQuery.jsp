@@ -71,10 +71,6 @@
 						</div>
 					</form>
 					<p id="msg"></p>
-					<div id="itemCreatedByDiv">
-						<input id="itemCreatedByBtn" type="button" value="显示成本(New)" class="btn btn-danger">
-						<div id="itemCreatedByDetailDiv"></div>
-					</div>
 					<div id="itemListByName"></div>
 					<div id="itemDetail"></div>
 					<p id="queryByUrl"></p>
@@ -140,11 +136,8 @@
 					</div>
 					<p id="allRealmMsg"></p>
 					<div id="allRealmCtlDiv">
-						<div id="allRealmContainer"
-							style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-						<div>
-							<table id="showAllTbl" class="table table-hover" data-page-length='170'></table>
-						</div>
+						<div id="allRealmContainer" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+						<div id="tableContainer"></div>
 					</div>
 					<p>说明:</p>
 					<ul>
@@ -183,9 +176,6 @@
 	<%@ include file="includes/script.jsp"%>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/modules/heatmap.js"></script>
-	<script src="/js/jquery.dataTables.min.js"></script>
-	<script src="/js/dataTables.bootstrap.min.js"></script>
-	<script src="/js/dataTables.responsive.js"></script>
-	<script src="/js/itemQuery.js?v=4"></script>
+	<script src="/js/itemQuery.js?v=5"></script>
 </body>
 </html>
