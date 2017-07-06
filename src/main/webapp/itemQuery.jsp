@@ -143,27 +143,7 @@
 						<div id="allRealmContainer"
 							style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 						<div>
-							<a id="showAllA" href="javascript:void(0)"
-								class="btn btn-primary">显示全部+</a>
-							<table id="showAllTbl" class="table table-striped">
-								<thead>
-									<tr>
-										<th>#</th>
-										<th>服务器</th>
-										<th><div id='sort1' class='tblHeadBtn'>
-												最低一口价<span class='glyphicon' aria-hidden='true'></span>
-											</div></th>
-										<th>卖家</th>
-										<th>剩余时间</th>
-										<th><div id='sort2' class='tblHeadBtn'>
-												总数量<span class='glyphicon' aria-hidden='true'></span>
-											</div></th>
-										<th>服务器人气</th>
-										<th>更新时间</th>
-									</tr>
-								</thead>
-								<tbody id="showAllBody"></tbody>
-							</table>
+							<table id="showAllTbl" class="table table-hover" data-page-length='170'></table>
 						</div>
 					</div>
 					<p>说明:</p>
@@ -203,6 +183,9 @@
 	<%@ include file="includes/script.jsp"%>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/highstock.js"></script>
 	<script src="//cdn.bootcss.com/highcharts/4.2.7/modules/heatmap.js"></script>
-	<script src="/js/itemQuery.js?v=3"></script>
+	<script src="/js/jquery.dataTables.min.js"></script>
+	<script src="/js/dataTables.bootstrap.min.js"></script>
+	<script src="/js/dataTables.responsive.js"></script>
+	<script src="/js/itemQuery.js?v=4"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+var API_HOST = "https://api.bnade.com";
 (function(BN) {
 	BN.Auction = {};
 	
@@ -68,9 +69,6 @@ itemQuery.getItemCreatedBy = function(itemId) {
 	return itemCreatedBy;
 };
 
-var sortColumn = "sort1";
-var orderByDesc = true;
-var gblData = [];
 var gblItemId = 0;
 var currentItem;
 
@@ -623,8 +621,8 @@ function itemQueryByName(realm, itemName) {
 					}
 					
 					$(".bonus").click(function() {
-						var regItemId = item.id+"?bl="+$(this).attr('bl');
-						accurateQuery(realm, regItemId, itemName);									
+						var regItemId = item.id;
+						accurateQuery(realm, regItemId, itemName, $(this).attr('bl'));									
 					});
 				} else {
 					$('#msg').html('物品:' + itemName + ' 发现' + item.bonusList.length + '种版本,请选择下列表中的一种来查询');
@@ -637,15 +635,15 @@ function itemQueryByName(realm, itemName) {
 					tableHtml += "<div><a class='bonus btn btn-default' href='javascript:void(0)' bl='all'>全部</a></div>";
 					$('#itemListByName').html(tableHtml);
 					$(".bonus").click(function() {
-						var regItemId = item.id+"?bl="+$(this).attr('bl');
-						accurateQuery(realm, regItemId, itemName);									
+						var regItemId = item.id;
+						accurateQuery(realm, regItemId, itemName, $(this).attr('bl'));									
 					});
 					for (var i in item.bonusList) {
 						var itemBonus = item.bonusList[i];
 						$("#itemBonus" + i + item.id).click(function() {
-							var regItemId = $(this).attr('itemId')+"?bl="+$(this).attr('bl');
+							var regItemId = $(this).attr('itemId');
 							var regItemName = $(this).html();
-							accurateQuery(realm, regItemId, regItemName);									
+							accurateQuery(realm, regItemId, regItemName, $(this).attr('bl'));									
 						});
 					}
 				}
@@ -714,9 +712,14 @@ function clear(){
 	$('#itemCreatedByDiv').hide();
 }
 var isShowAll=true;
-function accurateQuery(realm, itemId, itemName) {		
-	$("#showAllTbl").hide();
-	$("#showAllA").html("显示全部+");
+function accurateQuery(realm, itemId, itemName, bonusList) {
+	gblItemId =itemId;
+	sortColumn = "sort1";
+	orderByDesc = true;
+	getItemByAllRealms(itemId, itemName, bonusList);
+	if (bonusList != "" && bonusList != null) {
+		itemId += "?bl=" + bonusList;
+	}
 	loadItemDetail(itemId);
 	if (realm !== "") {
 		var realmId = Realm.getIdByName(realm);
@@ -727,12 +730,7 @@ function accurateQuery(realm, itemId, itemName) {
 			$('#msg').html("找不到服务器：" + realm);
 		}		
 	}		
-	
-	gblItemId =itemId;
-	sortColumn = "sort1";
-	orderByDesc = true;
-	
-	getItemByAllRealms(itemId, itemName);
+
 	var url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?itemName=" + encodeURIComponent(itemName);
 	if (realm != null && realm != '') {
 		url += "&realm=" + encodeURIComponent(realm);
@@ -1184,65 +1182,116 @@ function processRealmsData(data) {
 	}
 }
 
-function getItemByAllRealms(itemId,itemName){
+function getItemByAllRealms(itemId, itemName, bonusList) {
 	$('#allRealmMsg').html("正在查询所有服务器数据,请稍等...");
-	$.get('/wow/auction/item/'+itemId,function(data){	
-		if(data.code==404){
-			$('#allRealmMsg').html("查询所有服务器失败:"+data.errorMessage);
-			$('#allRealmCtlDiv').hide();
-		}else{
-			$('#allRealmCtlDiv').show();
-			// 重置排序数据
-			var isShowAll=true;
-//			processRealmsData(data);
-			gblData = data;			
-			
-			$("#showAllA").click(function(){
-				if(isShowAll){
-					isShowAll=false;
-					$("#showAllTbl").show();
-					$("#showAllA").html("显示全部-");
-				}else{
-					isShowAll=true;
-					$("#showAllTbl").hide();
-					$("#showAllA").html("显示全部+");
-				}		
-			});
-			$('#sort'+Column.minBuyout).click();
-			$("#showAllA").click();
-			
-			var chartLabels=[];
-			var chartBuyoutData=[];
-			var chartQuantityData=[];
-			var fuckOwner = ["贼面贼霸","冲进女澡堂","漏屁屁火星人"];
-			var calData=[];
-			var calDataCount = 0;
-			var quantitySum=0;
-			for(var i in data){
-				var realm=Realm.getConnectedById(data[i][0]);					
-				var buyout=data[i][1];
-				var buyoutOwner=data[i][2];
-				var quantity=data[i][3];
-				var updated=data[i][4];
-				if (fuckOwner.indexOf(buyoutOwner) == -1) {
-					calData[calDataCount++]=buyout;
-				}
-				chartLabels[i]=realm;
-				chartBuyoutData[i]=Bnade.getGold(buyout);
-				chartQuantityData[i]=quantity;
-				quantitySum+=quantity;
-			}			
-			var result = Bnade.getResult(calData);
-			var minBuy = Bnade.getGold(result.min);
-			var maxBuy = Bnade.getGold(result.max);
-			var avgBuy = Bnade.getGold(result.avg);
-			$('#allMinBuyout').html(minBuy);
-			$('#allMaxBuyout').html(maxBuy);
-			$('#allAvgBuyout').html(avgBuy);
-			$('#allAvgQuantity').html(parseInt(quantitySum/data.length));				
-			$('#allRealmMsg').html("所有服务器平均价格:"+avgBuy);				
-			loadChart('allRealmContainer',itemName+'在各服务器的价格和数量',itemName,chartLabels,chartBuyoutData,minBuy,avgBuy * 2 < maxBuy ? avgBuy * 2 : maxBuy, false, 'spline',chartQuantityData,'column');
+	var url = "/cheapest_auctions?itemId=" + itemId + (bonusList == null ? "" : "&bonusList=" + bonusList);
+	$.get(API_HOST + url, function(data) {
+		
+		// 排序，价格有低到高
+		data.sort(function(a, b) { 
+			return a.buyout - b.buyout;
+		});
+		
+		$('#allRealmCtlDiv').show();
+
+		// 构建DataTable的数据
+		var dataSet = [];
+		for (var i in data) {
+			var auc = data[i];
+			var num =parseInt(i) + 1;
+			var realmName = Realm.getConnectedById(auc.realmId);
+			var realmColumn = "<a href='/itemQuery.jsp?itemName="
+					+ itemName
+					+ "&realm="
+					+ encodeURIComponent(realmName)
+					+ "'>"
+					+ realmName + "</a>"
+			var buyout = Bnade.getGold(auc.buyout);
+			var ownerColumn = "<a href='/page/auction/owner/"
+					+ encodeURIComponent(auc.owner) + "/" + auc.realmId
+					+ "' target='_blank'>" + auc.owner + "</a>";
+			var timeLeft = leftTimeMap[auc.timeLeft];
+			var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"
+					+ auc.realmId
+					+ "' data-itemid='"
+					+ itemId
+					+ "'>" + auc.totalQuantity + "</a>";
+			dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, timeLeft]);
 		}
+		$("#showAllTbl").DataTable({
+			destroy: true,
+			"paging":   false, // 分页
+			"searching" : false, // 搜索
+	        //"ordering": true, // 排序
+	        "info":     false,
+	        //"order": [[ 3, "asc" ]], // 默认排序
+			responsive : true,
+			data: dataSet,
+	        columns: [
+	            { title: "#" },
+	            { title: "服务器" },
+	            { title: "最低一口价" },
+	            { title: "数量" },
+	            { title: "总数量" },
+	            { title: "卖家" },
+	            { title: "剩余时间" }	            
+	        ],
+			"language" : {
+				"lengthMenu" : "每页显示 _MENU_ 条记录",
+				"zeroRecords" : "数据未找到",
+				"info" : "第_PAGE_页, 共_PAGES_页",
+				"infoEmpty" : "找不到数据",
+				"infoFiltered" : "(总数 _MAX_条)",
+				"search" : "搜索:",
+				"paginate" : {
+					"first" : "首页",
+					"last" : "末页",
+					"next" : "下一页",
+					"previous" : "上一页"
+				},
+			},
+		});
+		
+		var chartLabels = [];
+		var chartBuyoutData = [];
+		var chartQuantityData = [];
+		// 严重扰乱市场的人，计算时剔除这些人计算
+		var fuckOwner = [ "贼面贼霸", "冲进女澡堂", "漏屁屁火星人" ];
+		var calData = [];
+		var calDataCount = 0;
+		var quantitySum = 0;
+		for (var i in data) {
+			var auc = data[i];
+			var realm = Realm.getConnectedById(auc.realmId);
+			var buyout = auc.buyout;
+			var buyoutOwner = auc.owner;
+			var quantity = auc.quantity;
+			var totalQuantity = auc.totalQuantity;
+			if (fuckOwner.indexOf(buyoutOwner) == -1) {
+				calData[calDataCount++] = buyout;
+			}
+			chartLabels[i] = realm;
+			chartBuyoutData[i] = Bnade.getGold(buyout);
+			chartQuantityData[i] = totalQuantity;
+			quantitySum += totalQuantity;
+		}
+		var result = Bnade.getResult(calData);
+		var minBuy = Bnade.getGold(result.min);
+		var maxBuy = Bnade.getGold(result.max);
+		var avgBuy = Bnade.getGold(result.avg);
+		$('#allMinBuyout').html(minBuy);
+		$('#allMaxBuyout').html(maxBuy);
+		$('#allAvgBuyout').html(avgBuy);
+		$('#allAvgQuantity').html(parseInt(quantitySum / data.length));
+		$('#allRealmMsg').html("所有服务器平均价格:" + avgBuy);
+		loadChart('allRealmContainer', itemName + '在各服务器的价格和数量',
+				itemName, chartLabels, chartBuyoutData, minBuy,
+				avgBuy * 2 < maxBuy ? avgBuy * 2 : maxBuy, false,
+				'spline', chartQuantityData, 'column');
+	
+	}).fail(function() {
+		$('#allRealmMsg').html("查询所有服务器数据出错");
+		$('#allRealmCtlDiv').hide();
 	});
 }
 function checkCommand(){
@@ -1385,7 +1434,7 @@ $(document).ready(function() {
 	$("#itemName").autocomplete({
 		source : function(request, response) {
 			$.ajax({
-				url : "https://api.bnade.com/items/names",
+				url : API_HOST + "/items/names",
 				data : {
 					search : request.term
 				},
@@ -1497,38 +1546,5 @@ $(document).ready(function() {
 			$("#msg").html("查询物品所有拍卖出错");
 	    });			  
 	});
-	
-	for (var i in Column) {
-		(function(){
-			var column = Column[i];
-			$('#sort'+column).click(function() {
-				if ($(this).attr("id") == sortColumn) {
-						orderByDesc = !orderByDesc;
-					} else {
-						orderByDesc = true;
-						sortColumn = $(this).attr("id");
-					}
-					sortData(column, gblData, orderByDesc);	       					
-					$("#showAllBody").html(generateTableBody(gblItemId,gblData));
-					$(".queryRealm").click(function() {
-						$("#realm").val($(this).html());
-						$("#queryBtn").click();
-					});
-					// 修改排序图标
-					for (var j in Column) {
-						var col = Column[j];
-						$("#sort"+col + " span").removeClass("glyphicon-sort glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt");
-						if ("sort"+col == $(this).attr("id")) {
-							if (orderByDesc) {
-								$("#sort"+col + " span").addClass("glyphicon-sort-by-attributes-alt");
-							} else {
-								$("#sort"+col + " span").addClass("glyphicon-sort-by-attributes");
-							}	       								       							
-						} else {
-							$("#sort"+col + " span").addClass("glyphicon-sort");	       							
-						}
-					}	      
-			});
-		})();
-	}
+
 });
