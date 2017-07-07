@@ -88,10 +88,27 @@ function getUrlParam(name) {
     if (r !== null) return decodeURI (r[2]); return null;
 }
 
+/**
+ * 简单封装localStorage
+ */
+var store = {
+	set : function(key, val) {
+		var str = val;
+		if (typeof str === 'object') {
+			str = JSON.stringify(val);
+		}
+		localStorage.setItem(key, str);
+	},
+	get : function(key) {
+		return JSON.parse(localStorage.getItem(key));
+	}
+}
+
+// 预防iframe盗用
 if(window.top !== window.self){ window.top.location = window.location;}  
 
 /**
- * 设置页面中的table，点击对列排序
+ * 设置页面中的table列排序
  */
 function sortableTable() {
 	$(document).on('click','th',function(){

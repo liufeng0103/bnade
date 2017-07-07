@@ -1155,7 +1155,8 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 		}
 		for (var i = 1; i < realmMark.length; i++) {
 			if (realmMark[i] == 0) {
-				dataSet.push( [++num, Realm.getConnectedById(i), "N/A", "N/A", "N/A", "N/A", HotRealm[i],"N/A"]);
+				var ownerQuantity = Realm.getOwnerQuantityById(i);
+				dataSet.push( [++num, Realm.getConnectedById(i), "N/A", "N/A", "N/A", "N/A", ownerQuantity === -1 ? "N/A" : ownerQuantity,"N/A"]);
 			}
 		}
 		$('#tableContainer').html('<table id="cheapestAuctionTbl" class="table table-hover"></table>');

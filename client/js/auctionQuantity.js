@@ -62,6 +62,9 @@ $(function() {
 		
 		sortableTable();
 		$('th').css("cursor", "pointer");
+		
+		// 保存到localStorage
+		store.set("realms", data);
 	}).fail(function() {
 		$('#tableContainer').text("查询出错");
 	});
