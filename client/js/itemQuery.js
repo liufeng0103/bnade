@@ -1105,6 +1105,7 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 	
 	$.ajax({
 		url : url,
+		crossDomain: true == !(document.all),
 		success : function(data) {
 			// 排序，价格有低到高
 			data.sort(function(a, b) { 
@@ -1244,11 +1245,11 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 		error : function(xhr) {
 			$('#allRealmCtlDiv').hide();
 			if (xhr.status === 404) {
-				$('#allRealmMsg').text("数据找不到");
+				$('#allRealmMsg').html("数据找不到");
 			} else if (xhr.status === 500) {
-				$('#allRealmMsg').text("服务器错误");
+				$('#allRealmMsg').html("服务器错误");
 			} else {
-				$('#allRealmMsg').text("未知错误");
+				$('#allRealmMsg').html("未知错误");
 			}
 		}
 	});
