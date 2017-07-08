@@ -67,4 +67,9 @@ public class WowTokenDaoImpl implements WowTokenDao {
 		run.update("truncate t_wowtoken");		
 	}
 
+	@Override
+	public void deleteByUpdated(long updated) throws SQLException {
+		run.update("delete from t_wowtoken where updated=?", updated);		
+	}
+
 }

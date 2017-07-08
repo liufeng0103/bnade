@@ -17,4 +17,6 @@ public interface WowTokenDao {
 	
 	void deleteAll() throws SQLException;
 	
+	void deleteByUpdated(long updated) throws SQLException;
+	
 }

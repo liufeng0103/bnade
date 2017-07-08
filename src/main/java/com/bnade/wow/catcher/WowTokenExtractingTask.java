@@ -95,15 +95,31 @@ public class WowTokenExtractingTask {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 减少wowtoken数量， 删除偶数间隔数据
+	 */
+	public void reduceWowTokens() {
+		try {
+			List<WowToken> list = wowTokenService.getAll();
+			System.out.println("共" + list.size() + "条记录");
+			int count = 0;
+			for (int i = 0; i < list.size(); i++) {
+				if (i % 2 == 0) {
+					WowToken wowToken = list.get(i);
+					count++;
+					wowTokenService.deleteByUpdated(wowToken.getUpdated());
+					System.out.println("清除updated " + wowToken.getUpdated());
+				}
+			}
+			System.out.println("共清除" + count + "条记录");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
-	public static void main(String[] args) {
-//		args = new String[1];
-//		args[0] = "init";
-		if (args.length > 0 && "init".equalsIgnoreCase(args[0])) {
-			new WowTokenExtractingTask().init();	
-		} else {
-			new WowTokenExtractingTask().process();	
-		}		
+	public static void main(String[] args) throws IOException {
+		new WowTokenExtractingTask().reduceWowTokens();
 	}
 
 }

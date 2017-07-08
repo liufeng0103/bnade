@@ -23,4 +23,6 @@ public interface WowTokenService {
 	
 	void deleteAll() throws SQLException;
 	
+	void deleteByUpdated(long updated) throws SQLException;
+	
 }

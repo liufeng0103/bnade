@@ -41,4 +41,9 @@ public class WowTokenServiceImpl implements WowTokenService {
 		dao.deleteAll();		
 	}
 
+	@Override
+	public void deleteByUpdated(long updated) throws SQLException {
+		dao.deleteByUpdated(updated);		
+	}
+
 }
