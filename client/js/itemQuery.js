@@ -1105,7 +1105,7 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 	
 	$.ajax({
 		url : url,
-		crossDomain: true == !(document.all),
+		crossDomain : true == !(document.all), // 解决IE9跨域访问问题
 		success : function(data) {
 			// 排序，价格有低到高
 			data.sort(function(a, b) { 
@@ -1397,17 +1397,24 @@ $(document).ready(function() {
 	 */
 	$("#itemName").autocomplete({
 		source : function(request, response) {
-			$.ajax({
-				url : API_HOST + "/items/names",
-				data : {
-					search : request.term
-				},
-				dataType : "json",
-				success : response,
-				error : function() {
-					response([]);
-				}
-			});
+			// 判断是否全中文， 减少不必要的搜索
+			var reg=/^[\u4E00-\u9FA5]+$/;
+			if (reg.test(request.term)) {
+				$.ajax({
+					url : API_HOST + "/items/names",
+					data : {
+						search : request.term
+					},
+					dataType : "json",
+					crossDomain : true == !(document.all), // 解决IE9跨域访问问题
+					success : response,
+					error : function() {
+						response([]);
+					}
+				});
+			} else {
+				response([]);
+			}
 		}
 	});
 	
