@@ -31,663 +31,79 @@ var API_HOST = "https://api.bnade.com";
 	
 })(window.BN = window.BN || {});
 
-var itemQuery = itemQuery || {};
-
-itemQuery.getItemAvgPrice = function(realmId, itemId){
-	var price = 0;
-	$.ajax({url:"/wow/auction/past/realm/" + realmId + "/item/" + itemId,async:false,success:function(result){
-		if (result.length > 0) {
-			var calData = [];
-			for(var i in result){
-				var item=result[i];
-				calData[i] = result[i][0];
+/**
+ * 物品相关
+ */
+var itemResource = {
+		
+	/**
+	 * 通过ajax get url内容
+	 * @param url
+	 * @returns 物品列表
+	 */
+	search : function(url) {
+		var result;
+		$.ajax({
+			url : url,
+			async : false, // 同步
+			crossDomain : true == !(document.all), // 解决IE9跨域访问问题
+			success : function(data) {
+				result = data;
+			},
+			error : function(xhr) {
+				if (xhr.status === 404) {
+					$('#msg').text("物品找不到");
+				} else if (xhr.status === 500) {
+					$('#msg').text("服务器错误");
+				} else {
+					$('#msg').text("未知错误");
+				}
 			}
-			var calResult = Bnade.getResult(calData);
-			price = Bnade.getGold(calResult.avg);				
-		}					
-	}});
-	return price;
-};
+		});
+		return result;
+	},
+	
+	/**
+	 * 通过物品名搜索
+	 * @param name 物品名
+	 */
+	searchByName : function(name) {
+		var url = API_HOST + "/items?name=" + encodeURIComponent(name);
+		return itemResource.search(url);
+	},
+	
+	/**
+	 * 通过物品id搜索
+	 * @param id 物品id
+	 */
+	searchById : function(id) {
+		var url = API_HOST + "/items/" + id;
+		return itemResource.search(url);
+	}
+}
+
+var auctionResource = {
+	searchCheapestAuctions : function() {
+		
+	}
+}
 
 var gblItemId = 0;
 
-var BonusGroups1 = [ {
-	"id" : 1,
-	"desc" : "快刀之 全能 爆击",
-	"bonusGroups" : [ {
-		"bl" : "1676",
-		"desc" : "245全能 614暴击"
-	}, {
-		"bl" : "1677",
-		"desc" : "307全能 552暴击"
-	}, {
-		"bl" : "1678",
-		"desc" : "368全能 491暴击"
-	}, {
-		"bl" : "1679",
-		"desc" : "429全能 429暴击"
-	}, {
-		"bl" : "1680",
-		"desc" : "491全能 368暴击"
-	}, {
-		"bl" : "1681",
-		"desc" : "552全能 307暴击"
-	}, {
-		"bl" : "1682",
-		"desc" : "614全能 245暴击"
-	}, ]
-}, {
-	"id" : 2,
-	"desc" : "无双之 爆击 精通",
-	"bonusGroups" : [ {
-		"bl" : "1683",
-		"desc" : "614暴击 245精通"
-	}, {
-		"bl" : "1684",
-		"desc" : "552暴击 307精通"
-	}, {
-		"bl" : "1685",
-		"desc" : "491暴击 368精通"
-	}, {
-		"bl" : "1686",
-		"desc" : "429暴击 429精通"
-	}, {
-		"bl" : "1687",
-		"desc" : "368暴击 491精通"
-	}, {
-		"bl" : "1688",
-		"desc" : "307暴击 552精通"
-	}, {
-		"bl" : "1689",
-		"desc" : "245暴击 614精通"
-	}, ]
-}, {
-	"id" : 3,
-	"desc" : "燎火之 爆击 急速",
-	"bonusGroups" : [ {
-		"bl" : "1690",
-		"desc" : "614暴击 245急速"
-	}, {
-		"bl" : "1691",
-		"desc" : "552暴击 307急速"
-	}, {
-		"bl" : "1692",
-		"desc" : "491暴击 368急速"
-	}, {
-		"bl" : "1693",
-		"desc" : "429暴击 429急速"
-	}, {
-		"bl" : "1694",
-		"desc" : "368暴击 491急速"
-	}, {
-		"bl" : "1695",
-		"desc" : "307暴击 552急速"
-	}, {
-		"bl" : "1696",
-		"desc" : "245暴击 614急速"
-	}, ]
-}, {
-	"id" : 4,
-	"desc" : "灼光之 精通 急速",
-	"bonusGroups" : [ {
-		"bl" : "1697",
-		"desc" : "245精通 614急速"
-	}, {
-		"bl" : "1698",
-		"desc" : "307精通 552急速"
-	}, {
-		"bl" : "1699",
-		"desc" : "368精通 491急速"
-	}, {
-		"bl" : "1700",
-		"desc" : "429精通 429急速"
-	}, {
-		"bl" : "1701",
-		"desc" : "491精通 368急速"
-	}, {
-		"bl" : "1702",
-		"desc" : "552精通 307急速"
-	}, {
-		"bl" : "1703",
-		"desc" : "614精通 245急速"
-	}, ]
-}, {
-	"id" : 5,
-	"desc" : "曙光之 全能 急速",
-	"bonusGroups" : [ {
-		"bl" : "1704",
-		"desc" : "245全能 614急速"
-	}, {
-		"bl" : "1705",
-		"desc" : "307全能 552急速"
-	}, {
-		"bl" : "1706",
-		"desc" : "368全能 491急速"
-	}, {
-		"bl" : "1707",
-		"desc" : "429全能 429急速"
-	}, {
-		"bl" : "1708",
-		"desc" : "491全能 368急速"
-	}, {
-		"bl" : "1709",
-		"desc" : "552全能 307急速"
-	}, {
-		"bl" : "1710",
-		"desc" : "614全能 245急速"
-	}, ]
-}, {
-	"id" : 6,
-	"desc" : "谐律之 全能 精通",
-	"bonusGroups" : [ {
-		"bl" : "1711",
-		"desc" : "245全能 614精通"
-	}, {
-		"bl" : "1712",
-		"desc" : "307全能 552精通"
-	}, {
-		"bl" : "1713",
-		"desc" : "368全能 491精通"
-	}, {
-		"bl" : "1714",
-		"desc" : "429全能 429精通"
-	}, {
-		"bl" : "1715",
-		"desc" : "491全能 368精通"
-	}, {
-		"bl" : "1716",
-		"desc" : "552全能 307精通"
-	}, {
-		"bl" : "1717",
-		"desc" : "614全能 245精通"
-	}, ]
-}, {
-	"id" : 7,
-	"desc" : "屠夫之 爆击",
-	"bonusGroups" : [ {
-		"bl" : "1718",
-		"desc" : "859爆击"
-	}, ]
-}, {
-	"id" : 8,
-	"desc" : "应变之 全能",
-	"bonusGroups" : [ {
-		"bl" : "1719",
-		"desc" : "859全能"
-	}, ]
-}, {
-	"id" : 9,
-	"desc" : "焦躁之 急速",
-	"bonusGroups" : [ {
-		"bl" : "1720",
-		"desc" : "859急速"
-	}, ]
-}, {
-	"id" : 10,
-	"desc" : "专擅之 精通",
-	"bonusGroups" : [ {
-		"bl" : "1721",
-		"desc" : "859精通"
-	}, ]
-}, ];
-
-var BonusGroups2 = [ {
-	"id" : 1,
-	"desc" : "快刀之 全能 爆击",
-	"bonusGroups" : [ {
-		"bl" : "1742",
-		"desc" : "460全能 1150暴击"
-	}, {
-		"bl" : "1743",
-		"desc" : "552全能 1058暴击"
-	}, {
-		"bl" : "1744",
-		"desc" : "644全能 966暴击"
-	}, {
-		"bl" : "1745",
-		"desc" : "736全能 874暴击"
-	}, {
-		"bl" : "1746",
-		"desc" : "966全能 644暴击"
-	}, {
-		"bl" : "1747",
-		"desc" : "1058全能 552暴击"
-	}, {
-		"bl" : "1748",
-		"desc" : "1150全能 460暴击"
-	}, ]
-}, {
-	"id" : 2,
-	"desc" : "无双之 爆击 精通",
-	"bonusGroups" : [ {
-		"bl" : "1749",
-		"desc" : "1150暴击 460精通"
-	}, {
-		"bl" : "1750",
-		"desc" : "1058暴击 552精通"
-	}, {
-		"bl" : "1751",
-		"desc" : "966暴击 644精通"
-	}, {
-		"bl" : "1752",
-		"desc" : "874暴击 736精通"
-	}, {
-		"bl" : "1753",
-		"desc" : "644暴击 966精通"
-	}, {
-		"bl" : "1754",
-		"desc" : "552暴击 1058精通"
-	}, {
-		"bl" : "1755",
-		"desc" : "460暴击 1150精通"
-	}, ]
-}, {
-	"id" : 3,
-	"desc" : "燎火之 爆击 急速",
-	"bonusGroups" : [ {
-		"bl" : "1756",
-		"desc" : "460急速 1150暴击"
-	}, {
-		"bl" : "1757",
-		"desc" : "598急速 1012暴击"
-	}, {
-		"bl" : "1758",
-		"desc" : "644急速 966暴击"
-	}, {
-		"bl" : "1759",
-		"desc" : "736急速 874暴击"
-	}, {
-		"bl" : "1760",
-		"desc" : "966急速 644暴击"
-	}, {
-		"bl" : "1761",
-		"desc" : "1058急速 552暴击"
-	}, {
-		"bl" : "1762",
-		"desc" : "1150急速 460暴击"
-	}, ]
-}, {
-	"id" : 4,
-	"desc" : "灼光之 精通 急速",
-	"bonusGroups" : [ {
-		"bl" : "1763",
-		"desc" : "1150精通 460急速"
-	}, {
-		"bl" : "1764",
-		"desc" : "1058精通 552急速"
-	}, {
-		"bl" : "1765",
-		"desc" : "966精通 644急速"
-	}, {
-		"bl" : "1766",
-		"desc" : "874精通 736急速"
-	}, {
-		"bl" : "1767",
-		"desc" : "644精通 966急速"
-	}, {
-		"bl" : "1768",
-		"desc" : "552精通 1058急速"
-	}, {
-		"bl" : "1769",
-		"desc" : "460精通 1150急速"
-	}, ]
-}, {
-	"id" : 5,
-	"desc" : "曙光之 全能 急速",
-	"bonusGroups" : [ {
-		"bl" : "1770",
-		"desc" : "460全能 1150急速"
-	}, {
-		"bl" : "1771",
-		"desc" : "552全能 1058急速"
-	}, {
-		"bl" : "1772",
-		"desc" : "644全能 966急速"
-	}, {
-		"bl" : "1773",
-		"desc" : "736全能 874急速"
-	}, {
-		"bl" : "1774",
-		"desc" : "966全能 644急速"
-	}, {
-		"bl" : "1775",
-		"desc" : "1058全能 552急速"
-	}, {
-		"bl" : "1776",
-		"desc" : "1150全能 460急速"
-	}, ]
-}, {
-	"id" : 6,
-	"desc" : "谐律之 全能 精通",
-	"bonusGroups" : [ {
-		"bl" : "1777",
-		"desc" : "460全能 1150精通"
-	}, {
-		"bl" : "1778",
-		"desc" : "552全能 1058精通"
-	}, {
-		"bl" : "1779",
-		"desc" : "644全能 966精通"
-	}, {
-		"bl" : "1780",
-		"desc" : "736全能 874精通"
-	}, {
-		"bl" : "1781",
-		"desc" : "966全能 644精通"
-	}, {
-		"bl" : "1782",
-		"desc" : "1058全能 552精通"
-	}, {
-		"bl" : "1783",
-		"desc" : "1150全能 460精通"
-	}, ]
-}, {
-	"id" : 7,
-	"desc" : "屠夫之 爆击",
-	"bonusGroups" : [ {
-		"bl" : "1784",
-		"desc" : "1611爆击"
-	}, ]
-}, {
-	"id" : 8,
-	"desc" : "应变之 全能",
-	"bonusGroups" : [ {
-		"bl" : "1785",
-		"desc" : "1611全能"
-	}, ]
-}, {
-	"id" : 9,
-	"desc" : "焦躁之 急速",
-	"bonusGroups" : [ {
-		"bl" : "1786",
-		"desc" : "1611急速"
-	}, ]
-}, {
-	"id" : 10,
-	"desc" : "专擅之 精通",
-	"bonusGroups" : [ {
-		"bl" : "1787",
-		"desc" : "1611精通"
-	}, ]
-}, ];
-
-var BonusGroups3 = [ {
-	"id" : 1,
-	"desc" : "快刀之 全能 爆击",
-	"bonusGroups" : [ {
-		"bl" : "3343",
-		"desc" : "460全能 229暴击"
-	}, {
-		"bl" : "3344",
-		"desc" : "575全能 114暴击"
-	}, {
-		"bl" : "3345",
-		"desc" : "690全能"
-	}, {
-		"bl" : "3361",
-		"desc" : "229全能 460暴击"
-	}, {
-		"bl" : "3362",
-		"desc" : "114全能 575暴击"
-	}, {
-		"bl" : "3363",
-		"desc" : "690暴击"
-	}, ]
-}, {
-	"id" : 2,
-	"desc" : "无双之 爆击 精通",
-	"bonusGroups" : [ {
-		"bl" : "3346",
-		"desc" : "229暴击 460精通"
-	}, {
-		"bl" : "3347",
-		"desc" : "114暴击 575精通"
-	}, {
-		"bl" : "3348",
-		"desc" : "690精通"
-	}, {
-		"bl" : "3351",
-		"desc" : "229精通 460暴击"
-	}, {
-		"bl" : "3352",
-		"desc" : "114精通 575暴击"
-	}, {
-		"bl" : "3354",
-		"desc" : "690暴击"
-	}, ]
-}, {
-	"id" : 3,
-	"desc" : "燎火之 爆击 急速",
-	"bonusGroups" : [ {
-		"bl" : "3349",
-		"desc" : "460急速 229暴击"
-	}, {
-		"bl" : "3350",
-		"desc" : "575急速 114暴击"
-	}, {
-		"bl" : "3353",
-		"desc" : "690急速"
-	}, {
-		"bl" : "3370",
-		"desc" : "229急速 460暴击"
-	}, {
-		"bl" : "3371",
-		"desc" : "114急速 575暴击"
-	}, {
-		"bl" : "3372",
-		"desc" : "690暴击"
-	}, ]
-}, {
-	"id" : 4,
-	"desc" : "灼光之 精通 急速",
-	"bonusGroups" : [ {
-		"bl" : "3355",
-		"desc" : "460急速 229精通"
-	}, {
-		"bl" : "3356",
-		"desc" : "575急速 114精通"
-	}, {
-		"bl" : "3357",
-		"desc" : "690急速"
-	}, {
-		"bl" : "3373",
-		"desc" : "229急速 460精通"
-	}, {
-		"bl" : "3374",
-		"desc" : "114急速 575精通"
-	}, {
-		"bl" : "3375",
-		"desc" : "690精通"
-	}, ]
-}, {
-	"id" : 5,
-	"desc" : "谐律之 全能 精通",
-	"bonusGroups" : [ {
-		"bl" : "3358",
-		"desc" : "460全能 229精通"
-	}, {
-		"bl" : "3359",
-		"desc" : "575全能 114精通"
-	}, {
-		"bl" : "3360",
-		"desc" : "690全能"
-	}, {
-		"bl" : "3367",
-		"desc" : "229全能 460精通"
-	}, {
-		"bl" : "3368",
-		"desc" : "114全能 575精通"
-	}, {
-		"bl" : "3369",
-		"desc" : "690精通"
-	}, ]
-}, {
-	"id" : 6,
-	"desc" : "曙光之 全能 急速",
-	"bonusGroups" : [ {
-		"bl" : "3364",
-		"desc" : "229全能 460急速"
-	}, {
-		"bl" : "3365",
-		"desc" : "114全能 575急速"
-	}, {
-		"bl" : "3366",
-		"desc" : "690急速"
-	}, {
-		"bl" : "3376",
-		"desc" : "460全能 229急速"
-	}, {
-		"bl" : "3377",
-		"desc" : "575全能 114急速"
-	}, {
-		"bl" : "3378",
-		"desc" : "690全能"
-	}, ]
-}, ];
-
-// 获取bonus说明，仅用于7.0制造业物品
-function getItemBonusHtml(type) {
-	var tmpHtml = "<div class='panel-group' role='tablist' aria-multiselectable='true'>";
-	if (type == 1) {
-		var bonusGroups = BonusGroups1;
-	} else if (type == 2) {
-		var bonusGroups = BonusGroups2;
-	} else if (type == 3) {
-		var bonusGroups = BonusGroups3;
-	}
-	for (i in bonusGroups) {
-		var bls = bonusGroups[i];
-		tmpHtml += "<div class='panel panel-default'><div class='panel-heading' role='tab' id='heading"+bls.id+"'><h4 class='panel-title'><a class='collapsed' data-toggle='collapse' data-parent='#accordion' href='#collapse"+bls.id+"' aria-expanded='false' aria-controls='collapse"+bls.id+"'>";
-		tmpHtml += bls.desc;
-		tmpHtml += "</a></h4></div><div id='collapse"+bls.id+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading"+bls.id+"'><div class='panel-body'>";
-			// body
-		tmpHtml += "<ul class='list-group'>";
-		for (j in bls.bonusGroups) {
-			var bl = bls.bonusGroups[j];
-			tmpHtml += "<li class='list-group-item'><a class='bonus' href='javascript:void(0)' bl='"+bl.bl+"'>"+bl.desc+"</a></li>";
-		}
-		tmpHtml += "</ul>";
-		tmpHtml += "</div></div></div>";
-	}
-	tmpHtml += "<a class='bonus btn btn-default' href='javascript:void(0)' bl='all'>全部</a></div>";
-	return tmpHtml;
-}
-
-function itemQueryByName(realm, itemName) {
-	$.get('/wow/item/name/' + encodeURIComponent(itemName), function(data) {					
-		if (data.length === 0) {
-			$('#msg').html("找不到物品:" + itemName);
-		} else if(data.length === 1) {
-			var item = data[0];
-			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, itemName);
-			if (item.bonusList.length === 0 || item.bonusList.length === 1) {							
-				accurateQuery(realm, item.id, itemName);
-			} else {
-				// 多bonus物品
-				if ((item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) || (item.bonusList[0] >= 1742 && item.bonusList[0] <= 1787) || (item.bonusList[0] >= 3343 && item.bonusList[0] <= 3378)) { // 7.0制造业物品
-					$('#msg').html('7.0制造业装备有多种副属性组合，请选择一种查询');
-					if (item.bonusList[0] >= 1676 && item.bonusList[0] <= 1721) {
-						$('#itemListByName').html(getItemBonusHtml(1));
-					} else if (item.bonusList[0] >= 1742 && item.bonusList[0] <= 1787) {
-						$('#itemListByName').html(getItemBonusHtml(2));
-					} else if (item.bonusList[0] >= 3343 && item.bonusList[0] <= 3378) {
-						$('#itemListByName').html(getItemBonusHtml(3));
-					}
-					
-					$(".bonus").click(function() {
-						var regItemId = item.id;
-						accurateQuery(realm, regItemId, itemName, $(this).attr('bl'));									
-					});
-				} else {
-					$('#msg').html('物品:' + itemName + ' 发现' + item.bonusList.length + '种版本,请选择下列表中的一种来查询');
-					var tableHtml = "<table class='table table-striped'><thead><tr><th>ID</th><th>物品名</th><th>物品说明</th></tr></thead><tbody>";
-					for (var i in item.bonusList) {
-						var itemBonus = item.bonusList[i];
-						tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='itemBonus"+i+item.id+"' itemId='"+item.id+"' bl='"+itemBonus+"'>"+item.name+"</a></td><td>"+item.itemLevel+Bnade.getBonusDesc(itemBonus)+"</td></tr>";
-					}
-					tableHtml += '</tbody></table>';
-					tableHtml += "<div><a class='bonus btn btn-default' href='javascript:void(0)' bl='all'>全部</a></div>";
-					$('#itemListByName').html(tableHtml);
-					$(".bonus").click(function() {
-						var regItemId = item.id;
-						accurateQuery(realm, regItemId, itemName, $(this).attr('bl'));									
-					});
-					for (var i in item.bonusList) {
-						var itemBonus = item.bonusList[i];
-						$("#itemBonus" + i + item.id).click(function() {
-							var regItemId = $(this).attr('itemId');
-							var regItemName = $(this).html();
-							accurateQuery(realm, regItemId, regItemName, $(this).attr('bl'));									
-						});
-					}
-				}
-			}						
-		}else if (data.length > 1) {
-			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, itemName);
-			$('#msg').html('发现' + data.length + '个有相同名字的物品,请选择下列表中的一个物品来查询');
-			var tableHtml = "<table class='table table-striped'><thead><tr><th>ID</th><th>物品名</th><th>物品等级</th></tr></thead><tbody>";
-			for(var i in data) {
-				var item = data[i];
-				tableHtml += "<tr><td>"+item.id+"</td><td><a href='javascript:void(0)' id='"+item.id+"'>"+item.name+"</a></td><td>"+item.itemLevel+"</td></tr>";
-			}
-			tableHtml += '</tbody></table>';
-			$('#itemListByName').html(tableHtml);	
-			for(var i in data){
-				var item = data[i];
-				$("#" + item.id).click(function() {
-					var regItemId = $(this).attr('id');
-					var regItemName = $(this).html();
-					accurateQuery(realm, regItemId, regItemName);								
-				});
-			}
-		} 		
-	}).fail(function() {
-		$("#msg").html("查询出错");
-    });	
-}
-function itemQuery() {		
-	clear();		
-	if (!checkCommand()) {
-		var itemName = $("#itemName").val();
-		var realm = $("#realm").val();
-		if (itemName === "") {
-			$("#msg").html("物品名不能为空");
-		} else {	
-			$('#itemListByName').empty();
-			// 如果物品时数字则当作物品ID来查询
-			if (parseInt(itemName, 10) == itemName) {
-				var id = itemName;
-				itemQueryById(realm, id);
-			} else {
-				itemQueryByName(realm, itemName);
-			}
-		}
-	}
-}
-function itemQueryById(realm, id) {
-	$.get('/wow/item/' + id, function(data) {
-		if (data != null) {
-			itemQueryByName(realm, data.name);			
-		} else {
-			$('#msg').html("通过ID找不到物品:" + id);
-		}						
-	});
-}
-
 function clear(){
 	$('#past24CtlDiv').hide();
-	$("#past24Msg").html("");
+	$("#past24Msg").text("");
 	$('#pastWeekCtlDiv').hide();
-	$("#pastWeekMsg").html("");
+	$("#pastWeekMsg").text("");
 	$('#allRealmCtlDiv').hide();	
-	$("#allRealmMsg").html("");			
-	$('#msg').html("");
-	$('#itemDetail').html("");
+	$("#allRealmMsg").text("");			
+	$('#msg').text("");
+	$('#itemDetail').text("");
 }
 
 function accurateQuery(realm, itemId, itemName, bonusList) {
 	gblItemId =itemId;
-	getItemByAllRealms(itemId, itemName, bonusList);
+	
 	if (bonusList != "" && bonusList != null) {
 		itemId += "?bl=" + bonusList;
 	}
@@ -695,10 +111,9 @@ function accurateQuery(realm, itemId, itemName, bonusList) {
 	if (realm !== "") {
 		var realmId = Realm.getIdByName(realm);
 		if (realmId > 0) {
-			getPast24(realmId, realm, itemId, itemName);
-			getPastWeek(realmId, realm, itemId, itemName);
+			
 		} else {
-			$('#msg').html("找不到服务器：" + realm);
+			$('#msg').text("找不到服务器：" + realm);
 		}		
 	}		
 
@@ -709,11 +124,18 @@ function accurateQuery(realm, itemId, itemName, bonusList) {
 	$("#queryByUrl").html("快速查询URL: <a href='" + url + "'>" + url + "</a>");
 }
 
-function getPast24(realmId, realm, itemId, itemName) {		
-	$('#past24Msg').html("正在查询24小时内数据,请稍等...");
-	$.get("/wow/auction/past/realm/" + realmId + "/item/" + itemId,function(data) {
+function getPast24(realm, item) {
+	if (realm === undefined || realm === null) {
+		return;
+	}
+	$('#past24Msg').text("正在查询24小时内数据,请稍等...");
+	var bonusList = "";
+	if (item.bonusList != "" && item.bonusList != null) {
+		bonusList += "?bl=" + item.bonusList;
+	}
+	$.get("/wow/auction/past/realm/" + realm.id + "/item/" + item.id + bonusList,function(data) {
 		if (data.length === 0) {
-			$('#past24Msg').html("24小时内数据找不到");
+			$('#past24Msg').text("24小时内数据找不到");
 			$('#past24CtlDiv').hide();
 		} else {				
 			$('#past24CtlDiv').show();
@@ -754,16 +176,16 @@ function getPast24(realmId, realm, itemId, itemName) {
 			avgQuantity = parseInt(avgQuantity/data.length);
 			var latestBuyout=toDecimal(data[data.length-1][0]/10000);
 			if(latestBuyout>=10) latestBuyout=parseInt(latestBuyout);						
-			$('#past24MinBuyout').html(tmpMinBuyout);
-			$('#past24MaxBuyout').html(tmpMaxBuyout);
-			$('#past24AvgBuyout').html(avgBuyout);
-			$('#past24AvgQuantity').html(avgQuantity);
-			$('#past24LatestBuyout').html(latestBuyout);				
-			loadChart('past24Container','24小时内价格走势',itemName,chartLabels,chartMinBuyout,tmpMinBuyout,tmpMaxBuyout,true,'areaspline',chartQuantity,'spline');
-			$('#past24Msg').html("");
+			$('#past24MinBuyout').text(tmpMinBuyout);
+			$('#past24MaxBuyout').text(tmpMaxBuyout);
+			$('#past24AvgBuyout').text(avgBuyout);
+			$('#past24AvgQuantity').text(avgQuantity);
+			$('#past24LatestBuyout').text(latestBuyout);				
+			loadChart('past24Container','24小时内价格走势',item.name,chartLabels,chartMinBuyout,tmpMinBuyout,tmpMaxBuyout,true,'areaspline',chartQuantity,'spline');
+			$('#past24Msg').text("");
 		}			
 	}).fail(function() {
-		$("#msg").html("24小时数据查询出错");
+		$("#msg").text("24小时数据查询出错");
     });
 }
 function loadChart(containerId,title,subtitle,chartLabels,chartMinBuyout,minBuyout,maxBuyout,showxAxisLabel,series1Type,chartQuantity,series2Type){
@@ -865,15 +287,22 @@ function loadHeatMapChart(container,title,heatMapLabels,heatMapData,minBuyout,se
         }]
     });
 }
-function getPastWeek(realmId, realm, itemId, itemName){
-	$('#pastWeekMsg').html("正在查询物品所有历史数据, 请稍等...");
-	$.get("/wow/auction/history/realm/" + realmId + "/item/" + itemId, function(data) {
+function getPastWeek(realm, item){
+	if (realm === undefined || realm === null) {
+		return;
+	}
+	$('#pastWeekMsg').text("正在查询物品所有历史数据, 请稍等...");
+	var bonusList = "";
+	if (item.bonusList != "" && item.bonusList != null) {
+		bonusList += "?bl=" + item.bonusList;
+	}
+	$.get("/wow/auction/history/realm/" + realm.id + "/item/" + item.id + bonusList, function(data) {
 		if (data.length === 0) {
-			$('#pastWeekMsg').html("历史数据未找到");					
+			$('#pastWeekMsg').text("历史数据未找到");					
 			$('#pastWeekCtlDiv').hide();
 		} else {
 			// 保存服务器名
-			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.realm.key, realm);
+			BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.realm.key, realm.name);
 			$('#pastWeekCtlDiv').show();
 			// 按更新时间排序
 			data.sort(function(a, b){
@@ -908,10 +337,10 @@ function getPastWeek(realmId, realm, itemId, itemName){
 			if (avgBuy > 10) {
 				valueDecimals = 0;
 			}
-			$('#historyMin').html(minBuy);
-			$('#historyMax').html(maxBuy);
-			$('#historyAvg').html(avgBuy);
-			$('#historyAvgQuantity').html(parseInt(quantitySum/data.length));
+			$('#historyMin').text(minBuy);
+			$('#historyMax').text(maxBuy);
+			$('#historyAvg').text(avgBuy);
+			$('#historyAvgQuantity').text(parseInt(quantitySum/data.length));
 
 			Highcharts.setOptions({lang:{
 				months:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
@@ -947,7 +376,7 @@ function getPastWeek(realmId, realm, itemId, itemName){
 	            navigator:{enabled:false},
 	            scrollbar:{enabled:false},
 	            title : {
-	                text : '['+itemName+']在服务器['+realm+']的历史价格信息'
+	                text : '['+item.name+']在服务器['+realm.name+']的历史价格信息'
 	            },xAxis: {
 	                type: 'datetime',
 	                dateTimeLabelFormats: {
@@ -1071,16 +500,16 @@ function getPastWeek(realmId, realm, itemId, itemName){
 				}
 			}
 			var weekResult = Bnade.getResult(weekCalData);			
-			$('#pastWeekMinBuyout').html(Bnade.getGold(weekResult.min));
-			$('#pastWeekMaxBuyout').html(Bnade.getGold(weekResult.max));
-			$('#pastWeekAvgBuyout').html(Bnade.getGold(weekResult.avg));
-			$('#pastWeekAvgQuantity').html(parseInt(weekQuantity/weekCount));
-			loadHeatMapChart('pastWeekBuyoutHeatMapContainer','一周内'+itemName+'价格热力图',heatMapLabels,heatMapBuyoutData,Bnade.getGold(weekResult.min),'一口价',0);
-			loadHeatMapChart('pastWeekQuantityHeatMapContainer','一周内'+itemName+'数量热力图',heatMapLabels,heatMapQuantityData,weekMinQuantity,'数量',8);
-			$('#pastWeekMsg').html("");
+			$('#pastWeekMinBuyout').text(Bnade.getGold(weekResult.min));
+			$('#pastWeekMaxBuyout').text(Bnade.getGold(weekResult.max));
+			$('#pastWeekAvgBuyout').text(Bnade.getGold(weekResult.avg));
+			$('#pastWeekAvgQuantity').text(parseInt(weekQuantity/weekCount));
+			loadHeatMapChart('pastWeekBuyoutHeatMapContainer','一周内'+item.name+'价格热力图',heatMapLabels,heatMapBuyoutData,Bnade.getGold(weekResult.min),'一口价',0);
+			loadHeatMapChart('pastWeekQuantityHeatMapContainer','一周内'+item.name+'数量热力图',heatMapLabels,heatMapQuantityData,weekMinQuantity,'数量',8);
+			$('#pastWeekMsg').text("");
 		}			
 	}).fail(function() {
-		$("#pastWeekMsg").html("历史数据查询出错");
+		$("#pastWeekMsg").text("历史数据查询出错");
     });
 }
 
@@ -1099,9 +528,9 @@ function processRealmsData(data) {
 	}
 }
 
-function getItemByAllRealms(itemId, itemName, bonusList) {
-	$('#allRealmMsg').html("正在查询所有服务器数据,请稍等...");
-	var url = API_HOST + "/cheapest_auctions?itemId=" + itemId + (bonusList == null ? "" : "&bonusList=" + bonusList);
+function getItemByAllRealms(item) {
+	$('#allRealmMsg').text("正在查询所有服务器数据,请稍等...");
+	var url = API_HOST + "/cheapest_auctions?itemId=" + item.id + (item.bonusList === null || item.bonusList === "" ? "" : "&bonusList=" + item.bonusList);
 	
 	$.ajax({
 		url : url,
@@ -1137,7 +566,7 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 					realmIndex = i;
 				}
 				var realmColumn = "<a href='/itemQuery.jsp?itemName="
-						+ itemName
+						+ item.name
 						+ "&realm="
 						+ encodeURIComponent(realmName)
 						+ "'>"
@@ -1150,7 +579,7 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 				var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"
 						+ auc.realmId
 						+ "' data-itemid='"
-						+ itemId
+						+ item.id
 						+ "'>" + auc.totalQuantity + "</a>";
 				dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, auc.ownerQuantity,timeLeft]);
 				
@@ -1230,13 +659,13 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 			var minBuy = Bnade.getGold(result.min);
 			var maxBuy = Bnade.getGold(result.max);
 			var avgBuy = Bnade.getGold(result.avg);
-			$('#allMinBuyout').html(minBuy);
-			$('#allMaxBuyout').html(maxBuy);
-			$('#allAvgBuyout').html(avgBuy);
-			$('#allAvgQuantity').html(parseInt(quantitySum / data.length));
-			$('#allRealmMsg').html("所有服务器平均价格:" + avgBuy);
-			loadChart('allRealmContainer', itemName + '在各服务器的价格和数量',
-					itemName, chartLabels, chartBuyoutData, minBuy,
+			$('#allMinBuyout').text(minBuy);
+			$('#allMaxBuyout').text(maxBuy);
+			$('#allAvgBuyout').text(avgBuy);
+			$('#allAvgQuantity').text(parseInt(quantitySum / data.length));
+			$('#allRealmMsg').text("所有服务器平均价格:" + avgBuy);
+			loadChart('allRealmContainer', item.name + '在各服务器的价格和数量',
+					item.name, chartLabels, chartBuyoutData, minBuy,
 					avgBuy * 2 < maxBuy ? avgBuy * 2 : maxBuy, false,
 					'spline', chartQuantityData, 'column');
 		
@@ -1245,11 +674,11 @@ function getItemByAllRealms(itemId, itemName, bonusList) {
 		error : function(xhr) {
 			$('#allRealmCtlDiv').hide();
 			if (xhr.status === 404) {
-				$('#allRealmMsg').html("数据找不到");
+				$('#allRealmMsg').text("数据找不到");
 			} else if (xhr.status === 500) {
-				$('#allRealmMsg').html("服务器错误");
+				$('#allRealmMsg').text("服务器错误");
 			} else {
-				$('#allRealmMsg').html("未知错误");
+				$('#allRealmMsg').text("未知错误");
 			}
 		}
 	});
@@ -1261,7 +690,7 @@ function checkCommand(){
 		if(parseInt(value)==value&&value>=0){
 			var obj=JSON.parse(localStorage.getItem(BnadeLocalStorage.lsItems.realm.key));
 			obj.length=value;
-			localStorage.setItem(BnadeLocalStorage.lsItems.realm.key,JSON.stringify(obj));
+			store.set(BnadeLocalStorage.lsItems.realm.key, obj);
 			BnadeLocalStorage.refresh();
 			alert("服务器保存数量设置成功");
 		}else{
@@ -1271,7 +700,7 @@ function checkCommand(){
 		if(parseInt(value)==value&&value>=0){
 			var obj=JSON.parse(localStorage.getItem(BnadeLocalStorage.lsItems.item.key));
 			obj.length=value;				
-			localStorage.setItem(BnadeLocalStorage.lsItems.item.key,JSON.stringify(obj));
+			store.set(BnadeLocalStorage.lsItems.item.key, obj);
 			BnadeLocalStorage.refresh();
 			alert("物品名保存数量设置成功");
 		}else{
@@ -1346,10 +775,10 @@ function queryByUrl() {
 }
 function fuzzyQueryItems(itemName) {
 	clear();
-	$('#msg').html("正在模糊查询物品信息,请稍等...");
+	$('#msg').text("正在模糊查询物品信息,请稍等...");
 	$.get('/wow/item/name/' + encodeURIComponent(itemName) + '?fuzzy=true', function(data) {		
 		if (data.length === 0) {
-			$('#msg').html("找不到物品:" + itemName);
+			$('#msg').text("找不到物品:" + itemName);
 		} else {
 			$("#fuzzyItemsList").show();
 			$("#fuzzyItemsList").html("<li class='active'><a href='javascript:void(0)'>物品名</a></li>");					
@@ -1357,18 +786,19 @@ function fuzzyQueryItems(itemName) {
 				var id = "fuzzyItem" + i;						
 				$("#fuzzyItemsList").append("<li><a href='javascript:void(0)' id='"+id+"'>"+data[i]+"</a></li>");
 				$("#" + id).click(function() {
-					$("#itemName").val($(this).html());							
+					$("#itemName").val($(this).text());							
 					$("#queryBtn").click();						
 				});
 			}	
-			$('#msg').html("");
+			$('#msg').text("");
 		}		
 	}).fail(function() {
-		$("#msg").html("模糊查询出错");
+		$("#msg").text("模糊查询出错");
     });
 }
+
 function loadItemDetail(itemId) {
-	$('#itemDetail').html("");
+	$('#itemDetail').text("");
 	$('#itemDetail').append("<p>物品ID："+itemId+"</p>");
 	if (itemId.toString().indexOf("?") > -1) {
 		itemId += "&tooltip=true";
@@ -1382,81 +812,184 @@ function loadItemDetail(itemId) {
 			$('#itemDetail').append(data);
 		}
 	}).fail(function() {
-		$("#msg").html("物品信息查询出错");
+		$("#msg").text("物品信息查询出错");
     });
 }
 
-$(document).ready(function() {
-	$("#queryBtn").click(function() {
-		itemQuery();
-	});
-    
-	/**
-	 * 物品查询框自动补全
-	 * 用到了jquery ui的autocomplete插件
-	 */
-	$("#itemName").autocomplete({
-		source : function(request, response) {
-			// 判断是否全中文， 减少不必要的搜索
-			var reg=/^[\u4E00-\u9FA5]+$/;
-			if (reg.test(request.term)) {
-				$.ajax({
-					url : API_HOST + "/items/names",
-					data : {
-						search : request.term
-					},
-					dataType : "json",
-					crossDomain : true == !(document.all), // 解决IE9跨域访问问题
-					success : response,
-					error : function() {
-						response([]);
-					}
-				});
-			} else {
-				response([]);
-			}
-		}
-	});
-	
-   $("#itemFuzzyQueryBtn").click(function(){
-		var itemName=$("#itemName").val();
-		if(itemName==""){
-			$('#msg').html("物品名不能为空");
-		} else {			
-			fuzzyQueryItems(itemName);			
-		}
-	});		
-   
-	!function() { // 页面加载运行
-		$('#past24CtlDiv').hide();
-		$('#pastWeekCtlDiv').hide();
-		$('#allRealmCtlDiv').hide();		
-		$("#fuzzyItemsList").hide();
-		queryByUrl();
-		loadTopItems();
-	}();
-	$('#itemAucsModal').on('show.bs.modal', function (event) {
-		var aLink = $(event.relatedTarget);
-		var realmId = aLink.data('realmid');
-		var itemId = aLink.data('itemid');
-		var modal = $(this);
-		modal.find('.modal-body-content').text("正在查询，请稍等...");
-		$.get('/wow/auction/realm/' + realmId + '/item/' + itemId, function(data) {		
-			if (data.length === 0) {
-				$('#msg').html("找不到物品:" + itemName);
-			} else {
-				var result = BN.Auction.foldByOwnerAndBuyout(data);
-				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th><th>说明</th></tr></thead><tbody>";
-				for (var i in result) {
-					var auc = result[i];
-					tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td><td>"+Bnade.getBonusDesc(auc[6])+"</td></tr>";
+/**
+ * 物品查询框自动补全
+ * 用到了jquery ui的autocomplete插件
+ */
+$("#itemName").autocomplete({
+	source : function(request, response) {
+		// 判断是否全中文， 减少不必要的搜索
+		var reg=/^[\u4E00-\u9FA5]+$/;
+		if (reg.test(request.term)) {
+			$.ajax({
+				url : API_HOST + "/items/names",
+				data : {
+					search : request.term
+				},
+				dataType : "json",
+				crossDomain : true == !(document.all), // 解决IE9跨域访问问题
+				success : response,
+				error : function() {
+					response([]);
 				}
-				tblHtml += "</tbody></table>";				
-				modal.find('.modal-body-content').html(tblHtml);
-			}		
-		}).fail(function() {
-			$("#msg").html("查询物品所有拍卖出错");
-	    });			  
-	});
+			});
+		} else {
+			response([]);
+		}
+	}
+});
+/**
+ * 查询
+ */
+function query() {
+clear(); // 隐藏所有div
+	
+	/**
+	 * 获取服务器信息
+	 */
+	var realmName = $("#realm").val();
+	var realm;
+	if (realmName !== "") {
+		var realmId = Realm.getIdByName(realmName);
+		if (realmId > 0) {
+			realm = {
+				id : realmId,
+				name : realmName
+			};
+		} else {
+			$("#msg").text("找不到务器: " + realmName);
+			return;
+		}
+	}
+	
+	/**
+	 * 物品查询
+	 */
+	var nameOrId = $("#itemName").val();	
+	if (nameOrId === "") {
+		$("#msg").text("物品名不能为空");
+	} else {	
+		$('#itemListByName').empty();
+		var items;
+		if (parseInt(nameOrId, 10) == nameOrId) { // 数字为物品id
+			var item = itemResource.searchById(nameOrId);
+			if (item !== null) {
+				items = [item];
+			}
+		} else {
+			items = itemResource.searchByName(nameOrId);
+		}
+		if (items !== null || items !== undefined) {
+			/**
+			 * 如果查询的物品唯一，直接查询拍卖信息
+			 * 如果多类型，需要用户选择后查询
+			 */
+			if (items.length === 1) {
+				var item = items[0];
+				BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, item.name); // 保存到物品名到localStorage
+				if (item.bonusLists.length === 0 || item.bonusLists.length === 1) {
+					item.bonusList = item.bonusLists.length === 0 ? "" : item.bonusLists[0];
+					
+					loadItemDetail(item.id);
+					getItemByAllRealms(item);
+					
+					
 
+					getPast24(realm, item);
+					getPastWeek(realm, item);
+					
+					var url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?itemName=" + encodeURIComponent(item.name);
+					if (realm.name != null && realm.name != '') {
+						url += "&realm=" + encodeURIComponent(realm.name);
+					}			
+					$("#queryByUrl").html("快速查询URL: <a href='" + url + "'>" + url + "</a>");
+				} else { // 多bonusList
+					$('#msg').text("发现" + item.bonusLists.length + "种物品类型(*表示带插槽)");
+					// 拼接html
+					// 格式分带槽和不带槽分类
+					var itemsHtml = "<ul class='list-inline'>";
+					for (var i in item.bonusLists) {
+						var bonusList = item.bonusLists[i];
+						itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item-id='" + item.id + "' data-item-name='" + item.name + "' data-item-bonus-list='" + bonusList +"'>" + Bnade.getBonusDesc(bonusList, item.level).replace("棱彩插槽", "").trim() + "</a></li>";
+					}
+					itemsHtml += "</ul>";
+					$('#itemListByName').html(itemsHtml);
+				}
+			} else if (items.length > 1) { // 相同物品名，不同id
+				BnadeLocalStorage.addItem(BnadeLocalStorage.lsItems.item.key, items[0].name);
+				$('#msg').text("发现" + items.length + "个同名物品,请选择一个查询");
+				var itemsHtml = "<ul class='list-inline'>";
+				for (var i in items) {
+					var item = items[i];
+					itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item-id='" + item.id + "' data-item-name='" + item.name + "' data-item-bonus-list=''>" + item.name + item.id + "</a></li>"; 
+				}
+				itemsHtml += "</ul>";
+				$('#itemListByName').html(itemsHtml);
+			} else { // 小于1的情况，正常不会出现，以防万一
+				$('#msg').text("物品找不到");
+			}
+			
+			$('.auctionQuery').click(function() {
+				var item = {};
+				item.id = $(this).attr("data-item-id");
+				item.name = $(this).attr("data-item-name");
+				item.bonusList = $(this).attr("data-item-bonus-list");
+				
+				loadItemDetail(item.id + "?bl=" + item.bonusList);
+				getItemByAllRealms(item);
+				getPast24(realm, item);
+				getPastWeek(realm, item);
+			});
+		}
+	}
+}
+/**
+ * 查询按钮单击事件
+ */
+$("#queryBtn").click(function() {
+	query();
+});
+
+$("#itemFuzzyQueryBtn").click(function(){
+	var itemName=$("#itemName").val();
+	if(itemName==""){
+		$('#msg').text("物品名不能为空");
+	} else {			
+		fuzzyQueryItems(itemName);			
+	}
+});
+
+$('#past24CtlDiv').hide();
+$('#pastWeekCtlDiv').hide();
+$('#allRealmCtlDiv').hide();		
+$("#fuzzyItemsList").hide();
+queryByUrl();
+loadTopItems();
+
+$('#itemAucsModal').on('show.bs.modal', function (event) {
+	var aLink = $(event.relatedTarget);
+	var realmId = aLink.data('realmid');
+	var itemId = aLink.data('itemid');
+	var modal = $(this);
+	modal.find('.modal-body-content').text("正在查询，请稍等...");
+	$.get('/wow/auction/realm/' + realmId + '/item/' + itemId, function(data) {		
+		if (data.length === 0) {
+			$('#msg').text("找不到物品:" + itemName);
+		} else {
+			var result = BN.Auction.foldByOwnerAndBuyout(data);
+			var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th><th>说明</th></tr></thead><tbody>";
+			for (var i in result) {
+				var auc = result[i];
+				tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td><td>"+Bnade.getBonusDesc(auc[6])+"</td></tr>";
+			}
+			tblHtml += "</tbody></table>";				
+			modal.find('.modal-body-content').html(tblHtml);
+		}		
+	}).fail(function() {
+		$("#msg").text("查询物品所有拍卖出错");
+    });			  
 });

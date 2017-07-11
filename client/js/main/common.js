@@ -93,9 +93,11 @@ function getUrlParam(name) {
  */
 var store = {
 	set : function(key, val) {
-		var str = val;
-		if (typeof str === 'object') {
+		var str;
+		if (typeof val === 'object') {
 			str = JSON.stringify(val);
+		} else {
+			str = val;
 		}
 		localStorage.setItem(key, str);
 	},
