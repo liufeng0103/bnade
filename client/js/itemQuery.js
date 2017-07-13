@@ -99,29 +99,7 @@ function clear(){
 	$("#allRealmMsg").text("");			
 	$('#msg').text("");
 	$('#itemDetail').text("");
-}
-
-function accurateQuery(realm, itemId, itemName, bonusList) {
-	gblItemId =itemId;
-	
-	if (bonusList != "" && bonusList != null) {
-		itemId += "?bl=" + bonusList;
-	}
-	loadItemDetail(itemId);
-	if (realm !== "") {
-		var realmId = Realm.getIdByName(realm);
-		if (realmId > 0) {
-			
-		} else {
-			$('#msg').text("找不到服务器：" + realm);
-		}		
-	}		
-
-	var url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?itemName=" + encodeURIComponent(itemName);
-	if (realm != null && realm != '') {
-		url += "&realm=" + encodeURIComponent(realm);
-	}			
-	$("#queryByUrl").html("快速查询URL: <a href='" + url + "'>" + url + "</a>");
+	$("#queryByUrl").text("");
 }
 
 function getPast24(realm, item) {
@@ -530,7 +508,7 @@ function processRealmsData(data) {
 
 function getItemByAllRealms(item) {
 	$('#allRealmMsg').text("正在查询所有服务器数据,请稍等...");
-	var url = API_HOST + "/cheapest_auctions?itemId=" + item.id + (item.bonusList === null || item.bonusList === "" ? "" : "&bonusList=" + item.bonusList);
+	var url = API_HOST + "/cheapest-auctions?itemId=" + item.id + (item.bonusList === null || item.bonusList === "" ? "" : "&bonusList=" + item.bonusList);
 	
 	$.ajax({
 		url : url,
@@ -711,57 +689,57 @@ function checkCommand(){
 	}
 	return true;
 }
-function loadTopItems(){
-	$.get('/wow/item/hot', function(data) {
-		if (data.length != 0){
-			var dailyI = 1;
-			var weeklyI = 1;
-			var monthlyI = 1;
-			$("#dailyHot").html("<div id='dailyHotList' class='list-group'></div>");
-			$("#weeklyHot").html("<div id='weeklyHotList' class='list-group'></div>");			
-			$("#monthlyHot").html("<div id='monthlyHotList' class='list-group'></div>");
-			for(var i in data){
-				if (data[i].type === 3) {
-					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(monthlyI++)+" "+data[i].name;
-					if (monthlyI <= 4) {
-						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
-					} else {
-						listItem +="</a>";
-					}					
-					$("#monthlyHotList").append(listItem);
-					$("#topItem"+i).click(function(){
-						$("#itemName").val($(this).attr('itemName'));							
-						$("#queryBtn").click();							
-					});
-				}
-				if (data[i].type === 2) {
-					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(weeklyI++)+" "+data[i].name;
-					if (weeklyI <= 4) {
-						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
-					} else {
-						listItem +="</a>";
-					}
-					$("#weeklyHotList").append(listItem);
-					$("#topItem"+i).click(function(){
-						$("#itemName").val($(this).attr('itemName'));							
-						$("#queryBtn").click();							
-					});
-				}
-				if (data[i].type === 1) {
-					var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].name+"'>"+(dailyI++)+" "+data[i].name;
-					if (dailyI <= 4) {
-						listItem +=" <span class='badge'>"+data[i].queried+"</span></a>";
-					} else {
-						listItem +="</a>";
-					}
-					$("#dailyHotList").append(listItem);
-					$("#topItem"+i).click(function(){
-						$("#itemName").val($(this).attr('itemName'));							
-						$("#queryBtn").click();							
-					});
-				}	
+
+function loadTopItems() {
+	$.get(API_HOST + '/items/search-statistics', function(data) {
+		var dailyI = 1;
+		var weeklyI = 1;
+		var monthlyI = 1;
+		$("#dailyHot").html("<div id='dailyHotList' class='list-group'></div>");
+		$("#weeklyHot").html("<div id='weeklyHotList' class='list-group'></div>");			
+		$("#monthlyHot").html("<div id='monthlyHotList' class='list-group'></div>");
+		for(var i in data){
+			if (data[i].type === 3) {
+				var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].itemName+"'>"+(monthlyI++)+" "+data[i].itemName;
+				if (monthlyI <= 4) {
+					listItem +=" <span class='badge'>"+data[i].searchCount+"</span></a>";
+				} else {
+					listItem +="</a>";
+				}					
+				$("#monthlyHotList").append(listItem);
+				$("#topItem"+i).click(function(){
+					$("#itemName").val($(this).attr('itemName'));							
+					$("#queryBtn").click();							
+				});
 			}
+			if (data[i].type === 2) {
+				var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].itemName+"'>"+(weeklyI++)+" "+data[i].itemName;
+				if (weeklyI <= 4) {
+					listItem +=" <span class='badge'>"+data[i].searchCount+"</span></a>";
+				} else {
+					listItem +="</a>";
+				}
+				$("#weeklyHotList").append(listItem);
+				$("#topItem"+i).click(function(){
+					$("#itemName").val($(this).attr('itemName'));							
+					$("#queryBtn").click();							
+				});
+			}
+			if (data[i].type === 1) {
+				var listItem = "<a id='topItem"+i+"' class='list-group-item' href='javascript:void(0)' itemName='"+data[i].itemName+"'>"+(dailyI++)+" "+data[i].itemName;
+				if (dailyI <= 4) {
+					listItem +=" <span class='badge'>"+data[i].searchCount+"</span></a>";
+				} else {
+					listItem +="</a>";
+				}
+				$("#dailyHotList").append(listItem);
+				$("#topItem"+i).click(function(){
+					$("#itemName").val($(this).attr('itemName'));							
+					$("#queryBtn").click();							
+				});
+			}	
 		}
+	
 	});
 }
 function queryByUrl() {
@@ -852,7 +830,7 @@ clear(); // 隐藏所有div
 	 * 获取服务器信息
 	 */
 	var realmName = $("#realm").val();
-	var realm;
+	var realm = null;
 	if (realmName !== "") {
 		var realmId = Realm.getIdByName(realmName);
 		if (realmId > 0) {
@@ -903,7 +881,7 @@ clear(); // 隐藏所有div
 					getPastWeek(realm, item);
 					
 					var url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?itemName=" + encodeURIComponent(item.name);
-					if (realm.name != null && realm.name != '') {
+					if (realm !== null) {
 						url += "&realm=" + encodeURIComponent(realm.name);
 					}			
 					$("#queryByUrl").html("快速查询URL: <a href='" + url + "'>" + url + "</a>");
