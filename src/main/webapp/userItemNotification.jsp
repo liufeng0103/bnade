@@ -289,7 +289,7 @@
 					var bonusHtml = "<select class='itemBonusSlt form-control' data-petspeciesid='"+item.petSpeciesId+"'>";
 					for (var j in item.bonusList) {
 						var bonus = item.bonusList[j];
-						bonusHtml += "<option value='" + bonus + "'>" + item.itemLevel + Bnade.getBonusDesc(bonus) + "</option>";
+						bonusHtml += "<option value='" + bonus + "'>" + Bnade.getBonusDesc(bonus, item.itemLevel) + "</option>";
 					}
 					for (var j in item.petStatsList) {
 						var petStats = item.petStatsList[j];
