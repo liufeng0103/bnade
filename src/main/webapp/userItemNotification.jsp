@@ -102,7 +102,7 @@
 		if (itemN.itemId == 82800 && itemN.petStats != null) {
 			desc = "类型"+itemN.petBreedId+" 生命值"+itemN.petStats.health+" 攻击"+itemN.petStats.power+" 速度"+itemN.petStats.speed;
 		} else {
-			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : itemN.itemLevel + Bnade.getBonusDesc(itemN.bonusList)
+			desc = itemN.bonusList == null || itemN.bonusList == "" ? "" : Bnade.getBonusDesc(itemN.bonusList, itemN.itemLevel);
 		}
 		var row = "<tr realmId='"+itemN.realmId+"' itemId='"+itemN.itemId+"' isInverted='"+itemN.isInverted+"' data-petSpeciesId='"+itemN.petSpeciesId+"' data-petBreedId='"+itemN.petBreedId+"' data-bonusList='"+itemN.bonusList+"'><td>"
 				+ (++count)

@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
 <%@ include file="includes/meta.jsp"%>
-<title>BNADE魔兽世界服务器拍卖物品数据排行 拍卖行玩家数量</title>
+<title>服务器拍卖排行 - BNADE魔兽世界</title>
 <%@ include file="includes/link.jsp"%>
 </head>
 <body>
@@ -14,7 +14,6 @@
 			<div id="tableContainer"></div>
 			<p>说明:</p>
 			<ul>
-				<li>BNADE交流QQ群:518160038</li>
 				<li>目前国服总共170个服务器</li>
 			</ul>
 		</div>
