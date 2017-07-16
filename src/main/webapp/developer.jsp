@@ -21,8 +21,8 @@
 						<li><a href="https://github.com/liufeng0103/bnade-web-ssh" target="_blank">bnade-web-ssh</a> 网站API</li>
 						<li><a href="https://github.com/liufeng0103/bnade" target="_blank">bnade</a> 还有部分功能在老的项目</li>
 					</ul>
-					<p>常见的问题我已总结到下面的Q&A,请查看是否有你想到的答案，如果找不到你的问题，请联系我。</p>
-					<h2>Q&A</h2>
+					<p>常见的问题我已总结到下面的Q&amp;A,请查看是否有你想到的答案，如果找不到你的问题，请联系我。</p>
+					<h2>Q&amp;A</h2>
 					<h3>拍卖行数据来源</h3>
 					<p>本网站的拍卖行数据来源官方的数据更新，虽然国服的战网API已关闭，但发现之前保存的拍卖行数据源地址的数据任然在周期性的更新，所以开发者任然可以用它开发拍卖行相关的应用，请<a href="https://github.com/liufeng0103/bnade/blob/master/RealmUrl.md" target="_blank">参考</a>。</p>
 					<hr>
