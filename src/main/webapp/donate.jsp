@@ -20,6 +20,7 @@
 						<a id="alipayBtn" class="btn btn-primary">支付宝支付</a>
 					</p>
 					<div id="weixinDiv" style="display: none;">
+						<p>目前一共有5元、10元、20元、39元和“我是土豪”共5档，请随意选择我都喜欢：</p>
 						<ul class="nav nav-tabs">
 							<li><a href="#donate-weixin-5" data-toggle="tab">￥5</a></li>
 							<li class="active"><a href="#donate-weixin-10" data-toggle="tab">￥10</a></li>
@@ -46,6 +47,7 @@
 						</div>
 					</div>
 					<div id="alipayDiv" style="display: none;">
+						<p>目前一共有5元、10元、20元、39元和“我是土豪”共5档，请随意选择我都喜欢：</p>
 						<ul class="nav nav-tabs">
 							<li><a href="#donate-alipay-5" data-toggle="tab">￥5</a></li>
 							<li class="active"><a href="#donate-alipay-10" data-toggle="tab">￥10</a></li>
@@ -72,7 +74,7 @@
 						</div>
 					</div>
 					<div id="messageDiv" style="display: none;">
-						<p>非常感谢您的打赏支持，请在下面留言，稍后我会把打赏和留言放到打赏列表中，再次感谢您的支持。</p>
+						<p>非常感谢您的打赏支持，请在下面留言，我会不定期的公布打赏的朋友，再次感谢您的支持。</p>
 						<form>
 							<div class="form-group">
 								<label for="exampleInputName2">昵称:</label> 
