@@ -803,7 +803,7 @@ $("#itemName").autocomplete({
 		// 判断是否全中文， 减少不必要的搜索
 		var reg=/^[\u4E00-\u9FA5]+$/;
 		// 包含：时，如设计图：魔钢长剑
-		var reg2 = /：/; 
+		var reg2 = /：|\+/; 
 		if (reg.test(request.term) || reg2.test(request.term)) {
 			$.ajax({
 				url : API_HOST + "/items/names",
