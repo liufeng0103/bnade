@@ -748,22 +748,26 @@ function fuzzyQueryItems(itemName) {
     });
 }
 
-function loadItemDetail(itemId) {
+function loadItemDetail(item) {
 	$('#itemDetail').text("");
-	if (itemId.toString().indexOf("?") > -1) {
-		itemId += "&tooltip=true";
-	} else {
-		itemId += "?tooltip=true";
-	}
-	$.get('/wow/item/' + itemId, function(data) {
-		if (data.code === 201) {
-			$('#msg').text("物品信息查询失败:" + data.errorMessage);								
-		} else {
-			$('#itemDetail').html("<p>物品ID："+itemId+"</p>" + data);
+	var bl = item.bonusList === "" ? "" : "?bonusList=" + item.bonusList;
+	var url = API_HOST + "/items/" + item.id + "/tooltips" + bl;
+	$.ajax({
+		url : url,
+		crossDomain : true == !(document.all), // 解决IE9跨域访问问题
+		success : function(data) {
+			$('#itemDetail').html("<p>物品ID：" + item.id + "</p>" + data);
+		},
+		error : function(xhr) {
+			if (xhr.status === 404) {
+				$('#itemDetail').text("物品信息找不到");
+			} else if (xhr.status === 500) {
+				$('#itemDetail').text("服务器错误");
+			} else {
+				$('#itemDetail').text("未知错误");
+			}
 		}
-	}).fail(function() {
-		$("#msg").text("物品信息查询出错");
-    });
+	});
 }
 
 /**
@@ -846,7 +850,7 @@ clear(); // 隐藏所有div
 				if (item.bonusLists.length === 0 || item.bonusLists.length === 1) {
 					item.bonusList = item.bonusLists.length === 0 ? "" : item.bonusLists[0];
 					
-					loadItemDetail(item.id);
+					loadItemDetail(item);
 					getItemByAllRealms(item);
 					
 					
@@ -887,7 +891,7 @@ clear(); // 隐藏所有div
 			
 			$('.auctionQuery').click(function() {
 				var item = $(this).data("item");				
-				loadItemDetail(item.id + "?bl=" + item.bonusList);
+				loadItemDetail(item);
 				getItemByAllRealms(item);
 				getPast24(realm, item);
 				getPastWeek(realm, item);
