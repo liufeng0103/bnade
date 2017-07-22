@@ -1,35 +1,4 @@
 var API_HOST = "https://api.bnade.com";
-(function(BN) {
-	BN.Auction = {};
-	
-	// 查询服务器某个物品的所有拍卖，对相同卖家相同一口单价的物品整合
-	BN.Auction.foldByOwnerAndBuyout = function(data) {
-		if (data.length <= 1) {
-			return data;
-		}
-		data.sort(function(a,b){ 
-			return a[3]/a[4] - b[3]/b[4];
-		});
-		var result = [];
-		var preAuc = data[0];
-		for (var i = 1, j = data.length; i < j; i++) {
-			var auc = data[i];
-			if (preAuc[0] === auc[0] && Bnade.getGold(preAuc[3]/preAuc[4]) === Bnade.getGold(auc[3]/auc[4])) {
-				preAuc[2] +=auc[2];
-				preAuc[3] +=auc[3];
-				preAuc[4] +=auc[4];
-			} else {
-				result.push(preAuc);
-				preAuc = auc;
-			}
-			if (i === data.length -1) {
-				result.push(preAuc);
-			}
-		}
-		return result;
-	};
-	
-})(window.BN = window.BN || {});
 
 /**
  * 物品相关
@@ -554,10 +523,14 @@ function getItemByAllRealms(item) {
 						+ encodeURIComponent(auc.owner) + "/" + auc.realmId
 						+ "' target='_blank'>" + auc.owner + "</a>";
 				var timeLeft = leftTimeMap[auc.timeLeft];
-				var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realmid='"
+				var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realm-id='"
 						+ auc.realmId
-						+ "' data-itemid='"
+						+ "' data-item-id='"
 						+ item.id
+						+ "' data-bonus-list='"
+						+ item.bonusList
+						+ "' data-item-level='"
+						+ item.level
 						+ "'>" + auc.totalQuantity + "</a>";
 				dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, auc.ownerQuantity,timeLeft]);
 				
@@ -777,7 +750,6 @@ function fuzzyQueryItems(itemName) {
 
 function loadItemDetail(itemId) {
 	$('#itemDetail').text("");
-	$('#itemDetail').append("<p>物品ID："+itemId+"</p>");
 	if (itemId.toString().indexOf("?") > -1) {
 		itemId += "&tooltip=true";
 	} else {
@@ -785,9 +757,9 @@ function loadItemDetail(itemId) {
 	}
 	$.get('/wow/item/' + itemId, function(data) {
 		if (data.code === 201) {
-			$('#msg').append("物品信息查询失败:" + data.errorMessage);								
+			$('#msg').text("物品信息查询失败:" + data.errorMessage);								
 		} else {
-			$('#itemDetail').append(data);
+			$('#itemDetail').html("<p>物品ID："+itemId+"</p>" + data);
 		}
 	}).fail(function() {
 		$("#msg").text("物品信息查询出错");
@@ -893,8 +865,8 @@ clear(); // 隐藏所有div
 					// 格式分带槽和不带槽分类
 					var itemsHtml = "<ul class='list-inline'>";
 					for (var i in item.bonusLists) {
-						var bonusList = item.bonusLists[i];
-						itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item-id='" + item.id + "' data-item-name='" + item.name + "' data-item-bonus-list='" + bonusList +"'>" + Bnade.getBonusDesc(bonusList, item.level).replace("棱彩插槽", "").trim() + "</a></li>";
+						item.bonusList = item.bonusLists[i];
+						itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item='" + JSON.stringify(item) + "'>" + Bnade.getBonusDesc(item.bonusList, item.level).trim() + "</a></li>";
 					}
 					itemsHtml += "</ul>";
 					$('#itemListByName').html(itemsHtml);
@@ -914,11 +886,7 @@ clear(); // 隐藏所有div
 			}
 			
 			$('.auctionQuery').click(function() {
-				var item = {};
-				item.id = $(this).attr("data-item-id");
-				item.name = $(this).attr("data-item-name");
-				item.bonusList = $(this).attr("data-item-bonus-list");
-				
+				var item = $(this).data("item");				
 				loadItemDetail(item.id + "?bl=" + item.bonusList);
 				getItemByAllRealms(item);
 				getPast24(realm, item);
@@ -950,26 +918,73 @@ $("#fuzzyItemsList").hide();
 queryByUrl();
 loadTopItems();
 
+/**
+ * 把同一卖家，一口价相同的同一类物品整合到一起
+ */
+function foldAuctionsByOwnerAndBuyoutAndBonusList(data) {
+	if (data.length <= 1) {
+		return data;
+	}
+	data.sort(function(a, b) {
+		return a.buyout / a.quantity - b.buyout / b.quantity;
+	});
+	var result = [];
+	var preAuc = data[0];
+	for (var i = 1, j = data.length; i < j; i++) {
+		var auc = data[i];
+		if (preAuc.owner === auc.owner //同一卖家
+				&& Bnade.getGold(preAuc.buyout / preAuc.quantity) === Bnade.getGold(auc.buyout / auc.quantity) // 一口单价一样
+				&& preAuc.bonusList === auc.bonusList) { // 类型一样
+			preAuc.bid += auc.bid;
+			preAuc.buyout += auc.buyout;
+			preAuc.quantity += auc.quantity;
+		} else {
+			result.push(preAuc);
+			preAuc = auc;
+		}
+		if (i === data.length - 1) {
+			result.push(preAuc);
+		}
+	}
+	return result;
+}
+
+// 当模态框打开时获取物品的所有拍卖数据
 $('#itemAucsModal').on('show.bs.modal', function (event) {
 	var aLink = $(event.relatedTarget);
-	var realmId = aLink.data('realmid');
-	var itemId = aLink.data('itemid');
+	var realmId = aLink.data('realm-id');
+	var itemId = aLink.data('item-id');
+	var itemLevel = aLink.data('item-level');
+	var bonusList = aLink.data('bonus-list');
 	var modal = $(this);
-	modal.find('.modal-body-content').text("正在查询，请稍等...");
-	$.get('/wow/auction/realm/' + realmId + '/item/' + itemId, function(data) {		
-		if (data.length === 0) {
-			$('#msg').text("找不到物品:" + itemName);
-		} else {
-			var result = BN.Auction.foldByOwnerAndBuyout(data);
-			var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th><th>说明</th></tr></thead><tbody>";
-			for (var i in result) {
-				var auc = result[i];
-				tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc[0]+"</td><td>"+auc[1]+"</td><td>"+Bnade.getGold(auc[2])+"</td><td>"+Bnade.getGold(auc[3])+"</td><td>"+auc[4]+"</td><td>"+Bnade.getGold(auc[3]/auc[4])+"</td><td>"+leftTimeMap[auc[5]]+"</td><td>"+Bnade.getBonusDesc(auc[6])+"</td></tr>";
+	var $modalBodyContent = modal.find('.modal-body-content');
+	$modalBodyContent.text("正在查询，请稍等...");
+	var url = API_HOST + "/auctions?realmId=" + realmId + "&itemId=" + itemId + "&bonusList=" + bonusList;	
+	$.ajax({
+		url : url,
+		crossDomain : true == !(document.all), // 解决IE9跨域访问问题
+		success : function(data) {
+			if (data.length === 0) {
+				$modalBodyContent.text("找不到物品:" + itemName);
+			} else {
+				var result = foldAuctionsByOwnerAndBuyoutAndBonusList(data);
+				var tblHtml = "<table class='table table-striped table-condensed table-responsive'><thead><tr><th>#</th><th>玩家</th><th>服务器</th><th>竞价</th><th>一口价</th><th>数量</th><th>单价</th><th>剩余时间</th><th>说明</th></tr></thead><tbody>";
+				for (var i in result) {
+					var auc = result[i];
+					tblHtml += "<tr><td>"+(parseInt(i) + 1)+"</td><td>"+auc.owner+"</td><td>" + auc.ownerRealm + "</td><td>" + Bnade.getGold(auc.bid) + "</td><td>"+Bnade.getGold(auc.buyout)+"</td><td>"+auc.quantity+"</td><td>"+Bnade.getGold(auc.buyout/auc.quantity)+"</td><td>"+leftTimeMap[auc.timeLeft]+"</td><td>"+Bnade.getBonusDesc(auc.bonusList, itemLevel)+"</td></tr>";
+				}
+				tblHtml += "</tbody></table>";				
+				$modalBodyContent.html(tblHtml);
+			}		
+		},
+		error : function(xhr) {
+			if (xhr.status === 404) {
+				$modalBodyContent.text("数据找不到");
+			} else if (xhr.status === 500) {
+				$modalBodyContent.text("服务器错误");
+			} else {
+				$modalBodyContent.text("未知错误");
 			}
-			tblHtml += "</tbody></table>";				
-			modal.find('.modal-body-content').html(tblHtml);
-		}		
-	}).fail(function() {
-		$("#msg").text("查询物品所有拍卖出错");
-    });			  
+		}
+	});
 });
