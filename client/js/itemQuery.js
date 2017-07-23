@@ -751,7 +751,7 @@ function fuzzyQueryItems(itemName) {
 function loadItemDetail(item) {
 	$('#itemDetail').text("");
 	var bl = item.bonusList === "" ? "" : "?bonusList=" + item.bonusList;
-	var url = API_HOST + "/items/" + item.id + "/tooltips" + bl;
+	var url = API_HOST + "/items/" + item.id + "/tooltip" + bl;
 	$.ajax({
 		url : url,
 		crossDomain : true == !(document.all), // 解决IE9跨域访问问题
@@ -881,7 +881,8 @@ clear(); // 隐藏所有div
 				var itemsHtml = "<ul class='list-inline'>";
 				for (var i in items) {
 					var item = items[i];
-					itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item-id='" + item.id + "' data-item-name='" + item.name + "' data-item-bonus-list=''>" + item.name + item.id + "</a></li>"; 
+					item.bonusList = "";
+					itemsHtml += "<li><a class='auctionQuery' href='javascript:void(0)' data-item='" + JSON.stringify(item) + "'>" + item.name + item.id + "</a></li>"; 
 				}
 				itemsHtml += "</ul>";
 				$('#itemListByName').html(itemsHtml);
