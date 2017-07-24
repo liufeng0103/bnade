@@ -475,7 +475,7 @@ function processRealmsData(data) {
 	}
 }
 
-function getItemByAllRealms(item) {
+function loadCheapestAuctions(item) {
 	$('#allRealmMsg').text("正在查询所有服务器数据,请稍等...");
 	var url = API_HOST + "/cheapest-auctions?itemId=" + item.id + (item.bonusList === null || item.bonusList === "" ? "" : "&bonusList=" + item.bonusList);
 	
@@ -525,13 +525,19 @@ function getItemByAllRealms(item) {
 				var timeLeft = leftTimeMap[auc.timeLeft];
 				var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realm-id='"
 						+ auc.realmId
-						+ "' data-item-id='"
-						+ item.id
-						+ "' data-bonus-list='"
-						+ item.bonusList
-						+ "' data-item-level='"
-						+ item.level
+						+ "' data-item='"
+						+ JSON.stringify(item)
 						+ "'>" + auc.totalQuantity + "</a>";
+				// 多bonus类型，支持所有类型查找
+				if (item.bonusLists.length > 0) {
+					var newItem = JSON.parse(JSON.stringify(item));
+					newItem.bonusList = "all";
+					totalQuantityColumn += "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realm-id='"
+						+ auc.realmId
+						+ "' data-item='"
+						+ JSON.stringify(newItem)
+						+ "'>A</a>";
+				}
 				dataSet.push( [num, realmColumn, buyout, auc.quantity, totalQuantityColumn, ownerColumn, auc.ownerQuantity,timeLeft]);
 				
 				realmMark[auc.realmId] = 1;
@@ -851,7 +857,7 @@ clear(); // 隐藏所有div
 					item.bonusList = item.bonusLists.length === 0 ? "" : item.bonusLists[0];
 					
 					loadItemDetail(item);
-					getItemByAllRealms(item);
+					loadCheapestAuctions(item);
 					
 					
 
@@ -893,7 +899,7 @@ clear(); // 隐藏所有div
 			$('.auctionQuery').click(function() {
 				var item = $(this).data("item");				
 				loadItemDetail(item);
-				getItemByAllRealms(item);
+				loadCheapestAuctions(item);
 				getPast24(realm, item);
 				getPastWeek(realm, item);
 			});
@@ -958,9 +964,10 @@ function foldAuctionsByOwnerAndBuyoutAndBonusList(data) {
 $('#itemAucsModal').on('show.bs.modal', function (event) {
 	var aLink = $(event.relatedTarget);
 	var realmId = aLink.data('realm-id');
-	var itemId = aLink.data('item-id');
-	var itemLevel = aLink.data('item-level');
-	var bonusList = aLink.data('bonus-list');
+	var item = aLink.data('item');
+	var itemId = item.id;
+	var itemLevel = item.level;
+	var bonusList = item.bonusList;
 	var modal = $(this);
 	var $modalBodyContent = modal.find('.modal-body-content');
 	$modalBodyContent.text("正在查询，请稍等...");
