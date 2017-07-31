@@ -309,7 +309,7 @@ var Bnade = {
 			if (bonusName !== undefined) {
 				// 对于装等奖励 直接跟level计算出实际等级
 				var num = parseInt(bonusName);
-				if (isNaN(num)) {
+				if (isNaN(bonusName)) {
 					desc += bonusName;
 				} else {
 					// 有些bonus，直接表示物品的装备，这里用500等级区分
