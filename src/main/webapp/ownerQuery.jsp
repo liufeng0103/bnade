@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
 <%@ include file="includes/meta.jsp"%>
-<title>BNADE魔兽世界玩家拍卖物品查询</title>
+<title>玩家拍卖物品查询 - BNADE魔兽世界</title>
 <%@ include file="includes/link.jsp"%>
 </head>
 <body>
@@ -49,6 +49,6 @@
 	</div>
 	<%@ include file="includes/footer.jsp"%>
 	<%@ include file="includes/script.jsp"%>
-	<script src="/js/ownerQuery.js?rev=@@hash"></script>
+	<script src="/js/ownerQuery.js"></script>
 </body>
 </html>

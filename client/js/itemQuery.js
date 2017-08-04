@@ -519,8 +519,8 @@ function loadCheapestAuctions(item) {
 						+ "'>"
 						+ realmName + "</a>"
 				var buyout = Bnade.getGold(auc.buyout);
-				var ownerColumn = "<a href='/page/auction/owner/"
-						+ encodeURIComponent(auc.owner) + "/" + auc.realmId
+				var ownerColumn = "<a href='/ownerQuery.jsp?owner="
+						+ encodeURIComponent(auc.owner) + "&realm=" + encodeURIComponent(realmName)
 						+ "' target='_blank'>" + auc.owner + "</a>";
 				var timeLeft = leftTimeMap[auc.timeLeft];
 				var totalQuantityColumn = "<a href='javascript:void(0)' data-toggle='modal' data-target='#itemAucsModal' data-realm-id='"
@@ -639,34 +639,6 @@ function loadCheapestAuctions(item) {
 			}
 		}
 	});
-}
-function checkCommand(){
-	var code=$('#realm').val();
-	var value=$('#itemName').val();
-	if(code=="realmCount"){
-		if(parseInt(value)==value&&value>=0){
-			var obj=JSON.parse(localStorage.getItem(BnadeLocalStorage.lsItems.realm.key));
-			obj.length=value;
-			store.set(BnadeLocalStorage.lsItems.realm.key, obj);
-			BnadeLocalStorage.refresh();
-			alert("服务器保存数量设置成功");
-		}else{
-			alert("请在物品名框输入正确的正整数");
-		} 
-	}else if(code=="itemCount"){
-		if(parseInt(value)==value&&value>=0){
-			var obj=JSON.parse(localStorage.getItem(BnadeLocalStorage.lsItems.item.key));
-			obj.length=value;				
-			store.set(BnadeLocalStorage.lsItems.item.key, obj);
-			BnadeLocalStorage.refresh();
-			alert("物品名保存数量设置成功");
-		}else{
-			alert("请在物品名框输入正确的正整数");
-		} 
-	}else{
-		return false;
-	}
-	return true;
 }
 
 function loadTopItems() {
