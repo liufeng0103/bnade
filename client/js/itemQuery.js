@@ -1,3 +1,5 @@
+"use strict";
+
 var API_HOST = "https://api.bnade.com";
 
 /**
@@ -776,6 +778,14 @@ $("#itemName").autocomplete({
 		}
 	}
 });
+
+/**
+ * 服务器输入框的自动补全
+ */
+$('#realm').autocomplete({
+	source : Realm.getNames()
+});
+
 /**
  * 查询
  */
