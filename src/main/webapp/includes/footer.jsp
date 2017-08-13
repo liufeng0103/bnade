@@ -13,6 +13,7 @@
 			<li><a href="/contactUs.jsp">联系我们</a></li>
 			<li><a href="/about.jsp">关于我们</a></li>
 			<li><a href="/disclaimer.jsp">免责声明</a></li>
+			<li><script src="https://s4.cnzz.com/z_stat.php?id=1257191070&web_id=1257191070" language="JavaScript"></script></li>
 		</ul>
 		<ul class="list-inline">
       <li>Copyright©2016 <a href="http://www.bnade.com">bnade.com</a> All Rights Reserved. <a href="http://www.miitbeian.gov.cn/">辽ICP备16000931号</a></li>
