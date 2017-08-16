@@ -75,7 +75,7 @@
 					<div id="itemDetail"></div>
 					<p id="queryByUrl"></p>
 					<p id="past24Msg"></p>
-					<div id="past24CtlDiv">
+					<div id="past24CtlDiv" style="display: none">
 						<h2 class="sub-header">总结</h2>
 						<table class="table table-striped">
 							<thead>
@@ -133,6 +133,10 @@
 							style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
 						<div id="pastWeekQuantityHeatMapContainer"
 							style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+					</div>
+					<div id="itemStatisticContainer" style="display: none">
+						<p class="message"></p>
+						<div id="itemStatisticChart"></div>
 					</div>
 					<p id="allRealmMsg"></p>
 					<div id="allRealmCtlDiv">
