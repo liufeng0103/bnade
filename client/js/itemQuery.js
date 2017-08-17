@@ -517,7 +517,7 @@ function loadCheapestAuctions(item) {
 					realmIndex = i;
 				}
 				var realmColumn = "<a href='/itemQuery.jsp?itemName="
-					+ item.name
+					+ encodeURIComponent(item.name)
 					+ "&realm="
 					+ encodeURIComponent(realmName)
 					+ "'>"
