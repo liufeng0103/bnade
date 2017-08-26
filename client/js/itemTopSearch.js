@@ -29,9 +29,9 @@ function loadItemMarket(page) {
 			$('#prePageBtn').removeAttr('disabled');
 		}
 		if (data.length !== size) {
-			$('#nexPageBtn').attr('disabled', 'disabled');
+			$('#nextPageBtn').attr('disabled', 'disabled');
 		} else {
-			$('#nexPageBtn').removeAttr('disabled');
+			$('#nextPageBtn').removeAttr('disabled');
 		}
 	}).fail(function () {
 		$('#msg').text("查询出错");
