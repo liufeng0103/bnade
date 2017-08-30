@@ -3,6 +3,82 @@
 var API_HOST = "https://api.bnade.com";
 
 /**
+ * 计算市场价
+ * 参考tsm市场价算法
+ * 
+ * @param {*}  
+ */
+function calculateMarketValue(buyouts) {
+	if (buyouts.length == 0) {
+		return 0;
+	}
+
+	var MIN_PERCENTILE = 0.15; // 至少考虑拍卖的最低的15％
+	var MAX_PERCENTILE = 0.30; // 最多考虑拍卖的最低的30％
+	var MAX_JUMP = 1.2; // 在最小和最大百分位数之间，任何价格上涨超过120％都将导致丢弃剩余的拍卖
+
+	var totalNum = 1;
+	var totalBuyout = 0;
+	var numRecords = buyouts.length;
+
+	/*
+	if (numRecords >= 4) {
+		var upperLimit = buyouts[numRecords * 0.75] + (buyouts[numRecords * 0.75] - buyouts[numRecords * 0.25]) * 1.5;
+		var lowerLimit = buyouts[numRecords * 0.25] - (buyouts[numRecords * 0.75] - buyouts[numRecords * 0.25]) * 1.5;
+		for (var i = 0; i < numRecords; i++) {
+			if (buyouts[numRecords - i] > upperLimit || buyouts[numRecords - i] < lowerLimit) {
+				buyouts.splice(numRecords - i, 1);
+			}
+		}
+		numRecords = buyouts.length;
+	}
+	*/
+	for (var i = 0; i < numRecords; i++) {
+		totalNum = i;
+		if (i > 0 && i > numRecords * MIN_PERCENTILE && (i > numRecords * MAX_PERCENTILE || buyouts[i] >= MAX_JUMP * buyouts[i - 1])) {
+			break;
+		}
+
+		totalBuyout += buyouts[i];
+		if (i == numRecords - 1) {
+			totalNum = numRecords;
+		}
+	}
+
+	var uncorrectedMean = totalBuyout / totalNum;
+	var varience = 0;
+
+	for (var i = 0; i < totalNum; i++) {
+		varience = (varience + Math.pow(buyouts[i] - uncorrectedMean, 2)); // 返回 x 的 y 次幂
+	}
+
+	var stdDev = Math.sqrt(varience / totalNum); // 返回数的平方根
+	var correctedTotalNum = 0;
+	var correctedTotalBuyout = 0;
+
+	for (var i = 0; i < totalNum; i++) {
+		if (Math.abs(uncorrectedMean - buyouts[i]) < 1.5 * stdDev) { // 返回 x 的绝对值
+			correctedTotalNum++;
+			correctedTotalBuyout += buyouts[i];
+		}
+	}
+	var correctedMean = 0;
+	if (correctedTotalNum > 0) {
+		correctedMean = Math.floor(correctedTotalBuyout / correctedTotalNum + 0.5);
+	}
+
+	if (correctedMean == 0) {
+		var total = 0;
+		for (var i = 0; i < buyouts.length; i++) {
+			total = total + buyouts[i];
+		}
+		return Math.round(total / buyouts.length, 0);
+	}
+
+	return correctedMean;
+}
+
+/**
  * 物品相关
  */
 var itemResource = {
@@ -624,7 +700,7 @@ function loadCheapestAuctions(item) {
 			$('#allMaxBuyout').text(maxBuy);
 			$('#allAvgBuyout').text(avgBuy);
 			$('#allAvgQuantity').text(parseInt(quantitySum / data.length));
-			$('#allRealmMsg').text("所有服务器平均价格:" + avgBuy);
+			$('#allRealmMsg').text("所有服务器平均价格:" + avgBuy + " 市场价:" + Bnade.getGold(calculateMarketValue(calData)));
 			loadChart('allRealmContainer', item.name + '在各服务器的价格和数量',
 				item.name, chartLabels, chartBuyoutData, minBuy,
 				avgBuy * 2 < maxBuy ? avgBuy * 2 : maxBuy, false,
