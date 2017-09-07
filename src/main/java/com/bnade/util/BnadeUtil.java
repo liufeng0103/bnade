@@ -3,9 +3,60 @@ package com.bnade.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BnadeUtil {
+	
+	/**
+	 * 计算市场价
+	 * 参考tsm市场价算法, 计算前15%到30%的数据，去除极值，计算的平均价
+	 * 
+	 * @param buyouts 价格数组
+	 */
+	public static long calculateMarketValue(List<Long> buyouts) {
+		if (buyouts.size() == 0)
+			return 0;
+
+		double MIN_PERCENTILE = 0.15; // 至少考虑拍卖的最低的15％
+		double MAX_PERCENTILE = 0.30; // 最多考虑拍卖的最低的30％
+		double MAX_JUMP = 1.2; // 在最小和最大百分位数之间，任何价格上涨超过120％都将导致丢弃剩余的拍卖
+
+		int totalNum = 0;
+		long totalBuyout = 0;
+		int	numRecords = buyouts.size();
+
+		for (int i = 0; i < numRecords; i++) {
+			totalNum = i;
+			if (i > 0 && i > numRecords * MIN_PERCENTILE && (i > numRecords * MAX_PERCENTILE || buyouts.get(i) >= MAX_JUMP * buyouts.get(i - 1))) {
+				break;
+			}
+
+			totalBuyout += buyouts.get(i);
+			if (i == numRecords - 1) {
+				totalNum = numRecords;
+			}
+		}
+
+		long uncorrectedMean = totalBuyout / totalNum;
+		double varience = 0;
+
+		for (int i = 0; i < totalNum; i++) {
+			varience = varience + Math.pow(buyouts.get(i) - uncorrectedMean, 2); // 返回 x 的 y 次幂
+		}
+
+		double stdDev = Math.sqrt(varience / totalNum);// 返回数的平方根
+		int correctedTotalNum = 1;
+		long correctedTotalBuyout = uncorrectedMean;
+
+		for (int i = 0; i < totalNum; i++) {
+			if (Math.abs(uncorrectedMean - buyouts.get(i)) < 1.5 * stdDev) { // 返回 x 的绝对值
+				correctedTotalNum++;
+				correctedTotalBuyout += buyouts.get(i);
+			}
+		}
+		return (long)Math.floor(correctedTotalBuyout / correctedTotalNum + 0.5);
+	}
 	
 	public static String getRealmNameById(int id) {
 		return realmMap.get(id);
