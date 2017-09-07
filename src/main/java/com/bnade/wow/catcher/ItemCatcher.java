@@ -130,8 +130,8 @@ public class ItemCatcher {
 				String petTooltip = client.get("https://www.battlenet.com.cn/wow/zh/pet/"+id+"/tooltip");
 				int index = petTooltip.indexOf("<span class=\"name\">");
 				String name = petTooltip.substring(index + "<span class=\"name\">".length(), petTooltip.indexOf("</span>", index));
-				int index2 = petTooltip.indexOf("https://render-cn.worldofwarcraft.com/wow/icons/36/");
-				String icon = petTooltip.substring(index2+"https://render-cn.worldofwarcraft.com/wow/icons/36/".length(), petTooltip.indexOf(".jpg", index2));
+				int index2 = petTooltip.indexOf("https://render-cn.worldofwarcraft.com/icons/36/");
+				String icon = petTooltip.substring(index2+"https://render-cn.worldofwarcraft.com/icons/36/".length(), petTooltip.indexOf(".jpg", index2));
 				System.out.println(id + name + " " + icon);
 				run.update("insert into t_pet (id,name,icon) values (?,?,?)", id, name, icon); 
 			}
