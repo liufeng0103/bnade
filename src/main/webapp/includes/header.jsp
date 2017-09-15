@@ -18,6 +18,7 @@
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/itemTopSearch.jsp">物品搜索排行</a></li>
 					<li><a href="/itemMarket.jsp">市场价排行</a></li>
+					<li><a href="/topOwner.jsp">卖家排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
 					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
 					<li><a href="/page/auction/s810101">101圣物</a></li>
@@ -42,6 +43,7 @@
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/itemTopSearch.jsp">物品搜索排行</a></li>
 					<li><a href="/itemMarket.jsp">市场价排行</a></li>
+					<li><a href="/topOwner.jsp">卖家排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
 					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
 					<li><a href="/page/auction/s810101">101圣物</a></li>

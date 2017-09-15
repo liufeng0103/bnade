@@ -15,37 +15,31 @@ function loadTop(realmId, data, contentDiv) {
 }
 
 function loadTopWorth(realmId, data) {
-	var tblHtml="<table class='table table-striped'><thead><tr><th>#</th><th>玩家</th><th>总价值</th></tr></thead><tbody>";
+	var tblHtml="<table class='table table-hover'><thead><tr><th>#</th><th>玩家</th><th>总价值</th></tr></thead><tbody>";
 	for (var i in data) {
 		var topOwner = data[i];
-		if (topOwner.type == 1) {
-			var worth = Bnade.getGold(topOwner.value);
-			tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(topOwner.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+worth+"</td></tr>";
-		}
+		var worth = Bnade.getGold(topOwner.value);
+		tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(topOwner.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+worth+"</td></tr>";
 	}
 	tblHtml+="</tbody></table>";
 	$('#topWorth').html(tblHtml);	
 }
 
 function loadTopCategory(realmId, data) {
-	var tblHtml="<table class='table table-striped'><thead><tr><th>#</th><th>玩家</th><th>种类数</th></tr></thead><tbody>";
+	var tblHtml="<table class='table table-hover'><thead><tr><th>#</th><th>玩家</th><th>种类数</th></tr></thead><tbody>";
 	for (var i in data) {
 		var topOwner = data[i];
-		if (topOwner.type == 2) {
-			tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(item.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+topOwner.value+"</td></tr>";
-		}
+		tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(topOwner.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+topOwner.value+"</td></tr>";
 	}
 	tblHtml+="</tbody></table>";
 	$('#topCategory').html(tblHtml);	
 }
 
 function loadTopQuantity(realmId, data) {
-	var tblHtml="<table class='table table-striped'><thead><tr><th>#</th><th>玩家</th><th>总数量</th></tr></thead><tbody>";
+	var tblHtml="<table class='table table-hover'><thead><tr><th>#</th><th>玩家</th><th>总数量</th></tr></thead><tbody>";
 	for (var i in data) {
 		var topOwner = data[i];
-		if (topOwner.type == 3) {
-			tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(item.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+topOwner.value+"</td></tr>";
-		}
+		tblHtml+="<tr><td>"+(parseInt(i)+1)+"</td><td><a href='/ownerQuery.jsp?realm="+encodeURIComponent($("#realm").val())+"&owner="+encodeURIComponent(topOwner.owner)+"'  target='_blank'>"+topOwner.owner+"</a></td><td>"+topOwner.value+"</td></tr>";
 	}
 	tblHtml+="</tbody></table>";
 	$('#topQuantity').html(tblHtml);	
@@ -62,9 +56,28 @@ function query() {
 				url: url,
 				crossDomain: true == !(document.all), // 解决IE9跨域访问问题
 				success: function (data) {
-					loadTopWorth(realmId, data);
-					loadTopCategory(realmId, data);
-					loadTopQuantity(realmId, data);
+					$('#msg').text("");
+					data.sort(function(a,b) {
+						return b.value - a.value;
+					});
+					var topWarthArr = [];
+					var topCategoryArr = [];
+					var topQuantityArr = [];
+					for (var i in data) {
+						var topOwner = data[i];
+						if (topOwner.type == 1) {
+							topWarthArr.push(topOwner)
+						}
+						if (topOwner.type == 2) {
+							topCategoryArr.push(topOwner);					
+												}
+						if (topOwner.type == 3) {
+							topQuantityArr.push(topOwner);	
+						}
+					}
+					loadTopWorth(realmId, topWarthArr);
+					loadTopCategory(realmId, topCategoryArr);
+					loadTopQuantity(realmId, topQuantityArr);
 				},
 				error: function (xhr) {
 					if (xhr.status === 404) {
