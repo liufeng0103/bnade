@@ -23,7 +23,14 @@
 							<input id="itemCountInput" type="text" class="form-control" style="width: 300px">
 						</div>
 						<button id="saveBtn" type="button" class="btn btn-success">保存</button>
+						<a id="exportBtn" type="button" class="btn btn-success">导出物品</a>
+						<button id="importBtn" type="button" class="btn btn-success">导入物品</button>
 						<label id="msg"></label>
+						<div class="form-group" id="importPanel" style="display:none">
+							<label>粘贴物品列表到下面文本框:</label>
+							<textarea id="itemListTxt" class="form-control" rows="3"></textarea>
+							<button id="importOkBtn" type="button" class="btn btn-success">确定导入</button>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -57,6 +64,18 @@
 			$("#msg").text("保存成功");
 		}
 	});
+	$("#exportBtn")
+		.attr("download", "items.txt")
+		.attr("href", "data:text/txt;charset=UTF-8," + JSON.stringify(itemNameArray));
+	$("#importBtn").click(function() {
+		$("#importPanel").show();
+	});
+	$("#importOkBtn").click(function() {
+		var itemList = $("#itemListTxt").val();
+		store.set(itemKey, itemList);
+		$("#msg").text("物品导入成功");
+	});
+
 	</script>
 </body>
 </html>
