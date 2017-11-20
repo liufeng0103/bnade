@@ -72,8 +72,21 @@
 	});
 	$("#importOkBtn").click(function() {
 		var itemList = $("#itemListTxt").val();
-		store.set(itemKey, itemList);
-		$("#msg").text("物品导入成功");
+		if (itemList != "") {
+			try {
+				var itemArray = JSON.parse(itemList);
+				if (Array.isArray(itemArray)) {
+					store.set(itemKey, itemList);
+					$("#msg").text("物品导入成功");
+				} else {
+					$("#msg").text("物品列表格式不正确");
+				}
+			} catch(err) {
+				$("#msg").text("物品列表格式不正确");
+			}
+		} else {
+			$("#msg").text("物品列表不能为空");
+		}
 	});
 
 	</script>
