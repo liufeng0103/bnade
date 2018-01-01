@@ -20,13 +20,13 @@
 						<a id="alipayBtn" class="btn btn-primary">支付宝支付</a>
 					</p>
 					<div id="weixinDiv" style="display: none;">
-						<p>目前一共有5元、10元、20元、39元和“我是土豪”共5档，请随意选择我都喜欢：</p>
+						<p>目前一共有5元、10元、20元、39元和88元共5档，感谢您的支持：</p>
 						<ul class="nav nav-tabs">
 							<li><a href="#donate-weixin-5" data-toggle="tab">￥5</a></li>
 							<li class="active"><a href="#donate-weixin-10" data-toggle="tab">￥10</a></li>
 							<li><a href="#donate-weixin-20" data-toggle="tab">￥20</a></li>
 							<li><a href="#donate-weixin-39" data-toggle="tab">￥39</a></li>
-							<li><a href="#donate-weixin-88" data-toggle="tab">我是土豪</a></li>
+							<li><a href="#donate-weixin-88" data-toggle="tab">￥88</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="donate-weixin-5" class="tab-pane">
@@ -47,13 +47,13 @@
 						</div>
 					</div>
 					<div id="alipayDiv" style="display: none;">
-						<p>目前一共有5元、10元、20元、39元和“我是土豪”共5档，请随意选择我都喜欢：</p>
+						<p>目前一共有5元、10元、20元、39元和88元共5档，感谢您的支持：</p>
 						<ul class="nav nav-tabs">
 							<li><a href="#donate-alipay-5" data-toggle="tab">￥5</a></li>
 							<li class="active"><a href="#donate-alipay-10" data-toggle="tab">￥10</a></li>
 							<li><a href="#donate-alipay-20" data-toggle="tab">￥20</a></li>
 							<li><a href="#donate-alipay-39" data-toggle="tab">￥39</a></li>
-							<li><a href="#donate-alipay-88" data-toggle="tab">我是土豪</a></li>
+							<li><a href="#donate-alipay-88" data-toggle="tab">￥88</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="donate-alipay-5" class="tab-pane">
@@ -90,14 +90,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="row" style="display: none;">
-				<div class="col-md-8">
-					<h4>打赏列表</h4>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>打赏列表:</h4>
 					<table class="table table-hover">
 						<thead>
-							<tr><th>日期</th><th>打赏人</th><th>金额</th><th>留言</th></tr>
+							<tr><th width="10%">日期</th><th width="10%">打赏人</th><th width="10%">金额</th><th width="10%">方式</th><th width="25%">留言</th><th width="25%">回复</th></tr>
 						</thead>
 						<tbody>
+							<tr><td>2017-12-31</td><td>匿名</td><td>88</td><td>微信</td><td></td><td>很感谢您的赞助，如果可以请通过qq群或者我的邮箱联系我，留下您的昵称和留言。我将不断努力，坚持下去，谢谢支持我的人</td></tr>
+							<tr><td>2018-01-01</td><td>萌萌的流光</td><td>88</td><td>微信</td><td>蟹蟹群主，好人~</td><td>谢谢赞助，也很高兴能帮助到你</td></tr>
 						</tbody>
 					</table>
 				</div>
