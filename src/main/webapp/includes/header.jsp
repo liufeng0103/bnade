@@ -15,13 +15,14 @@
 			<c:if test="${!sessionScope.user.isVip}">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/itemQuery.jsp">物价查询</a></li>
+					<li><a href="/wowtoken.jsp">时光徽章</a></li>
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/itemTopSearch.jsp">物品搜索排行</a></li>
 					<li><a href="/itemMarket.jsp">市场价排行</a></li>
 					<li><a href="/topOwner.jsp">卖家排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
 					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
-					<li><a href="/page/auction/s810101">101圣物</a></li>
+					<!-- <li><a href="/page/auction/s810101">101圣物</a></li> -->
 					<li><a href="/setting.jsp">设置</a></li>
 					<c:if test="${empty sessionScope.user}">
 						<li><a href="/page/user/login">登录</a></li>
@@ -40,13 +41,14 @@
 			<c:if test="${sessionScope.user.isVip}">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/itemQuery.jsp">物价查询</a></li>
+					<li><a href="/wowtoken.jsp">时光徽章</a></li>
 					<li><a href="/auctionQuantity.jsp">服务器排行</a></li>
 					<li><a href="/itemTopSearch.jsp">物品搜索排行</a></li>
 					<li><a href="/itemMarket.jsp">市场价排行</a></li>
 					<li><a href="/topOwner.jsp">卖家排行</a></li>
 					<li><a href="/download.jsp">下载</a></li>
 					<li><a href="/ownerQuery.jsp">玩家物品</a></li>
-					<li><a href="/page/auction/s810101">101圣物</a></li>
+					<!-- <li><a href="/page/auction/s810101">101圣物</a></li> -->
 					<li><a href="/setting.jsp">设置</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${sessionScope.user.nickname}<span class="caret"></span></a>
