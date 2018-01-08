@@ -14,6 +14,7 @@ import com.bnade.wow.po.WowToken;
 import com.bnade.wow.service.WowTokenService;
 import com.bnade.wow.service.impl.WowTokenServiceImpl;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * 获取时光徽章价格信息并保存到数据库
@@ -24,8 +25,8 @@ import com.google.gson.Gson;
 public class WowTokenExtractingTask {
 	
 	// 获取时光徽章信息的URL
-	private static final String WOWTOKEN_URL = "https://wowtoken.info/snapshot.json";
-	private static final String WOWTOKEN_HISTORY_URL = "https://wowtoken.info/wowtoken.json";
+	private static final String WOWTOKEN_URL = "https://data.wowtoken.info/snapshot.json";
+	private static final String WOWTOKEN_HISTORY_URL = "https://data.wowtoken.info/wowtoken.json";
 	
 	private static Logger logger = LoggerFactory.getLogger(WowTokenExtractingTask.class);
 	
@@ -45,26 +46,39 @@ public class WowTokenExtractingTask {
 	 * 2. 下载所有时光徽章数据并更新
 	 */
 	public void init() {
+		Gson gs = new GsonBuilder()
+	    .setPrettyPrinting()
+	    .disableHtmlEscaping()
+	    .create();
 		logger.info("开始初始化时光徽章信息");
 		try {
 			logger.info("删除数据库所有时光徽章信息");
 			wowTokenService.deleteAll();
 			logger.info("时光徽章信息删除完毕");
 			logger.info("开始下载所有时光徽章信息");
+			httpClient.setGzipSupported(true);
 			String tokensJson = httpClient.reliableGet(WOWTOKEN_HISTORY_URL, true);
+			
+//			int index = tokensJson.indexOf("history");
+//			tokensJson = "{" + tokensJson.substring(index - 1);
+			// 
+			System.out.println(tokensJson);
 			logger.info("下载完成");
-			List<List<Long>> tokens = gson.fromJson(tokensJson, WowTokensHistoryJson.class).getHistory().getCN();
+			List<List<Long>> tokens = gs.fromJson(tokensJson, WowTokensHistoryJson.class).getHistory().getCN();
 			if (tokens != null && tokens.size() != 0) {
 				logger.info("获取到{}条时光徽章信息", tokens.size());
 				List<WowToken> wowTokens = new ArrayList<>();
+				int i = 0;
 				for (List<Long> token : tokens) {
 					WowToken wowToken = new WowToken();
 					wowToken.setBuy(new Long(token.get(1)).intValue());
 					wowToken.setUpdated(token.get(0) * 1000);
 					wowTokens.add(wowToken);
+					wowTokenService.save(wowToken);
+					System.out.println(++i);
 				}
 				logger.info("开始保存{}条数据", wowTokens.size());
-				wowTokenService.save(wowTokens);
+//				wowTokenService.save(wowTokens);
 				logger.info("保存完毕");
 			} else {
 				logger.info("未获取到时光徽章数据");
@@ -119,7 +133,9 @@ public class WowTokenExtractingTask {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new WowTokenExtractingTask().reduceWowTokens();
+//		new WowTokenExtractingTask().reduceWowTokens();
+//		new WowTokenExtractingTask().init();
+		new WowTokenExtractingTask().process();
 	}
 
 }
