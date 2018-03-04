@@ -17,7 +17,7 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 
 	private static Logger logger = LoggerFactory.getLogger(AuctionHouseMinBuyoutDailyDataDaoImpl.class);
 	
-	private static final String TABLE_NAME_PREFIX = "t_ah_min_buyout_data_";
+	private static final String TABLE_NAME_PREFIX = "cheapest_auction_";
 	
 	private QueryRunner run;
 	
@@ -61,10 +61,10 @@ public class AuctionHouseMinBuyoutDailyDataDaoImpl implements AuctionHouseMinBuy
 	@Override
 	public List<Auction> get(int itemId, String bounsList, String date, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + date + "_" + realmId;
-		String url = "select item,owner,ownerRealm,bid,buyout,quantity,petSpeciesId,petBreedId,bonusLists,lastModifed from " + tableName + " where item=?";
+		String url = "select item_id as item,owner,owner_realm as ownerRealm,bid,buyout,quantity,pet_species_id as petSpeciesId,pet_breed_id as petBreedId,bonus_list as bonusLists,last_modified as lastModifed from " + tableName + " where item_id=?";
 		if (DBUtil.isTableExist(tableName)) {
 			if (bounsList != null) {
-				url += " and bonusLists=?";
+				url += " and bonus_list=?";
 				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId, bounsList);
 			} else {
 				return run.query(url, new BeanListHandler<Auction>(Auction.class), itemId);

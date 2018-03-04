@@ -54,7 +54,6 @@
 									<th>剩余时间</th>
 									<th>宠物等级</th>
 									<th>总数量</th>
-									<th>更新时间</th>
 								</tr>
 							</thead>
 							<tbody id="showAllBody"></tbody>

@@ -97,7 +97,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<UserItemNotification> getItemNotifications(int userId)
 			throws SQLException {
-		List<UserItemNotification> items = run.query("select userId,realmId,itemId,i.name as itemName,petSpeciesId,petBreedId,bonusList,i.itemLevel, isInverted,price,emailNotification from t_user_item_notification n join t_item i on n.itemId = i.id where n.userId=? and n.itemId != 82800 " 
+		List<UserItemNotification> items = run.query("select userId,realmId,itemId,i.name as itemName,petSpeciesId,petBreedId,bonusList,i.level as itemLevel, isInverted,price,emailNotification from t_user_item_notification n join item i on n.itemId = i.id where n.userId=? and n.itemId != 82800 " 
 				+ " union all select userId,realmId,82800,p.name as itemName,petSpeciesId,petBreedId,bonusList,0 as itemLevel, isInverted,price,emailNotification from t_user_item_notification n join t_pet p on n.petSpeciesId=p.id where n.userId=? and n.itemId = 82800 ",
 						new BeanListHandler<UserItemNotification>(UserItemNotification.class), userId, userId);
 		for (UserItemNotification item : items) {

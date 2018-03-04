@@ -42,8 +42,8 @@ public class TableInitializtion {
 		RealmService realmService = new RealmServiceImpl();
 		QueryRunner run = new QueryRunner(DBUtil.getDataSource());
 		List<String> realmNames = FileUtil.fileLineToList("realmlist.txt");
-		if (realmNames.size() != 170) {
-			System.err.println("国服一共170个服务器， 请确认使用了正确的文件");
+		if (realmNames.size() != 172) {
+			System.err.println("国服一共172个服务器， 请确认使用了正确的文件");
 			return;
 		}
 		for (String realmName : realmNames) {

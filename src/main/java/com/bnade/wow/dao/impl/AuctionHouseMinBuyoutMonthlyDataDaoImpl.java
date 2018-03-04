@@ -19,7 +19,7 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 
 	private static Logger logger = LoggerFactory.getLogger(AuctionHouseMinBuyoutMonthlyDataDaoImpl.class);
 	
-	private static final String TABLE_NAME_PREFIX = "t_ah_min_buyout_data_";
+	private static final String TABLE_NAME_PREFIX = "cheapest_auction_";
 	
 	private QueryRunner run;
 	
@@ -82,11 +82,11 @@ public class AuctionHouseMinBuyoutMonthlyDataDaoImpl implements AuctionHouseMinB
 	public List<HistoryAuction> get(int itemId, String bounsList, String month, int realmId) throws SQLException {
 		String tableName = TABLE_NAME_PREFIX + month + "_" + realmId;
 		if (DBUtil.isTableExist(tableName)) {
-			String url = "select item,buyout,quantity,petSpeciesId,petBreedId,bonusLists,lastModifed from "
+			String url = "select item_id as item,buyout,quantity,pet_species_id as petSpeciesId,pet_breed_id as petBreedId,bonus_list as bonusLists,last_modified as lastModifed from "
 					+ tableName 
-					+ " where item=?";
+					+ " where item_id=?";
 			if (bounsList != null) {
-				url += " and bonusLists=?";
+				url += " and bonus_list=?";
 				logger.debug(url);
 				return run.query(url, new BeanListHandler<HistoryAuction>(HistoryAuction.class), itemId, bounsList);
 			} else {

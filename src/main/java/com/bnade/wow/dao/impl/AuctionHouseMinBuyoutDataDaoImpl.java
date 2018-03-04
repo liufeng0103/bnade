@@ -78,7 +78,7 @@ public class AuctionHouseMinBuyoutDataDaoImpl implements AuctionHouseMinBuyoutDa
 
 	@Override
 	public List<Auction> getPetsByIdAndBreed(int petId, int breedId) throws SQLException {
-		return run.query("select auc,item,owner,ownerRealm,bid,buyout,quantity,timeLeft,petSpeciesId,petLevel,petBreedId,context,bonusLists,lastModifed,realmId from t_ah_min_buyout_data where petSpeciesId=? and petBreedId=?", 
+		return run.query("select auc,item_id as item,owner,owner_realm as ownerRealm,bid,buyout,quantity,time_left as timeLeft,pet_species_id as petSpeciesId,pet_level as petLevel,pet_breed_id as petBreedId,context,bonus_list as bonusLists,0 as lastModifed,realm_id as realmId from cheapest_auction where pet_species_id=? and pet_breed_id=?", 
 				new BeanListHandler<Auction>(Auction.class), petId, breedId);
 	}	
 

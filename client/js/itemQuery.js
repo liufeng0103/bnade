@@ -760,7 +760,7 @@ function queryByUrl() {
 function fuzzyQueryItems(itemName) {
 	clear();
 	$('#msg').text("正在模糊查询物品信息,请稍等...");
-	$.get('/wow/item/name/' + encodeURIComponent(itemName) + '?fuzzy=true', function (data) {
+	$.get(API_HOST + '/items/names?search=' + encodeURIComponent(itemName) + '&limit=100', function (data) {
 		if (data.length === 0) {
 			$('#msg').text("找不到物品:" + itemName);
 		} else {

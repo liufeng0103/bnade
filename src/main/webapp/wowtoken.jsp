@@ -15,7 +15,6 @@
 			<div id="wowTokenContainer"></div>
 			<p>说明:</p>
 			<ul>
-				<li>wowtoken.info关闭了国服时光徽章的数据接口，询问了他们的官方也说不再支持国服，所以过一阵将关闭该页面，对大家带来的不便非常抱歉</li>
 				<li>数据来源<a href="https://wowtoken.info" target="_blank">https://wowtoken.info</a></li>
 			</ul>
 		</div>

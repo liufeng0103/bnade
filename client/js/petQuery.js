@@ -72,7 +72,7 @@ function getItemByAllRealms(id, breed, name) {
 						var item = data[i];
 						var buyout = Bnade.getGold(item[1]);
 						var realm = Realm.getConnectedById(item[0]);								
-						$("#showAllBody").append("<tr><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td>"+item[2]+"</td><td>"+leftTimeMap[item[3]]+"</td><td>"+item[4]+"</td><td>"+item[5]+"</td><td>"+new Date(item[6]).format("MM-dd hh:mm:ss")+"</td></tr>");
+						$("#showAllBody").append("<tr><td>"+(parseInt(i)+1)+"</td><td>"+realm+"</td><td>"+buyout+"</td><td>"+item[2]+"</td><td>"+leftTimeMap[item[3]]+"</td><td>"+item[4]+"</td><td>"+item[5]+"</td></tr>");
 					}
 				} else {
 					isShowAll = true;

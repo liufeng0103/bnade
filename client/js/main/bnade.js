@@ -327,7 +327,7 @@ var Bnade = {
 		3406: "谐律之7",
 		3530: "30",
 		3570: "60",
-
+		3630: "90",
 	},
 	getConnectedRealms: function (realm) {
 		var tmpRealm = this.connectedRealm[realm];

@@ -1,5 +1,8 @@
 package com.bnade.wow.rs;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import javax.ws.rs.GET;
@@ -30,8 +33,9 @@ public class AddonResource {
     @GET
     @Path("/version")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object getVersion() throws SQLException {
-        String version = run.query("select version from t_addon limit 1", new ScalarHandler<String>());
+    public Object getVersion() throws SQLException, IOException {
+//        String version = run.query("select version from t_addon limit 1", new ScalarHandler<String>());
+    	String version = Files.readAllLines(Paths.get("/var/lib/tomcat/webapps/ROOT/data_version")).get(0);
         return "{\"version\":\"" + version + "\"}";
     }
     

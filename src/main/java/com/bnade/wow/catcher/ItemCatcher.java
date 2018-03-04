@@ -22,7 +22,6 @@ import com.bnade.wow.client.model.JAuction;
 import com.bnade.wow.client.model.XItem;
 import com.bnade.wow.client.model.XItemCreatedBy;
 import com.bnade.wow.client.model.XItemReagent;
-import com.bnade.wow.dao.impl.UserDaoImpl;
 
 
 /**
@@ -82,6 +81,18 @@ public class ItemCatcher {
 			e.printStackTrace();
 		}
 		logger.info("物品信息更新完毕");
+	}
+	
+	public void addItem(int id) {
+		try {
+			Item item = wowAPI.getItem(id);
+			run.update("insert into t_item (id,description,name,icon,itemClass,itemSubClass,inventoryType,itemLevel) values(?,?,?,?,?,?,?,?)", item.getId(), "", item.getName(),
+					item.getIcon(), item.getItemClass(), item.getSubClass(), item.getInventorySlot(), item.getLevel());
+			logger.info("保存物品:" + item);	
+		} catch (WowClientException | SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 //	public void refreshItems() {		
