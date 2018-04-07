@@ -75,7 +75,7 @@ BN.Resource = new function() {
 	};
 	
 	self.getItemsByName = function(name) {
-		return get(API_ROOT + "/items?name="+name);
+		return get("https://api.bnade.com/items?name="+name);
 	};
 	
 	self.addUserItemNotification = function(data) {
