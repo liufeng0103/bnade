@@ -286,7 +286,7 @@
 				for ( var i in items) {
 					var item = items[i];
 					html += "<option value='" + item.id + "' data-itemlevel='"+item.level+"'>" + item.name + "</option>";
-					var bonusHtml = "<select class='itemBonusSlt form-control' data-petspeciesid='"+0+"'>";
+					var bonusHtml = "<select class='itemBonusSlt form-control' data-petspeciesid='"+item.petSpeciesId+"'>";
 					for (var j in item.bonusLists) {
 						var bonus = item.bonusLists[j];
 						bonusHtml += "<option value='" + bonus + "'>" + Bnade.getBonusDesc(bonus, item.level) + "</option>";
