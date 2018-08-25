@@ -41,6 +41,6 @@ public class RealmDaoImpl implements RealmDao {
 
 	@Override
 	public List<Realm> getAll() throws SQLException {		
-		return run.query("select id,name,type,url,lastModified,maxAucId,auctionQuantity,playerQuantity,itemQuantity,lastUpdateTime from t_realm", new BeanListHandler<Realm>(Realm.class));
+		return run.query("select id,name from realm", new BeanListHandler<Realm>(Realm.class));
 	}
 }
