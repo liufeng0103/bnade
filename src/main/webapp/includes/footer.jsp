@@ -5,7 +5,7 @@
 		<ul class="list-inline">
 			<li><strong>友情链接</strong></li>
 			<li><a href="http://wowdata.top">魔兽大数据</a></li>
-			<li><a href="https://k99k5.com">k99k5的无名小站</a></li>
+			<li><a href="http://wowprice.info/">魔兽物价计算器</a></li>
 		</ul>
 		<ul class="list-inline">
 			<li><a href="/donate.jsp">打赏</a></li>
